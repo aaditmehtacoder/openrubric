@@ -1,0 +1,144 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * OpenRubric theming.
+ *
+ * Light is the default; .dark on <html> flips the palette. Every app surface token
+ * (canvas/surface/raised/sunken/ink/dim/faint/line/accent) is driven by a CSS
+ * variable, so the whole app + marketing recolor from these ~14 values. The dark
+ * "product screenshot" panels on the landing page are intentionally fixed (they read
+ * as a dark app preview in either theme).
+ *
+ * Fonts are injected as CSS variables by next/font in app/layout.tsx:
+ *   --font-sans  → Hanken Grotesk   --font-serif → Newsreader   --font-mono → JetBrains Mono
+ */
+
+@layer base {
+  :root {
+    /* ---- light (default): warm, airy ---- */
+    --background: 248 246 241; /* page canvas */
+    --surface: 255 255 255; /* cards / inputs on focus */
+    --surface-raised: 251 250 246; /* raised panels, inputs */
+    --sunken: 240 237 229; /* progress tracks, active nav, segmented control */
+    --foreground: 13 13 13; /* primary text + primary buttons */
+    --muted: 108 106 100; /* secondary text */
+    --faint: 162 156 147; /* tertiary / mono metadata */
+    --border: 230 226 217;
+    --border-soft: 240 237 229;
+    --border-softer: 244 241 234;
+    --accent: 37 99 235; /* restrained deep blue */
+  }
+
+  .dark {
+    /* ---- dark: warm near-black, never pure #000 ---- */
+    --background: 13 14 16;
+    --surface: 23 24 27;
+    --surface-raised: 28 30 34;
+    --sunken: 33 35 39;
+    --foreground: 243 241 236;
+    --muted: 160 158 152;
+    --faint: 122 120 114;
+    --border: 39 41 46;
+    --border-soft: 32 34 38;
+    --border-softer: 29 31 35;
+    --accent: 96 142 255; /* a touch brighter for contrast on dark */
+  }
+
+  * {
+    @apply border-line;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-canvas font-sans text-ink antialiased;
+    text-rendering: optimizeLegibility;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "liga" 1, "calt" 1;
+  }
+
+  /* Mono (Geist Mono) carries the data — keep figures aligned. */
+  .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+
+  ::selection {
+    @apply bg-accent text-white;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+  }
+
+  ::placeholder {
+    @apply text-faint;
+  }
+
+  /* Range slider — used in the judge rubric scorer. Theme-aware. */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 5px;
+    border-radius: 3px;
+    background: rgb(var(--border));
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background: rgb(var(--foreground));
+    cursor: pointer;
+    border: 3px solid rgb(var(--background));
+    box-shadow: 0 0 0 1px rgb(var(--foreground));
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgb(var(--foreground));
+    cursor: pointer;
+    border: 3px solid rgb(var(--background));
+    box-shadow: 0 0 0 1px rgb(var(--foreground));
+  }
+}
+
+@layer components {
+  /* Mono "eyebrow" — the uppercase metadata label used across every screen */
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.14em] text-dim;
+  }
+
+  /* Page container presets */
+  .container-marketing {
+    @apply mx-auto w-full max-w-marketing px-7;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}

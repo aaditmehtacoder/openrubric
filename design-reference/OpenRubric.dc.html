@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --accent: #2F6BFF; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Hanken Grotesk', system-ui, sans-serif; background: #F7F5F0; color: #0A0A0A; -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--accent); color: #fff; }
+  a { color: inherit; text-decoration: none; }
+  @keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+  @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .35; transform: scale(.82); } }
+  @keyframes growline { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes floatup { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</helmet>
+
+<div style="background:#070707;color:#FAFAFA;">
+
+  <!-- ANNOUNCEMENT + NAV -->
+  <header style="position:sticky;top:0;z-index:50;background:rgba(7,7,7,0.82);backdrop-filter:blur(14px);border-bottom:1px solid #1D1D1D;">
+    <sc-if value="{{ showAnnouncementBar }}" hint-placeholder-val="{{ true }}">
+      <div style="text-align:center;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.02em;color:#A8A8A8;padding:9px 20px;border-bottom:1px solid #141414;">
+        Open-source judging infrastructure for hackathons <span style="color:var(--accent);">→</span>
+      </div>
+    </sc-if>
+    <nav style="max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:16px 28px;">
+      <a href="#top" style="display:flex;align-items:center;gap:10px;">
+        <span style="display:inline-flex;width:26px;height:26px;align-items:center;justify-content:center;">
+          <svg width="26" height="26" viewBox="0 0 26 26" fill="none"><path d="M9 5 L5 5 L5 21 L9 21" stroke="#FAFAFA" stroke-width="2" stroke-linecap="square"/><path d="M17 5 L21 5 L21 21 L17 21" stroke="#FAFAFA" stroke-width="2" stroke-linecap="square"/><rect x="11.5" y="12" width="3" height="3" fill="var(--accent)"/></svg>
+        </span>
+        <span style="font-size:18px;font-weight:600;letter-spacing:-0.02em;">OpenRubric</span>
+      </a>
+      <div style="display:flex;align-items:center;gap:30px;font-size:14px;color:#C8C8C8;">
+        <a href="#product" style="transition:color .15s;" style-hover="color:#fff;">Product</a>
+        <a href="#docs" style="transition:color .15s;" style-hover="color:#fff;">Docs</a>
+        <a href="#opensource" style="transition:color .15s;" style-hover="color:#fff;">GitHub</a>
+        <a href="OpenRubric App.html" style="transition:color .15s;" style-hover="color:#fff;">Demo</a>
+      </div>
+      <div style="display:flex;align-items:center;gap:14px;">
+        <a href="OpenRubric App.html" style="font-size:14px;color:#C8C8C8;white-space:nowrap;transition:color .15s;" style-hover="color:#fff;">Sign in</a>
+        <a href="OpenRubric App.html" style="display:inline-flex;align-items:center;gap:8px;background:#FAFAFA;color:#070707;font-size:14px;font-weight:600;white-space:nowrap;padding:9px 16px;border-radius:9px;transition:transform .15s;" style-hover="transform:translateY(-1px);">Organize a hackathon</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="top" style="max-width:1200px;margin:0 auto;padding:84px 28px 40px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:26px;">Open Source Judging</div>
+    <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:48px;align-items:end;">
+      <h1 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(40px,5.4vw,74px);line-height:1.02;letter-spacing:-0.015em;max-width:14ch;">Judge hackathons with a rubric everyone can trust.</h1>
+      <div style="padding-bottom:8px;">
+        <p style="font-size:17px;line-height:1.55;color:#A8A8A8;max-width:42ch;margin-bottom:26px;">Import Devpost projects, paste your rubric, let judges score live, and review GitHub timelines before winners are announced.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="OpenRubric App.html" style="display:inline-flex;align-items:center;gap:8px;background:#FAFAFA;color:#070707;font-size:14.5px;font-weight:600;padding:12px 20px;border-radius:10px;transition:transform .15s;" style-hover="transform:translateY(-1px);">Organize a hackathon</a>
+          <a href="OpenRubric App.html" style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:#FAFAFA;font-size:14.5px;font-weight:600;padding:12px 20px;border-radius:10px;border:1px solid #2A2A2A;transition:border-color .15s;" style-hover="border-color:#4A4A4A;">Try judge demo →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HERO PRODUCT PANEL -->
+  <section style="max-width:1200px;margin:0 auto;padding:24px 28px 96px;">
+    <div style="border:1px solid #1D1D1D;border-radius:22px;background:#0B0B0B;overflow:hidden;box-shadow:0 40px 120px -40px rgba(0,0,0,0.9);">
+      <!-- browser bar -->
+      <div style="display:flex;align-items:center;gap:8px;padding:13px 18px;border-bottom:1px solid #161616;background:#0E0E0E;">
+        <span style="width:11px;height:11px;border-radius:50%;background:#2A2A2A;"></span>
+        <span style="width:11px;height:11px;border-radius:50%;background:#2A2A2A;"></span>
+        <span style="width:11px;height:11px;border-radius:50%;background:#2A2A2A;"></span>
+        <div style="flex:1;display:flex;justify-content:center;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6B6B6B;background:#080808;border:1px solid #1A1A1A;border-radius:7px;padding:5px 16px;">openrubric.org</div>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#4A4A4A;">demo</span>
+      </div>
+
+      <!-- panel body with grid lines -->
+      <div style="position:relative;padding:22px;">
+        <sc-if value="{{ showGrid }}" hint-placeholder-val="{{ true }}">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(#121212 1px,transparent 1px),linear-gradient(90deg,#121212 1px,transparent 1px);background-size:34px 34px;opacity:0.5;pointer-events:none;"></div>
+        </sc-if>
+
+        <!-- search -->
+        <div style="position:relative;display:flex;align-items:center;gap:10px;background:#070707;border:1px solid #1D1D1D;border-radius:11px;padding:13px 16px;margin-bottom:18px;">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#5A5A5A" stroke-width="1.6"/><path d="M11 11 L14 14" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:13.5px;color:#9A9A9A;">Search Lighthouse</span>
+          <span style="display:inline-block;width:1.5px;height:16px;background:var(--accent);animation:blink 1.1s step-end infinite;"></span>
+          <span style="flex:1;"></span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A5A;border:1px solid #1D1D1D;border-radius:5px;padding:2px 7px;">⌘K</span>
+        </div>
+
+        <div style="position:relative;display:grid;grid-template-columns:1.5fr 1fr;gap:16px;">
+          <!-- left column -->
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <!-- selected project -->
+            <div style="border:1px solid #1D1D1D;border-radius:13px;background:#0D0D0D;padding:16px;">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;">
+                <div>
+                  <div style="font-size:18px;font-weight:600;letter-spacing:-0.01em;">Lighthouse</div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#7A7A7A;margin-top:4px;">Team Beacon · Health AI</div>
+                </div>
+                <div style="display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#4FB286;background:rgba(79,178,134,0.08);border:1px solid rgba(79,178,134,0.22);border-radius:20px;padding:5px 11px;">
+                  <span style="width:6px;height:6px;border-radius:50%;background:#4FB286;"></span>Clean timeline
+                </div>
+              </div>
+            </div>
+
+            <!-- AI summary -->
+            <div style="border:1px solid #1D1D1D;border-radius:13px;background:#0D0D0D;padding:16px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">AI Summary</div>
+              <p style="font-size:13.5px;line-height:1.55;color:#C4C4C4;">A triage assistant for rural clinics that routes patient intake photos to the right specialist. Built on a fine-tuned vision model with an offline-first PWA front end.</p>
+              <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:12px;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9A9A9A;border:1px solid #1D1D1D;border-radius:6px;padding:3px 9px;">Next.js</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9A9A9A;border:1px solid #1D1D1D;border-radius:6px;padding:3px 9px;">PyTorch</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#9A9A9A;border:1px solid #1D1D1D;border-radius:6px;padding:3px 9px;">Supabase</span>
+              </div>
+            </div>
+
+            <!-- rubric score -->
+            <div style="border:1px solid #1D1D1D;border-radius:13px;background:#0D0D0D;padding:16px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#7A7A7A;">Rubric Score</div>
+                <div style="font-size:15px;font-weight:600;"><span style="color:#fff;">87</span><span style="color:#5A5A5A;"> / 100</span></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:9px;">
+                <sc-for list="{{ rubricBars }}" as="row" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:11px;">
+                    <span style="font-size:12.5px;color:#B4B4B4;width:96px;flex-shrink:0;">{{ row.name }}</span>
+                    <div style="flex:1;height:5px;background:#181818;border-radius:3px;overflow:hidden;">
+                      <div style="height:100%;border-radius:3px;background:var(--accent);width:{{ row.pct }};"></div>
+                    </div>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#8A8A8A;width:44px;text-align:right;">{{ row.score }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <!-- right column -->
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <!-- track rank -->
+            <div style="border:1px solid #1D1D1D;border-radius:13px;background:#0D0D0D;padding:16px;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#7A7A7A;margin-bottom:13px;">Track · Health AI</div>
+              <div style="display:flex;flex-direction:column;gap:2px;">
+                <sc-for list="{{ trackRank }}" as="t" hint-placeholder-count="4">
+                  <div style="display:flex;align-items:center;gap:11px;padding:8px 9px;border-radius:8px;background:{{ t.bg }};">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:{{ t.rankColor }};width:18px;">{{ t.rank }}</span>
+                    <span style="flex:1;font-size:13px;color:{{ t.nameColor }};font-weight:{{ t.weight }};">{{ t.name }}</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#8A8A8A;">{{ t.score }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- timeline mini -->
+            <div style="border:1px solid #1D1D1D;border-radius:13px;background:#0D0D0D;padding:16px;flex:1;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#7A7A7A;margin-bottom:14px;">GitHub Timeline</div>
+              <div style="display:flex;flex-direction:column;gap:0;">
+                <sc-for list="{{ timeline }}" as="ev" hint-placeholder-count="3">
+                  <div style="display:flex;gap:11px;">
+                    <div style="display:flex;flex-direction:column;align-items:center;">
+                      <span style="width:8px;height:8px;border-radius:50%;background:{{ ev.dot }};margin-top:3px;"></span>
+                      <span style="width:1px;flex:1;background:#1D1D1D;"></span>
+                    </div>
+                    <div style="padding-bottom:14px;">
+                      <div style="font-size:12.5px;color:#C4C4C4;">{{ ev.label }}</div>
+                      <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6A6A6A;margin-top:2px;">{{ ev.meta }}</div>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#4FB286;margin-top:2px;">
+                <span style="width:6px;height:6px;border-radius:50%;background:#4FB286;"></span>All commits within event window
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ====================== EDITORIAL BODY (off-white) ====================== -->
+<main style="background:#F7F5F0;color:#0A0A0A;">
+
+  <!-- SECTION 1: judging rooms -->
+  <section id="product" style="max-width:1200px;margin:0 auto;padding:96px 28px;border-bottom:1px solid #E5E1D8;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#737373;margin-bottom:20px;">Built for real judging rooms</div>
+    <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(30px,4vw,50px);line-height:1.06;letter-spacing:-0.015em;max-width:18ch;margin-bottom:56px;">Everything a judging room needs, and nothing it doesn't.</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid #E5E1D8;border-radius:18px;overflow:hidden;background:#FBFAF6;">
+      <sc-for list="{{ rooms }}" as="c" hint-placeholder-count="3">
+        <div style="padding:30px;border-right:1px solid #E5E1D8;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);margin-bottom:36px;">{{ c.num }}</div>
+          <h3 style="font-size:19px;font-weight:600;letter-spacing:-0.01em;margin-bottom:10px;">{{ c.title }}</h3>
+          <p style="font-size:14.5px;line-height:1.55;color:#5A5A5A;">{{ c.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- SECTION 2: workflow -->
+  <section style="max-width:1200px;margin:0 auto;padding:96px 28px;border-bottom:1px solid #E5E1D8;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#737373;margin-bottom:20px;">Devpost Import</div>
+    <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(30px,4vw,50px);line-height:1.06;letter-spacing:-0.015em;margin-bottom:48px;">From Devpost to final rankings.</h2>
+    <div style="display:flex;align-items:stretch;border:1px solid #E5E1D8;border-radius:18px;overflow:hidden;background:#FBFAF6;">
+      <sc-for list="{{ workflow }}" as="w" hint-placeholder-count="6">
+        <div style="flex:1;padding:24px 20px;border-right:1px solid #E5E1D8;">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A8A29A;margin-bottom:14px;">{{ w.step }}</div>
+          <div style="font-size:14.5px;font-weight:600;line-height:1.3;letter-spacing:-0.01em;">{{ w.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+</main>
+
+<!-- SECTION 3: rubric panel (BLACK) -->
+<section id="docs" style="background:#070707;color:#FAFAFA;">
+  <div style="max-width:1200px;margin:0 auto;padding:104px 28px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;">Live Scoring</div>
+    <div style="display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:center;">
+      <div>
+        <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(30px,4vw,50px);line-height:1.05;letter-spacing:-0.015em;margin-bottom:22px;">A rubric-first judging workspace.</h2>
+        <p style="font-size:16px;line-height:1.6;color:#A8A8A8;margin-bottom:18px;max-width:46ch;">Every score is tied to a criterion. Judges grade against the rubric you define — never a vague gut feeling — and each judge keeps their own record.</p>
+        <div style="display:flex;flex-direction:column;gap:13px;margin-top:26px;">
+          <div style="display:flex;gap:11px;align-items:baseline;"><span style="font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:13px;">—</span><span style="font-size:14.5px;color:#C4C4C4;">Weighted criteria with per-criterion comments</span></div>
+          <div style="display:flex;gap:11px;align-items:baseline;"><span style="font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:13px;">—</span><span style="font-size:14.5px;color:#C4C4C4;">Autosave every few seconds, no lost scores</span></div>
+          <div style="display:flex;gap:11px;align-items:baseline;"><span style="font-family:'JetBrains Mono',monospace;color:var(--accent);font-size:13px;">—</span><span style="font-size:14.5px;color:#C4C4C4;">Organizer aggregates — judges never overwrite each other</span></div>
+        </div>
+      </div>
+      <div style="border:1px solid #1D1D1D;border-radius:18px;background:#0B0B0B;padding:24px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid #161616;">
+          <div>
+            <div style="font-size:16px;font-weight:600;">Lighthouse</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#7A7A7A;margin-top:3px;">Rubric · 6 criteria</div>
+          </div>
+          <div style="text-align:right;"><div style="font-family:'Newsreader',serif;font-size:34px;line-height:1;">87<span style="color:#4A4A4A;font-size:20px;"> / 100</span></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <sc-for list="{{ rubricFull }}" as="r" hint-placeholder-count="6">
+            <div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
+                <span style="font-size:14px;color:#E4E4E4;">{{ r.name }}</span>
+                <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:#9A9A9A;">{{ r.score }}<span style="color:#4A4A4A;"> / {{ r.max }}</span></span>
+              </div>
+              <div style="height:6px;background:#181818;border-radius:3px;overflow:hidden;">
+                <div style="height:100%;border-radius:3px;background:var(--accent);width:{{ r.pct }};"></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 4: review signals (off-white) -->
+<main style="background:#F7F5F0;color:#0A0A0A;">
+  <section style="max-width:1200px;margin:0 auto;padding:104px 28px;border-bottom:1px solid #E5E1D8;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#737373;margin-bottom:20px;">Timeline Review</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;">
+      <div>
+        <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(30px,4vw,50px);line-height:1.05;letter-spacing:-0.015em;margin-bottom:22px;max-width:16ch;">Review signals, not accusations.</h2>
+        <p style="font-size:16px;line-height:1.6;color:#5A5A5A;max-width:44ch;margin-bottom:18px;">OpenRubric scans each repo's GitHub timeline and surfaces what an organizer might want to ask about — framed as a question, never a verdict.</p>
+        <div style="border-left:2px solid var(--accent);padding:14px 20px;background:#FBFAF6;border-radius:0 10px 10px 0;">
+          <p style="font-size:15px;line-height:1.5;color:#2A2A2A;font-weight:500;">OpenRubric never makes the final call. It gives organizers evidence to review.</p>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0;border:1px solid #E5E1D8;border-radius:16px;overflow:hidden;background:#FBFAF6;">
+        <sc-for list="{{ signals }}" as="s" hint-placeholder-count="5">
+          <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid #E5E1D8;">
+            <span style="width:8px;height:8px;border-radius:50%;background:{{ s.dot }};flex-shrink:0;"></span>
+            <span style="flex:1;font-size:14.5px;color:#2A2A2A;">{{ s.label }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:{{ s.tagColor }};border:1px solid {{ s.tagBorder }};background:{{ s.tagBg }};border-radius:20px;padding:3px 10px;">{{ s.tag }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 5: open source -->
+  <section id="opensource" style="max-width:1200px;margin:0 auto;padding:104px 28px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#737373;margin-bottom:20px;">Open Source By Design</div>
+    <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(30px,4vw,50px);line-height:1.06;letter-spacing:-0.015em;margin-bottom:56px;max-width:20ch;">Transparent, self-hostable, and yours to keep.</h2>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid #E5E1D8;border-radius:18px;overflow:hidden;background:#FBFAF6;">
+      <sc-for list="{{ osCards }}" as="o" hint-placeholder-count="4">
+        <div style="padding:28px;border-right:1px solid #E5E1D8;">
+          <h3 style="font-size:16px;font-weight:600;letter-spacing:-0.01em;margin-bottom:9px;">{{ o.title }}</h3>
+          <p style="font-size:13.5px;line-height:1.5;color:#5A5A5A;">{{ o.body }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+</main>
+
+<!-- FINAL CTA (BLACK) -->
+<section style="background:#070707;color:#FAFAFA;">
+  <div style="max-width:1200px;margin:0 auto;padding:120px 28px;text-align:center;">
+    <h2 style="font-family:'Newsreader',serif;font-weight:400;font-size:clamp(34px,5vw,62px);line-height:1.04;letter-spacing:-0.015em;max-width:18ch;margin:0 auto 32px;">Run your next hackathon with an open rubric.</h2>
+    <div style="display:flex;gap:13px;justify-content:center;flex-wrap:wrap;">
+      <a href="OpenRubric App.html" style="display:inline-flex;align-items:center;gap:8px;background:#FAFAFA;color:#070707;font-size:15px;font-weight:600;padding:13px 24px;border-radius:11px;transition:transform .15s;" style-hover="transform:translateY(-1px);">Organize a hackathon</a>
+      <a href="#opensource" style="display:inline-flex;align-items:center;gap:8px;background:transparent;color:#FAFAFA;font-size:15px;font-weight:600;padding:13px 24px;border-radius:11px;border:1px solid #2A2A2A;transition:border-color .15s;" style-hover="border-color:#4A4A4A;">View on GitHub ↗</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer style="border-top:1px solid #1D1D1D;">
+    <div style="max-width:1200px;margin:0 auto;padding:40px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <svg width="22" height="22" viewBox="0 0 26 26" fill="none"><path d="M9 5 L5 5 L5 21 L9 21" stroke="#FAFAFA" stroke-width="2" stroke-linecap="square"/><path d="M17 5 L21 5 L21 21 L17 21" stroke="#FAFAFA" stroke-width="2" stroke-linecap="square"/><rect x="11.5" y="12" width="3" height="3" fill="var(--accent)"/></svg>
+        <span style="font-size:15px;font-weight:600;">OpenRubric</span>
+      </div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6A6A6A;">MIT licensed · Self-hostable · Nonprofit</div>
+      <div style="display:flex;gap:24px;font-size:13.5px;color:#A8A8A8;">
+        <a href="#product" style-hover="color:#fff;">Product</a>
+        <a href="#docs" style-hover="color:#fff;">Docs</a>
+        <a href="#opensource" style-hover="color:#fff;">GitHub</a>
+        <a href="OpenRubric App.html" style-hover="color:#fff;">Demo</a>
+      </div>
+    </div>
+  </footer>
+</section>
+
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#070707"/><g stroke="#FAFAFA" stroke-width="4" fill="none" stroke-linecap="square"><path d="M42 32 L32 32 L32 68 L42 68"/><path d="M58 32 L68 32 L68 68 L58 68"/></g><rect x="46" y="46" width="8" height="8" fill="#2F6BFF"/></svg>
+</template></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2F6BFF&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showAnnouncementBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showGrid&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    if (this.props.accentColor) {
+      document.documentElement.style.setProperty('--accent', this.props.accentColor);
+    }
+  }
+  renderVals() {
+    if (this.props.accentColor) {
+      document.documentElement.style.setProperty('--accent', this.props.accentColor);
+    }
+    return {
+      showAnnouncementBar: this.props.showAnnouncementBar ?? true,
+      showGrid: this.props.showGrid ?? true,
+      rubricBars: [
+        { name: 'Innovation', score: '18/20', pct: '90%' },
+        { name: 'Technical', score: '22/25', pct: '88%' },
+        { name: 'Functionality', score: '17/20', pct: '85%' },
+        { name: 'Design / UX', score: '13/15', pct: '87%' },
+      ],
+      trackRank: [
+        { rank: '01', name: 'Lighthouse', score: '87', bg: 'rgba(47,107,255,0.10)', rankColor: '#2F6BFF', nameColor: '#fff', weight: '600' },
+        { rank: '02', name: 'MediScan', score: '83', bg: 'transparent', rankColor: '#6A6A6A', nameColor: '#C4C4C4', weight: '400' },
+        { rank: '03', name: 'CampusLoop', score: '79', bg: 'transparent', rankColor: '#6A6A6A', nameColor: '#C4C4C4', weight: '400' },
+        { rank: '04', name: 'StudyForge', score: '76', bg: 'transparent', rankColor: '#6A6A6A', nameColor: '#C4C4C4', weight: '400' },
+      ],
+      timeline: [
+        { label: 'Repo created', meta: 'Feb 14 · 09:12 · within window', dot: '#4FB286' },
+        { label: 'First commit', meta: 'Feb 14 · 10:40 · 3 contributors', dot: '#4FB286' },
+        { label: 'Last commit', meta: 'Feb 16 · 17:55 · before deadline', dot: '#4FB286' },
+      ],
+      rooms: [
+        { num: '01', title: 'Import submissions', body: 'Pull projects from a Devpost URL, paste project links, or upload a CSV. Manual entry always works as a fallback.' },
+        { num: '02', title: 'Score with a shared rubric', body: 'Paste your rubric once. Every judge scores against the same weighted criteria, with comments tied to each line.' },
+        { num: '03', title: 'Publish winners by track', body: 'Aggregate judge scores into per-track leaderboards and an overall winner — with review cases resolved first.' },
+      ],
+      workflow: [
+        { step: '01', label: 'Paste Devpost URL' },
+        { step: '02', label: 'Import projects' },
+        { step: '03', label: 'Assign judges' },
+        { step: '04', label: 'Score live' },
+        { step: '05', label: 'Review timelines' },
+        { step: '06', label: 'Export winners' },
+      ],
+      rubricFull: [
+        { name: 'Innovation', score: 18, max: 20, pct: '90%' },
+        { name: 'Technical Complexity', score: 22, max: 25, pct: '88%' },
+        { name: 'Functionality', score: 17, max: 20, pct: '85%' },
+        { name: 'Design / UX', score: 13, max: 15, pct: '87%' },
+        { name: 'Impact', score: 9, max: 10, pct: '90%' },
+        { name: 'Presentation', score: 8, max: 10, pct: '80%' },
+      ],
+      signals: [
+        { label: 'All commits inside the event window', tag: 'Clean timeline', dot: '#4FB286', tagColor: '#2E8A5E', tagBorder: 'rgba(46,138,94,0.3)', tagBg: 'rgba(46,138,94,0.07)' },
+        { label: 'A few commits before the event start', tag: 'Light review', dot: '#C99A3A', tagColor: '#A8791F', tagBorder: 'rgba(168,121,31,0.3)', tagBg: 'rgba(168,121,31,0.07)' },
+        { label: 'Activity after the submission deadline', tag: 'Needs review', dot: '#C99A3A', tagColor: '#A8791F', tagBorder: 'rgba(168,121,31,0.3)', tagBg: 'rgba(168,121,31,0.07)' },
+        { label: 'Older repo with fresh code added during event', tag: 'Light review', dot: '#C99A3A', tagColor: '#A8791F', tagBorder: 'rgba(168,121,31,0.3)', tagBg: 'rgba(168,121,31,0.07)' },
+        { label: 'No useful commit history found', tag: 'High priority', dot: '#C0584E', tagColor: '#B4453C', tagBorder: 'rgba(180,69,60,0.3)', tagBg: 'rgba(180,69,60,0.07)' },
+      ],
+      osCards: [
+        { title: 'Transparent scoring', body: 'Every number traces back to a criterion and a judge. Nothing is a black box.' },
+        { title: 'Self-hostable', body: 'Run it on your own Supabase project. Your data never leaves your control.' },
+        { title: 'Exportable data', body: 'Export submissions, scores, and rankings as CSV or JSON at any time.' },
+        { title: 'Human final decisions', body: 'OpenRubric surfaces evidence. Organizers make every award decision.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

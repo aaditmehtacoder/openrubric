@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root { --accent: #2F6BFF; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Hanken Grotesk', system-ui, sans-serif; background: #F7F5F0; color: #0A0A0A; -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--accent); color: #fff; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+  input, textarea, select { font-family: inherit; }
+  input:focus, textarea:focus { outline: none; }
+  ::placeholder { color: #A8A29A; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .scr { }
+  input[type=range]{ -webkit-appearance:none; appearance:none; height:5px; border-radius:3px; background:#E5E1D8; }
+  input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:17px; height:17px; border-radius:50%; background:#0A0A0A; cursor:pointer; border:3px solid #F7F5F0; box-shadow:0 0 0 1px #0A0A0A; }
+</style>
+</helmet>
+
+<div style="min-height:100vh;">
+
+  <!-- ============ AUTH ============ -->
+  <sc-if value="{{ isAuth }}" hint-placeholder-val="{{ true }}">
+    <div class="scr" style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:32px;background:#F7F5F0;">
+      <div style="width:100%;max-width:420px;">
+        <div style="display:flex;align-items:center;gap:10px;justify-content:center;margin-bottom:30px;">
+          <svg width="24" height="24" viewBox="0 0 26 26" fill="none"><path d="M9 5 L5 5 L5 21 L9 21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="square"/><path d="M17 5 L21 5 L21 21 L17 21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="square"/><rect x="11.5" y="12" width="3" height="3" fill="var(--accent)"/></svg>
+          <span style="font-size:18px;font-weight:600;letter-spacing:-0.02em;">OpenRubric</span>
+        </div>
+        <div style="background:#fff;border:1px solid #E5E1D8;border-radius:18px;padding:32px;box-shadow:0 1px 2px rgba(0,0,0,0.03);">
+          <h1 style="font-size:22px;font-weight:600;letter-spacing:-0.02em;margin-bottom:6px;">Sign in to your hackathon</h1>
+          <p style="font-size:14px;color:#737373;margin-bottom:24px;">Continue with your judging account, or jump into a demo workspace.</p>
+
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#A8A29A;margin-bottom:9px;">Email</div>
+          <input type="email" placeholder="you@hackathon.org" style="width:100%;border:1px solid #E5E1D8;border-radius:10px;padding:12px 14px;font-size:14px;background:#FBFAF6;margin-bottom:14px;" style-focus="border-color:var(--accent);background:#fff;" />
+          <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#A8A29A;margin-bottom:9px;">Password</div>
+          <input type="password" placeholder="••••••••" style="width:100%;border:1px solid #E5E1D8;border-radius:10px;padding:12px 14px;font-size:14px;background:#FBFAF6;margin-bottom:18px;" style-focus="border-color:var(--accent);background:#fff;" />
+          <button onClick="{{ goJudge }}" style="width:100%;background:#0A0A0A;color:#fff;font-size:14.5px;font-weight:600;padding:13px;border-radius:10px;transition:transform .12s;" style-hover="transform:translateY(-1px);">Continue</button>
+
+          <div style="display:flex;align-items:center;gap:12px;margin:22px 0;">
+            <span style="flex:1;height:1px;background:#E5E1D8;"></span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A8A29A;">DEMO LOGIN</span>
+            <span style="flex:1;height:1px;background:#E5E1D8;"></span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <button onClick="{{ goOrganizer }}" style="display:flex;align-items:center;justify-content:space-between;border:1px solid #E5E1D8;border-radius:10px;padding:12px 15px;background:#FBFAF6;transition:border-color .12s;" style-hover="border-color:#0A0A0A;">
+              <span style="font-size:14px;font-weight:500;">Demo Organizer</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#737373;">set up &amp; rank →</span>
+            </button>
+            <button onClick="{{ goJudge }}" style="display:flex;align-items:center;justify-content:space-between;border:1px solid #E5E1D8;border-radius:10px;padding:12px 15px;background:#FBFAF6;transition:border-color .12s;" style-hover="border-color:#0A0A0A;">
+              <span style="font-size:14px;font-weight:500;">Demo Judge</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#737373;">score live →</span>
+            </button>
+            <button onClick="{{ goJudge }}" style="display:flex;align-items:center;justify-content:space-between;border:1px solid #E5E1D8;border-radius:10px;padding:12px 15px;background:#FBFAF6;transition:border-color .12s;" style-hover="border-color:#0A0A0A;">
+              <span style="font-size:14px;font-weight:500;">Demo Participant</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#737373;">view status →</span>
+            </button>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:20px;font-size:13px;color:#737373;">
+          New here? <a href="#" style="color:var(--accent);font-weight:500;">Create an account</a> · <a href="OpenRubric.html" style="color:#737373;text-decoration:underline;">Back to site</a>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ============ APP FRAME ============ -->
+  <sc-if value="{{ isApp }}" hint-placeholder-val="{{ false }}">
+    <div style="display:flex;min-height:100vh;">
+
+      <!-- SIDEBAR -->
+      <sc-if value="{{ showSidebar }}" hint-placeholder-val="{{ false }}">
+        <aside style="width:236px;flex-shrink:0;border-right:1px solid #E5E1D8;background:#FBFAF6;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;">
+          <div style="padding:20px 20px 18px;border-bottom:1px solid #E5E1D8;">
+            <a href="OpenRubric.html" style="display:flex;align-items:center;gap:9px;">
+              <svg width="22" height="22" viewBox="0 0 26 26" fill="none"><path d="M9 5 L5 5 L5 21 L9 21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="square"/><path d="M17 5 L21 5 L21 21 L17 21" stroke="#0A0A0A" stroke-width="2" stroke-linecap="square"/><rect x="11.5" y="12" width="3" height="3" fill="var(--accent)"/></svg>
+              <span style="font-size:16px;font-weight:600;letter-spacing:-0.02em;">OpenRubric</span>
+            </a>
+            <div style="margin-top:14px;display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #E5E1D8;border-radius:9px;padding:8px 10px;">
+              <span style="width:24px;height:24px;border-radius:6px;background:#0A0A0A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;">BA</span>
+              <div style="min-width:0;">
+                <div style="font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Bay Area AI Hacks</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#A8A29A;">2026 · live</div>
+              </div>
+            </div>
+          </div>
+          <nav style="padding:14px 12px;flex:1;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#A8A29A;padding:6px 10px 8px;">{{ navLabel }}</div>
+            <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+              <button onClick="{{ n.go }}" style="width:100%;display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;margin-bottom:2px;text-align:left;background:{{ n.bg }};transition:background .12s;" style-hover="background:#F1EFE8;">
+                <span style="font-size:13.5px;font-weight:{{ n.weight }};color:{{ n.color }};">{{ n.label }}</span>
+                <span style="flex:1;"></span>
+                <sc-if value="{{ n.badge }}" hint-placeholder-val="{{ false }}"><span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#B4453C;background:rgba(180,69,60,0.08);border-radius:20px;padding:2px 7px;">{{ n.badge }}</span></sc-if>
+              </button>
+            </sc-for>
+          </nav>
+          <div style="padding:14px;border-top:1px solid #E5E1D8;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#A8A29A;margin-bottom:8px;">View as</div>
+            <div style="display:flex;background:#fff;border:1px solid #E5E1D8;border-radius:9px;padding:3px;">
+              <button onClick="{{ goOrganizer }}" style="flex:1;font-size:12.5px;font-weight:600;padding:6px;border-radius:6px;background:{{ orgPillBg }};color:{{ orgPillColor }};">Organizer</button>
+              <button onClick="{{ goJudge }}" style="flex:1;font-size:12.5px;font-weight:600;padding:6px;border-radius:6px;background:{{ judgePillBg }};color:{{ judgePillColor }};">Judge</button>
+            </div>
+          </div>
+        </aside>
+      </sc-if>
+
+      <!-- MAIN COLUMN -->
+      <div style="flex:1;min-width:0;display:flex;flex-direction:column;">
+
+        <!-- ===== JUDGE DASHBOARD ===== -->
+        <sc-if value="{{ isJudgeDash }}" hint-placeholder-val="{{ false }}">
+          <div class="scr">
+            <div style="border-bottom:1px solid #E5E1D8;background:#F7F5F0;">
+              <div style="max-width:1080px;margin:0 auto;padding:34px 32px 0;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#737373;margin-bottom:14px;">Judging · Priya Shah</div>
+                <h1 style="font-size:30px;font-weight:600;letter-spacing:-0.025em;margin-bottom:6px;">Projects to judge</h1>
+                <p style="font-size:14.5px;color:#737373;margin-bottom:24px;">Search, open a project, and score it against the rubric. {{ remainingCount }}</p>
+                <div style="display:flex;align-items:center;gap:11px;background:#fff;border:1px solid #E5E1D8;border-radius:12px;padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,0.03);" style-focus-within="border-color:var(--accent);">
+                  <svg width="17" height="17" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="#A8A29A" stroke-width="1.6"/><path d="M11 11 L14 14" stroke="#A8A29A" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  <input value="{{ search }}" onInput="{{ onSearch }}" placeholder="Search project, team, or participant…" style="flex:1;border:none;background:none;font-size:15px;color:#0A0A0A;" />
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A8A29A;border:1px solid #E5E1D8;border-radius:5px;padding:2px 7px;">⌘K</span>
+                </div>
+                <div style="display:flex;gap:8px;padding:18px 0 18px;flex-wrap:wrap;">
+                  <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+                    <button onClick="{{ f.go }}" style="font-size:13px;font-weight:500;padding:7px 14px;border-radius:20px;border:1px solid {{ f.border }};background:{{ f.bg }};color:{{ f.color }};transition:all .12s;">{{ f.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+            <div style="max-width:1080px;margin:0 auto;padding:24px 32px 60px;width:100%;">
+              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px;">
+                <sc-for list="{{ visibleProjects }}" as="p" hint-placeholder-count="5">
+                  <div style="border:1px solid #E5E1D8;border-radius:14px;background:#fff;padding:18px;display:flex;flex-direction:column;transition:border-color .12s,transform .12s;" style-hover="border-color:#0A0A0A;transform:translateY(-2px);">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:4px;">
+                      <div style="font-size:17px;font-weight:600;letter-spacing:-0.01em;">{{ p.name }}</div>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:{{ p.tlColor }};background:{{ p.tlBg }};border:1px solid {{ p.tlBorder }};border-radius:20px;padding:3px 9px;white-space:nowrap;">{{ p.tlLabel }}</span>
+                    </div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#737373;margin-bottom:16px;">{{ p.team }} · {{ p.track }}</div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+                      <span style="width:7px;height:7px;border-radius:50%;background:{{ p.statusDot }};"></span>
+                      <span style="font-size:13px;color:#5A5A5A;">{{ p.statusLabel }}</span>
+                      <sc-if value="{{ p.hasMyScore }}" hint-placeholder-val="{{ false }}"><span style="flex:1;"></span><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#0A0A0A;font-weight:600;">{{ p.myScore }} / 100</span></sc-if>
+                    </div>
+                    <button onClick="{{ p.open }}" style="margin-top:auto;width:100%;background:{{ p.btnBg }};color:{{ p.btnColor }};border:1px solid {{ p.btnBorder }};font-size:13.5px;font-weight:600;padding:10px;border-radius:9px;transition:transform .12s;" style-hover="transform:translateY(-1px);">{{ p.btnLabel }}</button>
+                  </div>
+                </sc-for>
+              </div>
+              <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+                <div style="text-align:center;padding:60px 20px;color:#A8A29A;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:13px;">No projects match "{{ search }}"</div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== GRADING WORKSPACE ===== -->
+        <sc-if value="{{ isGrading }}" hint-placeholder-val="{{ false }}">
+          <div class="scr" style="display:flex;flex-direction:column;min-height:100vh;background:#F7F5F0;">
+            <!-- top bar -->
+            <div style="position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 24px;border-bottom:1px solid #E5E1D8;background:rgba(247,245,240,0.86);backdrop-filter:blur(12px);">
+              <div style="display:flex;align-items:center;gap:16px;min-width:0;">
+                <button onClick="{{ backToList }}" style="display:inline-flex;align-items:center;gap:7px;font-size:13.5px;font-weight:500;color:#5A5A5A;border:1px solid #E5E1D8;border-radius:9px;padding:8px 13px;background:#fff;transition:border-color .12s;" style-hover="border-color:#0A0A0A;color:#0A0A0A;">← All projects</button>
+                <div style="min-width:0;">
+                  <div style="font-size:16px;font-weight:600;letter-spacing:-0.01em;white-space:nowrap;">{{ ap.name }}</div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#737373;">{{ ap.team }} · {{ ap.track }}</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:18px;">
+                <div style="display:flex;align-items:center;gap:7px;">
+                  <span style="width:7px;height:7px;border-radius:50%;background:{{ asDot }};"></span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:{{ asColor }};white-space:nowrap;">{{ asLabel }}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding-right:4px;">
+                  <span style="font-size:15px;font-weight:700;letter-spacing:-0.01em;">{{ apTotal }}<span style="color:#A8A29A;font-weight:500;"> / 100</span></span>
+                </div>
+                <button style="background:#0A0A0A;color:#fff;font-size:13.5px;font-weight:600;padding:9px 18px;border-radius:9px;white-space:nowrap;transition:transform .12s;" style-hover="transform:translateY(-1px);">Submit final score</button>
+              </div>
+            </div>
+
+            <!-- 3 columns -->
+            <div style="display:grid;grid-template-columns:280px minmax(0,1fr) 320px;gap:0;flex:1;">
+
+              <!-- LEFT: identity -->
+              <aside style="border-right:1px solid #E5E1D8;padding:26px 22px;background:#FBFAF6;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#A8A29A;margin-bottom:12px;">Project</div>
+                <h2 style="font-size:22px;font-weight:600;letter-spacing:-0.02em;margin-bottom:6px;">{{ ap.name }}</h2>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#737373;margin-bottom:18px;">{{ ap.team }}</div>
+                <span style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);background:rgba(47,107,255,0.07);border:1px solid rgba(47,107,255,0.22);border-radius:20px;padding:4px 11px;margin-bottom:20px;">{{ ap.track }}</span>
+                <p style="font-size:13.5px;line-height:1.55;color:#5A5A5A;margin-bottom:22px;">{{ ap.desc }}</p>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:#A8A29A;margin-bottom:10px;">Participants</div>
+                <div style="font-size:13.5px;color:#2A2A2A;margin-bottom:24px;line-height:1.5;">{{ ap.participants }}</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:#A8A29A;margin-bottom:10px;">Links</div>
+                <div style="display:flex;flex-direction:column;gap:7px;">
+                  <sc-for list="{{ apLinks }}" as="lk" hint-placeholder-count="4">
+                    <a href="#" style="display:flex;align-items:center;justify-content:space-between;font-size:13px;color:#2A2A2A;border:1px solid #E5E1D8;border-radius:9px;padding:9px 12px;background:#fff;transition:border-color .12s;" style-hover="border-color:#0A0A0A;">
+                      <span>{{ lk.label }}</span>
+                      <span style="color:#A8A29A;">↗</span>
+                    </a>
+                  </sc-for>
+                </div>
+              </aside>
+
+              <!-- CENTER: workspace -->
+              <section style="padding:26px 30px 80px;min-width:0;">
+                <!-- tabs -->
+                <div style="display:inline-flex;background:#EEEAE1;border-radius:11px;padding:4px;margin-bottom:22px;">
+                  <button onClick="{{ setRubricTab }}" style="font-size:13.5px;font-weight:600;padding:8px 18px;border-radius:8px;background:{{ rubricTabBg }};color:{{ rubricTabColor }};transition:all .12s;">Rubric</button>
+                  <button onClick="{{ setPresTab }}" style="font-size:13.5px;font-weight:600;padding:8px 18px;border-radius:8px;background:{{ presTabBg }};color:{{ presTabColor }};transition:all .12s;">Presentation</button>
+                  <button onClick="{{ setCommentsTab }}" style="font-size:13.5px;font-weight:600;padding:8px 18px;border-radius:8px;background:{{ commentsTabBg }};color:{{ commentsTabColor }};transition:all .12s;">Comments</button>
+                </div>
+
+                <!-- AI summary -->
+                <div style="border:1px solid #E5E1D8;border-radius:14px;background:#fff;padding:20px;margin-bottom:16px;">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent);">AI Quick Summary</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#A8A29A;border:1px solid #E5E1D8;border-radius:5px;padding:1px 6px;">draft</span>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;">
+                    <div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#A8A29A;margin-bottom:4px;">What it does</div><div style="font-size:13.5px;line-height:1.5;color:#2A2A2A;">{{ aiWhat }}</div></div>
+                    <div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#A8A29A;margin-bottom:4px;">Who it helps</div><div style="font-size:13.5px;line-height:1.5;color:#2A2A2A;">{{ aiWho }}</div></div>
+                    <div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#A8A29A;margin-bottom:4px;">How it works</div><div style="font-size:13.5px;line-height:1.5;color:#2A2A2A;">{{ aiHow }}</div></div>
+                    <div><div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#A8A29A;margin-bottom:4px;">Tech stack</div><div style="display:flex;flex-wrap:wrap;gap:6px;">
+                      <sc-for list="{{ aiTech }}" as="t" hint-placeholder-count="3"><span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#5A5A5A;border:1px solid #E5E1D8;border-radius:6px;padding:2px 8px;">{{ t }}</span></sc-for>
+                    </div></div>
+                  </div>
+                  <div style="display:flex;gap:18px;margin-top:16px;padding-top:14px;border-top:1px solid #F0EDE5;">
+                    <div style="flex:1;"><div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#2E8A5E;margin-bottom:4px;">Strongest part</div><div style="font-size:13px;line-height:1.5;color:#2A2A2A;">{{ aiStrong }}</div></div>
+                    <div style="flex:1;"><div style="font-family:'JetBrains Mono',monospace;font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:#A8791F;margin-bottom:4px;">Worth asking about</div><div style="font-size:13px;line-height:1.5;color:#2A2A2A;">{{ aiUnclear }}</div></div>
+                  </div>
+                </div>
+
+                <!-- suggested questions -->
+                <div style="border:1px solid #E5E1D8;border-radius:14px;background:#fff;padding:20px;margin-bottom:16px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:#737373;margin-bottom:13px;">Suggested questions</div>
+                  <div style="display:flex;flex-direction:column;gap:9px;">
+                    <sc-for list="{{ suggestedQs }}" as="q" hint-placeholder-count="5">
+                      <div style="display:flex;gap:10px;align-items:baseline;"><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--accent);">→</span><span style="font-size:13.5px;color:#2A2A2A;">{{ q }}</span></div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <!-- RUBRIC TAB -->
+                <sc-if value="{{ isRubricTab }}" hint-placeholder-val="{{ true }}">
+                  <div style="border:1px solid #E5E1D8;border-radius:14px;background:#fff;overflow:hidden;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #F0EDE5;">
+                      <span style="font-size:15px;font-weight:600;">Rubric scoring</span>
+                      <span style="font-size:15px;font-weight:700;">{{ apTotal }}<span style="color:#A8A29A;font-weight:500;"> / 100</span></span>
+                    </div>
+                    <sc-for list="{{ gradeCriteria }}" as="c" hint-placeholder-count="6">
+                      <div style="padding:18px 20px;border-bottom:1px solid #F0EDE5;">
+                        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px;">
+                          <div style="min-width:0;">
+                            <div style="font-size:14.5px;font-weight:600;margin-bottom:3px;">{{ c.name }}</div>
+                            <div style="font-size:12.5px;color:#737373;line-height:1.45;">{{ c.desc }}</div>
+                          </div>
+                          <div style="display:flex;align-items:baseline;gap:3px;flex-shrink:0;">
+                            <span style="font-size:20px;font-weight:700;letter-spacing:-0.01em;min-width:26px;text-align:right;">{{ c.value }}</span>
+                            <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#A8A29A;">/ {{ c.max }}</span>
+                          </div>
+                        </div>
+                        <input type="range" min="0" max="{{ c.max }}" value="{{ c.value }}" onInput="{{ c.set }}" style="width:100%;" />
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#A8A29A;margin-top:8px;">{{ c.helper }}</div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <!-- PRESENTATION TAB -->
+                <sc-if value="{{ isPresTab }}" hint-placeholder-val="{{ false }}">
+                  <div style="border:1px solid #E5E1D8;border-radius:14px;background:#fff;padding:20px;">
+                    <div style="font-size:15px;font-weight:600;margin-bottom:6px;">Presentation &amp; demo</div>
+                    <p style="font-size:13px;color:#737373;margin-bottom:18px;">Captured during the live demo. These notes inform your Presentation rubric score.</p>
+                    <div style="display:flex;flex-direction:column;gap:18px;">
+                      <sc-for list="{{ presData }}" as="p" hint-placeholder-count="5">
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+                          <span style="font-size:14px;color:#2A2A2A;">{{ p.label }}</span>
+                          <div style="display:flex;gap:6px;">
+                            <sc-for list="{{ p.dots }}" as="d" hint-placeholder-count="5">
+                              <button onClick="{{ d.set }}" style="width:26px;height:26px;border-radius:7px;border:1px solid {{ d.borderC }};background:{{ d.bg }};"></button>
+                            </sc-for>
+                          </div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <!-- COMMENTS TAB -->
+                <sc-if value="{{ isCommentsTab }}" hint-placeholder-val="{{ false }}">
+                  <div style="border:1px solid #E5E1D8;border-radius:14px;background:#fff;padding:20px;">
+                    <div style="font-size:15px;font-weight:600;margin-bottom:6px;">Your notes</div>
+                    <p style="font-size:13px;color:#737373;margin-bottom:14px;">Private to you until you submit. The organizer sees these alongside your scores.</p>
+                    <textarea value="{{ commentText }}" onInput="{{ onComment }}" placeholder="What stood out? What would you ask the team?" style="width:100%;min-height:140px;resize:vertical;border:1px solid #E5E1D8;border-radius:10px;padding:13px 15px;font-size:14px;line-height:1.55;background:#FBFAF6;" style-focus="border-color:var(--accent);background:#fff;"></textarea>
+                  </div>
+                </sc-if>
+              </section>
+
+              <!-- RIGHT: evidence -->
+              <aside style="border-left:1px solid #E5E1D8;padding:26px 22px;background:#FBFAF6;">
+                <!-- presence -->
+                <div style="display:flex;align-items:center;gap:9px;margin-bottom:22px;">
+                  <div style="display:flex;">
+                    <span style="width:24px;height:24px;border-radius:50%;background:#0A0A0A;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;border:2px solid #FBFAF6;">AC</span>
+                    <span style="width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;border:2px solid #FBFAF6;margin-left:-7px;">MP</span>
+                  </div>
+                  <span style="font-size:12.5px;color:#5A5A5A;">Alex &amp; Maya also viewing</span>
+                </div>
+
+                <!-- autosave -->
+                <div style="display:flex;align-items:center;gap:8px;padding:11px 13px;border:1px solid #E5E1D8;border-radius:10px;background:#fff;margin-bottom:18px;">
+                  <span style="width:8px;height:8px;border-radius:50%;background:{{ asDot }};{{ asPulse }}"></span>
+                  <span style="font-size:12.5px;color:{{ asColor }};">{{ asLabel }}</span>
+                  <span style="flex:1;"></span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#A8A29A;">autosave on</span>
+                </div>
+
+                <!-- github timeline -->
+                <div style="border:1px solid #E5E1D8;border-radius:13px;background:#fff;padding:16px;margin-bottom:14px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:#737373;">GitHub timeline</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:{{ tlBadgeColor }};background:{{ tlBadgeBg }};border:1px solid {{ tlBadgeBorder }};border-radius:20px;padding:3px 9px;">{{ tlBadgeLabel }}</span>
+                  </div>
+                  <div>
+                    <sc-for list="{{ tlEvents }}" as="ev" hint-placeholder-count="3">
+                      <div style="display:flex;gap:10px;">
+                        <div style="display:flex;flex-direction:column;align-items:center;"><span style="width:8px;height:8px;border-radius:50%;background:{{ ev.d }};margin-top:3px;"></span><span style="width:1px;flex:1;background:#E5E1D8;"></span></div>
+                        <div style="padding-bottom:13px;"><div style="font-size:12.5px;color:#2A2A2A;font-weight:500;">{{ ev.l }}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#A8A29A;margin-top:2px;">{{ ev.m }}</div></div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+
+                <!-- originality signals -->
+                <div style="border:1px solid #E5E1D8;border-radius:13px;background:#fff;padding:16px;margin-bottom:14px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:#737373;margin-bottom:13px;">Review signals</div>
+                  <div style="display:flex;flex-direction:column;gap:10px;">
+                    <sc-for list="{{ tlFlags }}" as="f" hint-placeholder-count="3">
+                      <div style="display:flex;align-items:center;gap:10px;">
+                        <span style="width:18px;height:18px;border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:{{ f.markColor }};background:{{ f.markBg }};">{{ f.mark }}</span>
+                        <span style="font-size:12.5px;color:#2A2A2A;">{{ f.l }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="margin-top:14px;padding:11px 13px;background:#FBFAF6;border:1px solid #F0EDE5;border-radius:9px;">
+                    <div style="font-size:12px;line-height:1.5;color:#5A5A5A;">{{ tlNote }}</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#A8A29A;margin-top:8px;">This is a signal, not a verdict.</div>
+                  </div>
+                </div>
+
+                <!-- organizer notes -->
+                <div style="border:1px solid #E5E1D8;border-radius:13px;background:#fff;padding:16px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:#737373;margin-bottom:10px;">Organizer note</div>
+                  <div style="font-size:12.5px;line-height:1.5;color:#5A5A5A;">No action requested. Score against the rubric as usual.</div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== ORGANIZER DASHBOARD ===== -->
+        <sc-if value="{{ isOrgDash }}" hint-placeholder-val="{{ false }}">
+          <div class="scr">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:22px 32px;border-bottom:1px solid #E5E1D8;background:rgba(247,245,240,0.86);backdrop-filter:blur(12px);position:sticky;top:0;z-index:20;">
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#737373;margin-bottom:6px;">Organizer</div>
+                <h1 style="font-size:24px;font-weight:600;letter-spacing:-0.02em;">Dashboard</h1>
+              </div>
+              <div style="display:flex;gap:10px;">
+                <button onClick="{{ goSetup }}" style="font-size:13.5px;font-weight:600;color:#0A0A0A;border:1px solid #E5E1D8;background:#fff;padding:9px 15px;border-radius:9px;" style-hover="border-color:#0A0A0A;">Edit setup</button>
+                <button onClick="{{ goRankings }}" style="font-size:13.5px;font-weight:600;color:#fff;background:#0A0A0A;padding:9px 15px;border-radius:9px;" style-hover="transform:translateY(-1px);">View rankings</button>
+              </div>
+            </div>
+            <div style="max-width:1180px;margin:0 auto;padding:26px 32px 70px;width:100%;">
+              <!-- metrics -->
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid #E5E1D8;border-radius:14px;overflow:hidden;background:#fff;margin-bottom:22px;">
+                <div style="padding:20px 22px;border-right:1px solid #E5E1D8;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#A8A29A;margin-bottom:10px;">Submissions</div><div style="font-size:30px;font-weight:700;letter-spacing:-0.02em;">{{ mSubmissions }}</div></div>
+                <div style="padding:20px 22px;border-right:1px solid #E5E1D8;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#A8A29A;margin-bottom:10px;">Judges active</div><div style="font-size:30px;font-weight:700;letter-spacing:-0.02em;">{{ mJudges }}</div></div>
+                <div style="padding:20px 22px;border-right:1px solid #E5E1D8;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#A8A29A;margin-bottom:10px;">Scores completed</div><div style="font-size:30px;font-weight:700;letter-spacing:-0.02em;">{{ mScores }}</div></div>
+                <div style="padding:20px 22px;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#A8A29A;margin-bottom:10px;">Needs review</div><div style="font-size:30px;font-weight:700;letter-spacing:-0.02em;color:#B4453C;">{{ mReview }}</div></div>
+              </div>
+
+              <!-- progress -->
+              <div style="border:1px solid #E5E1D8;border-radius:14px;background:#fff;padding:18px 22px;margin-bottom:22px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;">
+                  <span style="font-size:14px;font-weight:600;">Judging progress</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#737373;">{{ progressLabel }}</span>
+                </div>
+                <div style="height:8px;background:#F1EFE8;border-radius:4px;overflow:hidden;"><div style="height:100%;background:var(--accent);border-radius:4px;width:{{ progressPct }};"></div></div>
+              </div>
+
+              <!-- table + rail -->
+              <div style="display:grid;grid-template-columns:1.65fr 1fr;gap:22px;align-items:start;">
+                <!-- submissions table -->
+                <div style="border:1px solid #E5E1D8;border-radius:14px;background:#fff;overflow:hidden;">
+                  <div style="padding:15px 20px;border-bottom:1px solid #F0EDE5;font-size:14px;font-weight:600;">Submissions</div>
+                  <div style="display:grid;grid-template-columns:1.7fr 1fr 0.7fr 0.6fr 1.1fr 1fr;gap:10px;padding:10px 20px;border-bottom:1px solid #F0EDE5;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#A8A29A;">
+                    <span>Project</span><span>Track</span><span>Judges</span><span>Avg</span><span>Timeline</span><span>Status</span>
+                  </div>
+                  <sc-for list="{{ submissions }}" as="s" hint-placeholder-count="5">
+                    <div onClick="{{ s.open }}" style="display:grid;grid-template-columns:1.7fr 1fr 0.7fr 0.6fr 1.1fr 1fr;gap:10px;padding:14px 20px;border-bottom:1px solid #F4F1EA;align-items:center;cursor:pointer;transition:background .1s;" style-hover="background:#FBFAF6;">
+                      <div style="min-width:0;"><div style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ s.name }}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#A8A29A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ s.team }}</div></div>
+                      <span style="font-size:12.5px;color:#5A5A5A;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ s.track }}</span>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A5A5A;">{{ s.judges }}</span>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;">{{ s.avg }}</span>
+                      <span style="justify-self:start;font-family:'JetBrains Mono',monospace;font-size:10px;color:{{ s.tlColor }};background:{{ s.tlBg }};border:1px solid {{ s.tlBorder }};border-radius:20px;padding:3px 8px;white-space:nowrap;">{{ s.tlLabel }}</span>
+                      <span style="justify-self:start;font-size:11.5px;font-weight:600;color:{{ s.statusColor }};background:{{ s.statusBg }};border-radius:20px;padding:3px 10px;white-space:nowrap;">{{ s.statusLabel }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+
+                <!-- right rail -->
+                <div style="display:flex;flex-direction:column;gap:18px;">
+                  <div style="border:1px solid #E5E1D8;border-radius:14px;background:#fff;padding:18px;">
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:#737373;margin-bottom:14px;">Track leaders</div>
+                    <div style="display:flex;flex-direction:column;gap:12px;">
+                      <sc-for list="{{ trackLeaders }}" as="t" hint-placeholder-count="4">
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                          <div style="min-width:0;"><div style="font-size:13.5px;font-weight:600;">{{ t.name }}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#A8A29A;">{{ t.track }}</div></div>
+                          <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;">{{ t.avg }}</span>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </div>
+
+                  <div style="border:1px solid var(--accent);border-radius:14px;background:rgba(47,107,255,0.04);padding:18px;">
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;">Overall winner · suggested</div>
+                    <div style="font-size:18px;font-weight:600;letter-spacing:-0.01em;">Lighthouse</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#5A5A5A;margin-top:4px;">Avg 87 · 3 / 3 judges · clean timeline</div>
+                  </div>
+
+                  <div style="border:1px solid #E5E1D8;border-radius:14px;background:#fff;padding:18px;">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:#737373;">Review queue</span>
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#B4453C;background:rgba(180,69,60,0.08);border-radius:20px;padding:2px 8px;">{{ reviewCount }} open</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:11px;">
+                      <sc-for list="{{ reviewCases }}" as="r" hint-placeholder-count="2">
+                        <button onClick="{{ r.open }}" style="display:flex;align-items:center;justify-content:space-between;gap:10px;text-align:left;width:100%;border:1px solid #F0EDE5;border-radius:10px;padding:11px 13px;background:#FBFAF6;transition:border-color .12s;" style-hover="border-color:#0A0A0A;">
+                          <div style="min-width:0;"><div style="font-size:13px;font-weight:600;">{{ r.name }}</div><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#A8A29A;">{{ r.reason }}</div></div>
+                          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:{{ r.color }};white-space:nowrap;">{{ r.priority }}</span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== RANKINGS ===== -->
+        <sc-if value="{{ isRankings }}" hint-placeholder-val="{{ false }}">
+          <div class="scr">
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:22px 32px;border-bottom:1px solid #E5E1D8;background:rgba(247,245,240,0.86);backdrop-filter:blur(12px);position:sticky;top:0;z-index:20;">
+              <div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#737373;margin-bottom:6px;">Final Rankings</div>
+                <h1 style="font-size:24px;font-weight:600;letter-spacing:-0.02em;">Rankings</h1>
+              </div>
+              <button style="font-size:13.5px;font-weight:600;color:#0A0A0A;border:1px solid #E5E1D8;background:#fff;padding:9px 15px;border-radius:9px;" style-hover="border-color:#0A0A0A;">Export CSV ↓</button>
+            </div>
+            <div style="max-width:1080px;margin:0 auto;padding:26px 32px 70px;width:100%;">
+              <!-- winner callout -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+                <div style="border:1px solid var(--accent);border-radius:14px;background:rgba(47,107,255,0.04);padding:20px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent);margin-bottom:8px;">Suggested overall winner</div>
+                  <div style="font-size:22px;font-weight:700;letter-spacing:-0.02em;">Lighthouse</div>
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A5A5A;margin-top:5px;">Avg 87 · clean timeline · eligible to award</div>
+                </div>
+                <div style="border:1px solid rgba(180,69,60,0.3);border-radius:14px;background:rgba(180,69,60,0.04);padding:20px;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:#B4453C;margin-bottom:8px;">Hold before award</div>
+                  <div style="font-size:16px;font-weight:600;letter-spacing:-0.01em;">CodePilot — top in Developer Tools</div>
+                  <div style="font-size:12.5px;color:#5A5A5A;margin-top:5px;line-height:1.45;">Top score, but a high-priority review is unresolved. Resolve it before this award is final.</div>
+                </div>
+              </div>
+
+              <!-- overall leaderboard -->
+              <div style="border:1px solid #E5E1D8;border-radius:14px;background:#fff;overflow:hidden;margin-bottom:24px;">
+                <div style="padding:15px 20px;border-bottom:1px solid #F0EDE5;font-size:14px;font-weight:600;">Overall leaderboard</div>
+                <div style="display:grid;grid-template-columns:0.5fr 2fr 1.2fr 0.8fr 0.8fr 1.2fr;gap:10px;padding:10px 20px;border-bottom:1px solid #F0EDE5;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#A8A29A;">
+                  <span>#</span><span>Project</span><span>Track</span><span>Avg</span><span>Judges</span><span>Timeline</span>
+                </div>
+                <sc-for list="{{ overallRanking }}" as="r" hint-placeholder-count="5">
+                  <div style="display:grid;grid-template-columns:0.5fr 2fr 1.2fr 0.8fr 0.8fr 1.2fr;gap:10px;padding:14px 20px;border-bottom:1px solid #F4F1EA;align-items:center;background:{{ r.rowBg }};">
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:#A8A29A;">{{ r.rank }}</span>
+                    <div style="min-width:0;"><div style="font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px;"><span>{{ r.name }}</span><sc-if value="{{ r.award }}" hint-placeholder-val="{{ false }}"><span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:500;color:{{ r.awardColor }};border:1px solid {{ r.awardColor }};border-radius:20px;padding:1px 7px;">{{ r.award }}</span></sc-if></div><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#A8A29A;">{{ r.team }}</div></div>
+                    <span style="font-size:12.5px;color:#5A5A5A;">{{ r.track }}</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;">{{ r.avg }}</span>
+                    <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A5A5A;">{{ r.judges }}</span>
+                    <span style="justify-self:start;font-family:'JetBrains Mono',monospace;font-size:10px;color:{{ r.tlColor }};background:{{ r.tlBg }};border:1px solid {{ r.tlBorder }};border-radius:20px;padding:3px 8px;white-space:nowrap;">{{ r.tlLabel }}</span>
+                  </div>
+                </sc-for>
+              </div>
+
+              <!-- track winners -->
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#737373;margin-bottom:14px;">Track winners</div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+                <sc-for list="{{ trackLeaders }}" as="t" hint-placeholder-count="4">
+                  <div style="border:1px solid #E5E1D8;border-radius:13px;background:#fff;padding:16px;">
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#A8A29A;margin-bottom:10px;">{{ t.track }}</div>
+                    <div style="font-size:15px;font-weight:600;letter-spacing:-0.01em;margin-bottom:4px;">{{ t.name }}</div>
+                    <div style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#5A5A5A;">Avg {{ t.avg }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!-- ===== SETUP WIZARD ===== -->
+        <sc-if value="{{ isSetup }}" hint-placeholder-val="{{ false }}">
+          <div class="scr">
+            <div style="padding:22px 32px;border-bottom:1px solid #E5E1D8;background:rgba(247,245,240,0.86);backdrop-filter:blur(12px);position:sticky;top:0;z-index:20;">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#737373;margin-bottom:6px;">New hackathon</div>
+              <h1 style="font-size:24px;font-weight:600;letter-spacing:-0.02em;">Set up judging</h1>
+            </div>
+            <div style="max-width:780px;margin:0 auto;padding:30px 32px 80px;width:100%;">
+              <!-- stepper -->
+              <div style="display:flex;align-items:center;margin-bottom:30px;">
+                <sc-for list="{{ setupSteps }}" as="st" hint-placeholder-count="5">
+                  <button onClick="{{ st.go }}" style="display:flex;align-items:center;gap:9px;flex:1;background:none;">
+                    <span style="width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;background:{{ st.circleBg }};color:{{ st.circleColor }};border:1px solid {{ st.circleBorder }};flex-shrink:0;">{{ st.mark }}</span>
+                    <span style="font-size:12.5px;font-weight:600;color:{{ st.labelColor }};white-space:nowrap;">{{ st.label }}</span>
+                    <span style="flex:1;height:1px;background:#E5E1D8;min-width:8px;"></span>
+                  </button>
+                </sc-for>
+              </div>
+
+              <div style="border:1px solid #E5E1D8;border-radius:16px;background:#fff;padding:28px;">
+                <h2 style="font-size:19px;font-weight:600;letter-spacing:-0.01em;margin-bottom:5px;">{{ stepTitle }}</h2>
+                <p style="font-size:14px;color:#737373;margin-bottom:24px;">{{ stepSub }}</p>
+
+                <!-- step 1 -->
+                <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ true }}">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                    <div style="grid-column:span 2;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#A8A29A;margin-bottom:8px;">Hackathon name</div><input value="Bay Area AI Hacks 2026" style="width:100%;border:1px solid #E5E1D8;border-radius:10px;padding:11px 13px;font-size:14px;background:#FBFAF6;" style-focus="border-color:var(--accent);background:#fff;" /></div>
+                    <div><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#A8A29A;margin-bottom:8px;">Website URL</div><input value="bayareaaihacks.org" style="width:100%;border:1px solid #E5E1D8;border-radius:10px;padding:11px 13px;font-size:14px;background:#FBFAF6;" style-focus="border-color:var(--accent);background:#fff;" /></div>
+                    <div><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#A8A29A;margin-bottom:8px;">Devpost URL</div><input value="bayareaaihacks.devpost.com" style="width:100%;border:1px solid #E5E1D8;border-radius:10px;padding:11px 13px;font-size:14px;background:#FBFAF6;" style-focus="border-color:var(--accent);background:#fff;" /></div>
+                    <div><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#A8A29A;margin-bottom:8px;">Start time</div><input value="Feb 14, 2026 · 09:00" style="width:100%;border:1px solid #E5E1D8;border-radius:10px;padding:11px 13px;font-size:14px;background:#FBFAF6;" style-focus="border-color:var(--accent);background:#fff;" /></div>
+                    <div><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#A8A29A;margin-bottom:8px;">Submission deadline</div><input value="Feb 16, 2026 · 18:00" style="width:100%;border:1px solid #E5E1D8;border-radius:10px;padding:11px 13px;font-size:14px;background:#FBFAF6;" style-focus="border-color:var(--accent);background:#fff;" /></div>
+                    <div style="grid-column:span 2;"><div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:#A8A29A;margin-bottom:8px;">Judging deadline</div><input value="Feb 17, 2026 · 20:00" style="width:100%;border:1px solid #E5E1D8;border-radius:10px;padding:11px 13px;font-size:14px;background:#FBFAF6;" style-focus="border-color:var(--accent);background:#fff;" /></div>
+                  </div>
+                </sc-if>
+
+                <!-- step 2 -->
+                <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div style="display:flex;align-items:center;gap:11px;border:1px solid var(--accent);border-radius:11px;padding:14px 16px;background:rgba(47,107,255,0.04);">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--accent);">01</span>
+                      <input value="bayareaaihacks.devpost.com" style="flex:1;border:none;background:none;font-size:14px;" />
+                      <button style="background:#0A0A0A;color:#fff;font-size:12.5px;font-weight:600;padding:8px 14px;border-radius:8px;">Import</button>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                      <button style="text-align:left;border:1px solid #E5E1D8;border-radius:11px;padding:14px 16px;background:#FBFAF6;" style-hover="border-color:#0A0A0A;"><div style="font-size:13.5px;font-weight:600;margin-bottom:3px;">Paste project URLs</div><div style="font-size:12px;color:#737373;">One Devpost project per line.</div></button>
+                      <button style="text-align:left;border:1px solid #E5E1D8;border-radius:11px;padding:14px 16px;background:#FBFAF6;" style-hover="border-color:#0A0A0A;"><div style="font-size:13.5px;font-weight:600;margin-bottom:3px;">Upload CSV</div><div style="font-size:12px;color:#737373;">project_name, team_name, repo_url…</div></button>
+                    </div>
+                    <button style="text-align:left;border:1px dashed #D6D1C6;border-radius:11px;padding:14px 16px;background:transparent;" style-hover="border-color:#0A0A0A;"><div style="font-size:13.5px;font-weight:600;">+ Add a project manually</div></button>
+                    <div style="display:flex;gap:10px;align-items:flex-start;border-top:1px solid #F0EDE5;padding-top:14px;margin-top:4px;">
+                      <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#A8791F;">!</span>
+                      <p style="font-size:12.5px;line-height:1.5;color:#737373;">Devpost doesn't expose a stable public judging API. OpenRubric imports only public project metadata and never bypasses authentication. If an import fails: <span style="color:#2A2A2A;">"Couldn't import automatically. Upload CSV or paste project links manually."</span></p>
+                    </div>
+                  </div>
+                </sc-if>
+
+                <!-- step 3 -->
+                <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+                  <textarea placeholder="Paste your rubric text here…" style="width:100%;min-height:90px;resize:vertical;border:1px solid #E5E1D8;border-radius:10px;padding:13px 15px;font-size:14px;line-height:1.55;background:#FBFAF6;margin-bottom:14px;" style-focus="border-color:var(--accent);background:#fff;">Innovation (20), Technical Complexity (25), Functionality (20), Design / UX (15), Impact (10), Presentation (10).</textarea>
+                  <div style="display:flex;justify-content:flex-end;margin-bottom:18px;"><button style="font-size:12.5px;font-weight:600;color:#fff;background:#0A0A0A;padding:8px 14px;border-radius:8px;">Generate criteria</button></div>
+                  <div style="border:1px solid #E5E1D8;border-radius:12px;overflow:hidden;">
+                    <sc-for list="{{ defaultCriteria }}" as="c" hint-placeholder-count="6">
+                      <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid #F4F1EA;">
+                        <input value="{{ c.name }}" style="border:none;background:none;font-size:14px;font-weight:500;flex:1;" />
+                        <div style="display:flex;align-items:center;gap:6px;"><input value="{{ c.max }}" style="width:46px;text-align:right;border:1px solid #E5E1D8;border-radius:7px;padding:5px 8px;font-family:'JetBrains Mono',monospace;font-size:13px;background:#FBFAF6;" /><span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#A8A29A;">pts</span></div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </sc-if>
+
+                <!-- step 4 -->
+                <sc-if value="{{ isStep4 }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;flex-wrap:wrap;gap:9px;">
+                    <sc-for list="{{ defaultTracks }}" as="t" hint-placeholder-count="9">
+                      <span style="display:inline-flex;align-items:center;gap:8px;font-size:13.5px;font-weight:500;border:1px solid #E5E1D8;border-radius:20px;padding:8px 14px;background:#FBFAF6;">{{ t }} <span style="color:#C9C4BA;cursor:pointer;">×</span></span>
+                    </sc-for>
+                    <button style="font-size:13.5px;font-weight:600;color:var(--accent);border:1px dashed #C7D3F2;border-radius:20px;padding:8px 14px;background:rgba(47,107,255,0.04);">+ Add track</button>
+                  </div>
+                </sc-if>
+
+                <!-- step 5 -->
+                <sc-if value="{{ isStep5 }}" hint-placeholder-val="{{ false }}">
+                  <div style="border:1px solid #E5E1D8;border-radius:12px;overflow:hidden;margin-bottom:14px;">
+                    <div style="display:grid;grid-template-columns:1.2fr 1.6fr 1.4fr 1fr;gap:10px;padding:10px 16px;border-bottom:1px solid #F0EDE5;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:#A8A29A;"><span>Name</span><span>Email</span><span>Tracks</span><span>Scope</span></div>
+                    <sc-for list="{{ judgesList }}" as="j" hint-placeholder-count="3">
+                      <div style="display:grid;grid-template-columns:1.2fr 1.6fr 1.4fr 1fr;gap:10px;padding:13px 16px;border-bottom:1px solid #F4F1EA;align-items:center;">
+                        <span style="font-size:13.5px;font-weight:600;">{{ j.name }}</span>
+                        <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#737373;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ j.email }}</span>
+                        <span style="font-size:12.5px;color:#5A5A5A;">{{ j.tracks }}</span>
+                        <span style="font-size:11.5px;color:#5A5A5A;">{{ j.scope }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <button style="text-align:left;width:100%;border:1px dashed #D6D1C6;border-radius:11px;padding:13px 16px;background:transparent;font-size:13.5px;font-weight:600;" style-hover="border-color:#0A0A0A;">+ Invite a judge</button>
+                </sc-if>
+              </div>
+
+              <!-- footer nav -->
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;">
+                <button onClick="{{ prevStep }}" style="font-size:13.5px;font-weight:600;color:#5A5A5A;border:1px solid #E5E1D8;background:#fff;padding:10px 18px;border-radius:10px;" style-hover="border-color:#0A0A0A;color:#0A0A0A;">← Back</button>
+                <button onClick="{{ onFinish }}" style="font-size:13.5px;font-weight:600;color:#fff;background:#0A0A0A;padding:10px 20px;border-radius:10px;" style-hover="transform:translateY(-1px);">{{ nextLabel }}</button>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <!--SCREENS-->
+
+      </div>
+    </div>
+  </sc-if>
+</div>
+
+<template id="__bundler_thumbnail">
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#F7F5F0"/><g stroke="#0A0A0A" stroke-width="4" fill="none" stroke-linecap="square"><path d="M42 32 L32 32 L32 68 L42 68"/><path d="M58 32 L68 32 L68 68 L58 68"/></g><rect x="46" y="46" width="8" height="8" fill="#2F6BFF"/></svg>
+</template></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2F6BFF&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = {
+    screen: 'auth',
+    role: 'judge',
+    search: '',
+    filter: 'all',
+    activeProjectId: 'lighthouse',
+    setupStep: 1,
+    autosave: 'saved',
+    scores: {
+      lighthouse: { innovation: 18, technical: 22, functionality: 17, design: 13, impact: 9, presentation: 8 },
+      studyforge: { innovation: 14, technical: 16, functionality: 0, design: 0, impact: 0, presentation: 0 },
+    },
+    gradeTab: 'rubric',
+    pres: { lighthouse: { clarity: 4, demo: 5, technical: 4, answers: 4, confidence: 4 } },
+    comments: { lighthouse: 'Strong offline story. Want to confirm clinical eval before ranking #1.' },
+  };
+
+  // ---- static reference data ----
+  criteria = [
+    { id: 'innovation', name: 'Innovation', max: 20, desc: 'Originality of the idea and the approach taken.', helper: 'A fresh take, or a known pattern reapplied?' },
+    { id: 'technical', name: 'Technical Complexity', max: 25, desc: 'Engineering depth and difficulty of what was built.', helper: 'How hard was this to build well?' },
+    { id: 'functionality', name: 'Functionality', max: 20, desc: 'How much of the product actually works end to end.', helper: 'Working product vs. demo-only?' },
+    { id: 'design', name: 'Design / UX', max: 15, desc: 'Clarity and quality of the experience.', helper: 'Is it usable and considered?' },
+    { id: 'impact', name: 'Impact', max: 10, desc: 'Potential real-world value and reach.', helper: 'Who benefits, and how much?' },
+    { id: 'presentation', name: 'Presentation', max: 10, desc: 'Quality of the demo and the pitch.', helper: 'Clear story, confident demo?' },
+  ];
+
+  projects = [
+    { id: 'lighthouse', name: 'Lighthouse', team: 'Team Beacon', track: 'Health AI', timeline: 'clean',
+      participants: ['Dana Okafor', 'Liam Reyes', 'Sora Tan'],
+      desc: 'A triage assistant for rural clinics that routes patient intake photos to the right specialist using an offline-first PWA.',
+      repo: 'github.com/team-beacon/lighthouse', devpost: 'devpost.com/lighthouse', live: 'lighthouse-demo.vercel.app', video: 'youtu.be/demo',
+      othersAvg: 87, judgesDone: 3, judgesTotal: 3 },
+    { id: 'mediscan', name: 'MediScan', team: 'Team Vitals', track: 'Health AI', timeline: 'needs',
+      participants: ['Noah Berg', 'Ivy Chen'],
+      desc: 'Phone-camera skin-condition pre-screening with a referral hand-off to local dermatologists.',
+      repo: 'github.com/team-vitals/mediscan', devpost: 'devpost.com/mediscan', live: 'mediscan.app', video: 'youtu.be/demo2',
+      othersAvg: 83, judgesDone: 2, judgesTotal: 3 },
+    { id: 'studyforge', name: 'StudyForge', team: 'Team Forge', track: 'Education', timeline: 'light',
+      participants: ['Mara Quill', 'Theo Vance', 'Ren Adeyemi'],
+      desc: 'Turns lecture recordings into spaced-repetition decks and auto-graded practice problems.',
+      repo: 'github.com/team-forge/studyforge', devpost: 'devpost.com/studyforge', live: 'studyforge.io', video: 'youtu.be/demo3',
+      othersAvg: 76, judgesDone: 1, judgesTotal: 3 },
+    { id: 'campusloop', name: 'CampusLoop', team: 'Team Loop', track: 'Social Impact', timeline: 'clean',
+      participants: ['Priscilla Ade', 'Jon Kim'],
+      desc: 'A mutual-aid board connecting students with surplus dining-hall meals to those who need them.',
+      repo: 'github.com/team-loop/campusloop', devpost: 'devpost.com/campusloop', live: 'campusloop.app', video: 'youtu.be/demo4',
+      othersAvg: 79, judgesDone: 3, judgesTotal: 3 },
+    { id: 'codepilot', name: 'CodePilot', team: 'Team Pilot', track: 'Developer Tools', timeline: 'high',
+      participants: ['Sam Ortiz', 'Wei Lin'],
+      desc: 'An IDE companion that explains unfamiliar codebases and drafts onboarding docs from the repo.',
+      repo: 'github.com/team-pilot/codepilot', devpost: 'devpost.com/codepilot', live: 'codepilot.dev', video: 'youtu.be/demo5',
+      othersAvg: 81, judgesDone: 2, judgesTotal: 3 },
+  ];
+
+  aiData = {
+    lighthouse: { what: 'A triage assistant for rural clinics that routes patient intake photos to the right specialist.', who: 'Frontline nurses and clinics with no on-site specialists.', how: 'An offline-first PWA captures intake photos; a fine-tuned vision model suggests a referral category and confidence.', tech: ['Next.js', 'PyTorch', 'Supabase', 'PWA'], strong: 'The offline-first sync is genuinely robust — works with intermittent connectivity.', unclear: 'How the model was evaluated for clinical safety is not documented in the repo.' },
+    mediscan: { what: 'Phone-camera skin-condition pre-screening with a referral hand-off to local dermatologists.', who: 'People without easy access to a dermatologist.', how: 'On-device classifier flags concern level, then routes to a partner directory.', tech: ['React Native', 'TensorFlow Lite', 'Firebase'], strong: 'Clean on-device inference with no image leaving the phone.', unclear: 'Some commit activity appears after the submission deadline — worth confirming what changed.' },
+    studyforge: { what: 'Turns lecture recordings into spaced-repetition decks and auto-graded practice problems.', who: 'Students reviewing dense course material.', how: 'Transcribes audio, extracts concepts, and generates cards plus practice questions.', tech: ['Next.js', 'Whisper', 'Postgres'], strong: 'The auto-generated practice problems are surprisingly good.', unclear: 'Grading half of the rubric is still pending from this judge.' },
+    campusloop: { what: 'A mutual-aid board connecting students with surplus dining-hall meals to those who need them.', who: 'Students facing food insecurity on campus.', how: 'Real-time board with claim/hold flow and pickup windows.', tech: ['SvelteKit', 'Supabase Realtime'], strong: 'Thoughtful, low-friction claim flow with dignity in mind.', unclear: 'Scaling beyond a single campus is not yet addressed.' },
+    codepilot: { what: 'An IDE companion that explains unfamiliar codebases and drafts onboarding docs from the repo.', who: 'Engineers joining a new project.', how: 'Indexes a repo and answers architecture questions with cited file references.', tech: ['VS Code API', 'OpenAI', 'tree-sitter'], strong: 'The cited file references make answers trustworthy.', unclear: 'Several commits predate the hackathon start — judges may want to ask which parts were built during the event.' },
+  };
+  suggestedQs = [
+    'Which part was built during the hackathon?',
+    'What was the hardest technical challenge?',
+    'Can you walk through the architecture?',
+    'What is fully working versus demo-only?',
+    'What would you improve with another week?',
+  ];
+  timelineData = {
+    lighthouse: { events: [ { l: 'Repo created', m: 'Feb 14, 09:12 — within event window', d: '#2E8A5E' }, { l: 'First commit', m: 'Feb 14, 10:40 — 3 contributors', d: '#2E8A5E' }, { l: 'Last commit', m: 'Feb 16, 17:55 — before deadline', d: '#2E8A5E' } ], note: 'All 142 commits fall inside the event window across 3 contributors. Nothing here needs review.', flags: [ { l: 'All commits inside event window', ok: true }, { l: 'No pre-event activity', ok: true }, { l: 'All contributors listed on the team', ok: true } ] },
+    mediscan: { events: [ { l: 'Repo created', m: 'Feb 14, 11:02 — within window', d: '#2E8A5E' }, { l: 'First commit', m: 'Feb 14, 12:15 — 2 contributors', d: '#2E8A5E' }, { l: 'Last commit', m: 'Feb 16, 23:40 — after deadline', d: '#C99A3A' } ], note: 'GitHub timeline shows 6 commits after the submission deadline. This does not prove a rule violation, but judges may want to ask what changed after submission.', flags: [ { l: '6 commits after the deadline', ok: false }, { l: 'Repo created within window', ok: true }, { l: 'All contributors listed', ok: true } ] },
+    studyforge: { events: [ { l: 'Repo created', m: 'Feb 9, 14:20 — 5 days pre-event', d: '#C99A3A' }, { l: 'First commit', m: 'Feb 14, 10:05 — within window', d: '#2E8A5E' }, { l: 'Last commit', m: 'Feb 16, 16:30 — before deadline', d: '#2E8A5E' } ], note: 'Repo was created before the event but the first code commit lands inside the window. Likely a pre-created placeholder repo — a light review.', flags: [ { l: 'Repo created 5 days before event', ok: false }, { l: 'First commit inside window', ok: true }, { l: 'All contributors listed', ok: true } ] },
+    campusloop: { events: [ { l: 'Repo created', m: 'Feb 14, 08:50 — within window', d: '#2E8A5E' }, { l: 'First commit', m: 'Feb 14, 09:30 — 2 contributors', d: '#2E8A5E' }, { l: 'Last commit', m: 'Feb 16, 15:10 — before deadline', d: '#2E8A5E' } ], note: 'Clean timeline. All activity is inside the event window.', flags: [ { l: 'All commits inside event window', ok: true }, { l: 'No pre-event activity', ok: true }, { l: 'All contributors listed', ok: true } ] },
+    codepilot: { events: [ { l: 'Repo created', m: 'Jan 3, 21:14 — 6 weeks pre-event', d: '#C0584E' }, { l: 'Pre-event commits', m: '38 commits before Feb 14', d: '#C0584E' }, { l: 'Last commit', m: 'Feb 16, 14:02 — before deadline', d: '#2E8A5E' } ], note: 'GitHub timeline shows 38 commits before the hackathon start. This does not prove a rule violation, but judges should ask which parts were built during the event before any award.', flags: [ { l: '38 commits before event start', ok: false }, { l: 'Repo created 6 weeks early', ok: false }, { l: 'One unlisted contributor', ok: false } ] },
+  };
+
+  timelineMeta = {
+    clean: { label: 'Clean timeline', color: '#2E8A5E', bg: 'rgba(46,138,94,0.07)', border: 'rgba(46,138,94,0.28)', dot: '#2E8A5E' },
+    light: { label: 'Light review', color: '#A8791F', bg: 'rgba(168,121,31,0.07)', border: 'rgba(168,121,31,0.28)', dot: '#C99A3A' },
+    needs: { label: 'Needs review', color: '#A8791F', bg: 'rgba(168,121,31,0.07)', border: 'rgba(168,121,31,0.28)', dot: '#C99A3A' },
+    high: { label: 'High priority', color: '#B4453C', bg: 'rgba(180,69,60,0.07)', border: 'rgba(180,69,60,0.28)', dot: '#C0584E' },
+  };
+
+  // ---- helpers ----
+  myScoreObj(id) { return this.state.scores[id] || {}; }
+  hasAnyScore(id) { const s = this.myScoreObj(id); return Object.values(s).some(v => v > 0); }
+  isComplete(id) { const s = this.myScoreObj(id); return this.criteria.every(c => (s[c.id] || 0) > 0); }
+  totalFor(id) { const s = this.myScoreObj(id); return this.criteria.reduce((a, c) => a + (s[c.id] || 0), 0); }
+
+  go = (screen) => this.setState({ screen });
+  goOrganizer = () => this.setState({ screen: 'organizerDash', role: 'organizer' });
+  goJudge = () => this.setState({ screen: 'judgeDash', role: 'judge' });
+  goRankings = () => this.setState({ screen: 'rankings', role: 'organizer' });
+  goSetup = () => this.setState({ screen: 'organizerSetup', role: 'organizer' });
+  goOrgDash = () => this.setState({ screen: 'organizerDash', role: 'organizer' });
+
+  openProject = (id) => this.setState({ screen: 'grading', activeProjectId: id, gradeTab: 'rubric' });
+
+  onSearch = (e) => this.setState({ search: e.target.value });
+  setFilter = (f) => this.setState({ filter: f });
+
+  setScore = (critId, val) => {
+    const id = this.state.activeProjectId;
+    const scores = { ...this.state.scores, [id]: { ...this.myScoreObj(id), [critId]: Number(val) } };
+    this.setState({ scores, autosave: 'saving' });
+    clearTimeout(this._sv);
+    this._sv = setTimeout(() => this.setState({ autosave: 'saved' }), 850);
+  };
+
+  setTab = (t) => this.setState({ gradeTab: t });
+
+  presObj(id) { return this.state.pres[id] || {}; }
+  setPres = (key, val) => {
+    const id = this.state.activeProjectId;
+    const pres = { ...this.state.pres, [id]: { ...this.presObj(id), [key]: val } };
+    this.setState({ pres, autosave: 'saving' });
+    clearTimeout(this._sv); this._sv = setTimeout(() => this.setState({ autosave: 'saved' }), 850);
+  };
+  setComment = (e) => {
+    const id = this.state.activeProjectId;
+    const comments = { ...this.state.comments, [id]: e.target.value };
+    this.setState({ comments, autosave: 'saving' });
+    clearTimeout(this._sv); this._sv = setTimeout(() => this.setState({ autosave: 'saved' }), 850);
+  };
+
+  nextStep = () => this.setState(s => ({ setupStep: Math.min(5, s.setupStep + 1) }));
+  prevStep = () => this.setState(s => ({ setupStep: Math.max(1, s.setupStep - 1) }));
+  gotoStep = (n) => this.setState({ setupStep: n });
+
+  defaultTracks = ['Overall', 'Beginner', 'Advanced', 'AI', 'Health', 'Education', 'Social Impact', 'Developer Tools', 'Sponsor Prize'];
+  judgesList = [
+    { name: 'Priya Shah', email: 'priya@bayareahacks.org', tracks: 'Health AI, Overall', scope: 'All submissions' },
+    { name: 'Alex Chen', email: 'alex@bayareahacks.org', tracks: 'Developer Tools', scope: 'Selected (12)' },
+    { name: 'Maya Patel', email: 'maya@bayareahacks.org', tracks: 'Education, Social Impact', scope: 'All submissions' },
+  ];
+
+  componentDidMount() {
+    if (this.props.accentColor) document.documentElement.style.setProperty('--accent', this.props.accentColor);
+  }
+
+  renderVals() {
+    if (this.props.accentColor) document.documentElement.style.setProperty('--accent', this.props.accentColor);
+    const { screen, role, search, filter } = this.state;
+    const isAuth = screen === 'auth';
+    const isApp = !isAuth;
+    const isGrading = screen === 'grading';
+    const isJudgeDash = screen === 'judgeDash';
+    const showSidebar = isApp && !isGrading;
+
+    // judge dashboard projects
+    const statusFor = (p) => {
+      if (this.isComplete(p.id)) return { label: 'Finalized · ' + this.totalFor(p.id) + '/100', dot: '#2E8A5E' };
+      if (this.hasAnyScore(p.id)) return { label: 'In progress', dot: '#C99A3A' };
+      return { label: 'Not scored', dot: '#C9C4BA' };
+    };
+    let vis = this.projects.filter(p => {
+      const q = search.toLowerCase().trim();
+      const matchQ = !q || p.name.toLowerCase().includes(q) || p.team.toLowerCase().includes(q) || p.track.toLowerCase().includes(q) || p.participants.join(' ').toLowerCase().includes(q);
+      let matchF = true;
+      if (filter === 'notScored') matchF = !this.hasAnyScore(p.id);
+      else if (filter === 'scored') matchF = this.isComplete(p.id);
+      else if (filter === 'needsReview') matchF = (p.timeline === 'needs' || p.timeline === 'high');
+      return matchQ && matchF;
+    });
+    const visibleProjects = vis.map(p => {
+      const st = statusFor(p);
+      const tl = this.timelineMeta[p.timeline];
+      const done = this.isComplete(p.id);
+      return {
+        name: p.name, team: p.team, track: p.track,
+        tlLabel: tl.label, tlColor: tl.color, tlBg: tl.bg, tlBorder: tl.border,
+        statusLabel: st.label, statusDot: st.dot,
+        hasMyScore: done, myScore: this.totalFor(p.id),
+        open: () => this.openProject(p.id),
+        btnLabel: done ? 'Review score' : (this.hasAnyScore(p.id) ? 'Continue grading' : 'Grade'),
+        btnBg: done ? '#fff' : '#0A0A0A', btnColor: done ? '#0A0A0A' : '#fff', btnBorder: done ? '#E5E1D8' : '#0A0A0A',
+      };
+    });
+
+    const mkFilter = (key, label) => {
+      const on = filter === key;
+      return { label, go: () => this.setFilter(key), bg: on ? '#0A0A0A' : '#fff', color: on ? '#fff' : '#5A5A5A', border: on ? '#0A0A0A' : '#E5E1D8' };
+    };
+
+    // sidebar nav
+    const orgNav = [
+      { key: 'organizerDash', label: 'Dashboard', go: this.goOrgDash },
+      { key: 'organizerSetup', label: 'Setup', go: this.goSetup },
+      { key: 'rankings', label: 'Rankings', go: this.goRankings },
+    ];
+    const judgeNav = [
+      { key: 'judgeDash', label: 'Projects', go: this.goJudge },
+    ];
+    const baseNav = role === 'organizer' ? orgNav : judgeNav;
+    const navItems = baseNav.map(n => {
+      const on = screen === n.key;
+      return { label: n.label, go: n.go, bg: on ? '#F1EFE8' : 'transparent', color: on ? '#0A0A0A' : '#5A5A5A', weight: on ? '600' : '500', badge: (n.key === 'organizerDash' && role === 'organizer') ? '2' : null };
+    });
+
+    const completed = this.projects.filter(p => this.isComplete(p.id)).length;
+
+    // ---- grading workspace ----
+    const ap = this.projects.find(p => p.id === this.state.activeProjectId) || this.projects[0];
+    const apScores = this.myScoreObj(ap.id);
+    const apTotal = this.totalFor(ap.id);
+    const apTimeline = this.timelineData[ap.id];
+    const apTl = this.timelineMeta[ap.timeline];
+    const ai = this.aiData[ap.id];
+    const gradeCriteria = this.criteria.map(c => {
+      const v = apScores[c.id] || 0;
+      return { id: c.id, name: c.name, max: c.max, desc: c.desc, helper: c.helper, value: v, pct: Math.round((v / c.max) * 100) + '%',
+        set: (e) => this.setScore(c.id, e.target.value) };
+    });
+    const asMap = {
+      saved: { label: 'All changes saved', color: '#2E8A5E', dot: '#2E8A5E', spin: false },
+      saving: { label: 'Saving…', color: '#A8791F', dot: '#C99A3A', spin: true },
+      unsaved: { label: 'Unsaved changes', color: '#737373', dot: '#C9C4BA', spin: false },
+    };
+    const as = asMap[this.state.autosave] || asMap.saved;
+    const presKeys = [
+      { key: 'clarity', label: 'Clarity of pitch' },
+      { key: 'demo', label: 'Demo quality' },
+      { key: 'technical', label: 'Technical explanation' },
+      { key: 'answers', label: 'Answers to questions' },
+      { key: 'confidence', label: 'Team confidence' },
+    ];
+    const presData = presKeys.map(p => {
+      const v = this.presObj(ap.id)[p.key] || 0;
+      return { label: p.label, value: v, dots: [1,2,3,4,5].map(n => ({ on: n <= v, set: () => this.setPres(p.key, n), bg: n <= v ? 'var(--accent)' : '#fff', borderC: n <= v ? 'var(--accent)' : '#E5E1D8' })) };
+    });
+    const apLinks = [
+      { label: 'Devpost', url: ap.devpost }, { label: 'GitHub', url: ap.repo },
+      { label: 'Live demo', url: ap.live }, { label: 'Video', url: ap.video },
+    ];
+
+    // ---- organizer dashboard + rankings ----
+    const statusMeta = {
+      finalized: { label: 'Finalized', color: '#2E8A5E', bg: 'rgba(46,138,94,0.08)' },
+      progress: { label: 'In progress', color: '#A8791F', bg: 'rgba(168,121,31,0.09)' },
+      notscored: { label: 'Not scored', color: '#737373', bg: '#F1EFE8' },
+    };
+    const submissions = this.projects.map(p => {
+      const tl = this.timelineMeta[p.timeline];
+      const st = p.judgesDone === p.judgesTotal ? 'finalized' : (p.judgesDone > 0 ? 'progress' : 'notscored');
+      const sm = statusMeta[st];
+      const needsReview = p.timeline === 'needs' || p.timeline === 'high';
+      return {
+        name: p.name, team: p.team, track: p.track,
+        judges: p.judgesDone + ' / ' + p.judgesTotal,
+        avg: p.othersAvg,
+        tlLabel: tl.label, tlColor: tl.color, tlBg: tl.bg, tlBorder: tl.border,
+        reviewLabel: p.timeline === 'high' ? 'High priority' : (needsReview ? 'Open' : 'None'),
+        reviewColor: p.timeline === 'high' ? '#B4453C' : (needsReview ? '#A8791F' : '#A8A29A'),
+        statusLabel: sm.label, statusColor: sm.color, statusBg: sm.bg,
+        open: () => this.openProject(p.id),
+      };
+    });
+    const totalJudgeSlots = this.projects.reduce((a, p) => a + p.judgesTotal, 0);
+    const doneJudgeSlots = this.projects.reduce((a, p) => a + p.judgesDone, 0);
+    const needsReviewCount = this.projects.filter(p => p.timeline === 'needs' || p.timeline === 'high').length;
+
+    const sorted = [...this.projects].sort((a, b) => b.othersAvg - a.othersAvg);
+    const overallRanking = sorted.map((p, i) => {
+      const tl = this.timelineMeta[p.timeline];
+      const blocked = p.timeline === 'high';
+      return {
+        rank: String(i + 1).padStart(2, '0'), name: p.name, team: p.team, track: p.track, avg: p.othersAvg,
+        judges: p.judgesDone + ' / ' + p.judgesTotal,
+        tlLabel: tl.label, tlColor: tl.color, tlBg: tl.bg, tlBorder: tl.border,
+        blocked,
+        rowBg: i === 0 ? 'rgba(47,107,255,0.04)' : 'transparent',
+        award: i === 0 ? (blocked ? 'Review first' : 'Suggested winner') : '',
+        awardColor: blocked ? '#B4453C' : '#2E8A5E',
+      };
+    });
+    const trackLeaders = [
+      { track: 'Health AI', name: 'Lighthouse', avg: 87 },
+      { track: 'Education', name: 'StudyForge', avg: 76 },
+      { track: 'Developer Tools', name: 'CodePilot', avg: 81, flag: true },
+      { track: 'Social Impact', name: 'CampusLoop', avg: 79 },
+    ];
+    const reviewCases = this.projects.filter(p => p.timeline === 'needs' || p.timeline === 'high').map(p => {
+      const tl = this.timelineMeta[p.timeline];
+      return { name: p.name, reason: p.timeline === 'high' ? '38 pre-event commits' : '6 commits after deadline',
+        priority: p.timeline === 'high' ? 'High' : 'Needs review', color: p.timeline === 'high' ? '#B4453C' : '#A8791F',
+        open: () => this.openProject(p.id) };
+    });
+
+    // ---- setup wizard ----
+    const step = this.state.setupStep;
+    const setupSteps = [
+      { n: 1, label: 'Hackathon' }, { n: 2, label: 'Import' }, { n: 3, label: 'Rubric' }, { n: 4, label: 'Tracks' }, { n: 5, label: 'Judges' },
+    ].map(s => ({ n: s.n, label: s.label, done: s.n < step, active: s.n === step,
+      circleBg: s.n < step ? '#0A0A0A' : (s.n === step ? '#0A0A0A' : '#fff'),
+      circleColor: s.n <= step ? '#fff' : '#A8A29A',
+      circleBorder: s.n === step ? '#0A0A0A' : '#E5E1D8',
+      labelColor: s.n === step ? '#0A0A0A' : '#737373',
+      mark: s.n < step ? '✓' : String(s.n),
+      go: () => this.gotoStep(s.n) }));
+
+    return {
+      isAuth, isApp, isGrading, isJudgeDash, showSidebar,
+      goJudge: this.goJudge, goOrganizer: this.goOrganizer,
+      search,
+      onSearch: this.onSearch,
+      visibleProjects,
+      noResults: visibleProjects.length === 0,
+      remainingCount: (this.projects.length - completed) + ' of ' + this.projects.length + ' still need your score.',
+      filters: [ mkFilter('all', 'All'), mkFilter('notScored', 'Not scored'), mkFilter('scored', 'Scored'), mkFilter('needsReview', 'Needs review') ],
+      navItems,
+      navLabel: role === 'organizer' ? 'Organizer' : 'Judge',
+      orgPillBg: role === 'organizer' ? '#0A0A0A' : 'transparent', orgPillColor: role === 'organizer' ? '#fff' : '#5A5A5A',
+      judgePillBg: role === 'judge' ? '#0A0A0A' : 'transparent', judgePillColor: role === 'judge' ? '#fff' : '#5A5A5A',
+      // grading
+      ap: { name: ap.name, team: ap.team, track: ap.track, desc: ap.desc, participants: ap.participants.join(', ') },
+      apLinks,
+      backToList: this.goJudge,
+      gradeCriteria,
+      apTotal,
+      gradeTab: this.state.gradeTab,
+      isRubricTab: this.state.gradeTab === 'rubric',
+      isPresTab: this.state.gradeTab === 'presentation',
+      isCommentsTab: this.state.gradeTab === 'comments',
+      setRubricTab: () => this.setTab('rubric'),
+      setPresTab: () => this.setTab('presentation'),
+      setCommentsTab: () => this.setTab('comments'),
+      rubricTabBg: this.state.gradeTab === 'rubric' ? '#0A0A0A' : 'transparent', rubricTabColor: this.state.gradeTab === 'rubric' ? '#fff' : '#5A5A5A',
+      presTabBg: this.state.gradeTab === 'presentation' ? '#0A0A0A' : 'transparent', presTabColor: this.state.gradeTab === 'presentation' ? '#fff' : '#5A5A5A',
+      commentsTabBg: this.state.gradeTab === 'comments' ? '#0A0A0A' : 'transparent', commentsTabColor: this.state.gradeTab === 'comments' ? '#fff' : '#5A5A5A',
+      asLabel: as.label, asColor: as.color, asDot: as.dot, asSpin: as.spin,
+      asPulse: this.state.autosave === 'saving' ? 'animation:pulse .8s infinite;' : '',
+      aiWhat: ai.what, aiWho: ai.who, aiHow: ai.how, aiTech: ai.tech, aiStrong: ai.strong, aiUnclear: ai.unclear,
+      suggestedQs: this.suggestedQs,
+      tlEvents: apTimeline.events.map(e => ({ l: e.l, m: e.m, d: e.d })),
+      tlNote: apTimeline.note,
+      tlFlags: apTimeline.flags.map(f => ({ l: f.l, dot: f.ok ? '#2E8A5E' : '#C99A3A', mark: f.ok ? '✓' : '!' , markColor: f.ok ? '#2E8A5E' : '#A8791F', markBg: f.ok ? 'rgba(46,138,94,0.1)' : 'rgba(168,121,31,0.12)' })),
+      tlBadgeLabel: apTl.label, tlBadgeColor: apTl.color, tlBadgeBg: apTl.bg, tlBadgeBorder: apTl.border,
+      presData,
+      commentText: this.state.comments[ap.id] || '',
+      onComment: this.setComment,
+      // screen flags
+      isOrgDash: screen === 'organizerDash',
+      isRankings: screen === 'rankings',
+      isSetup: screen === 'organizerSetup',
+      // organizer dashboard
+      submissions,
+      mSubmissions: this.projects.length,
+      mJudges: 3,
+      mScores: doneJudgeSlots + ' / ' + totalJudgeSlots,
+      mReview: needsReviewCount,
+      progressPct: Math.round((doneJudgeSlots / totalJudgeSlots) * 100) + '%',
+      progressLabel: doneJudgeSlots + ' of ' + totalJudgeSlots + ' judge scores in',
+      trackLeaders,
+      reviewCases,
+      reviewCount: reviewCases.length,
+      goRankings: this.goRankings,
+      goSetup: this.goSetup,
+      // rankings
+      overallRanking,
+      // setup
+      setupSteps,
+      setupStep: step,
+      stepTitle: ['', 'Hackathon details', 'Import submissions', 'Define your rubric', 'Set up tracks', 'Invite judges'][step],
+      stepSub: ['', 'The basics judges and participants will see.', 'Pull projects in from Devpost, CSV, or add them by hand.', 'Paste your rubric and we will turn it into scorable criteria.', 'Group submissions into the prizes you are awarding.', 'Add judges and decide what each one scores.'][step],
+      nextStep: this.nextStep, prevStep: this.prevStep,
+      isStep1: step === 1, isStep2: step === 2, isStep3: step === 3, isStep4: step === 4, isStep5: step === 5,
+      isFirstStep: step === 1, isLastStep: step === 5,
+      nextLabel: step === 5 ? 'Finish & open dashboard' : 'Continue',
+      onFinish: step === 5 ? this.goOrgDash : this.nextStep,
+      defaultCriteria: this.criteria.map(c => ({ name: c.name, max: c.max })),
+      defaultTracks: this.defaultTracks,
+      judgesList: this.judgesList,
+    };
+  }
+}
+</script>
+</body>
+</html>

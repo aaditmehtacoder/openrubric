@@ -1,0 +1,255 @@
+/**
+ * GitHub timeline review.
+ *
+ * When GITHUB_TOKEN is set, scanRepository() hits the GitHub REST API and derives
+ * review *signals* from the real commit history. With no token it returns the
+ * matching demo scan. Either way the output is identical in shape (GithubScan).
+ *
+ * LANGUAGE POLICY (enforced by reviewNote + assertSafeLanguage):
+ *   OpenRubric never accuses. It surfaces a question for a human organizer.
+ *   Allowed:  "review signal", "timeline concern", "needs organizer review",
+ *             "clean timeline", "pre-event commits detected",
+ *             "post-deadline activity detected", "this is a signal, not a verdict".
+ *   Forbidden: cheater, fraud, guilty, stolen, plagiarized, caught.
+ */
+
+import { DEMO_PROJECTS } from "./demo-data";
+import type { GithubScan, ReviewPriority, TimelineEvent, TimelineFlag } from "./types";
+
+export const FORBIDDEN_LANGUAGE = ["cheater", "fraud", "guilty", "stolen", "plagiarized", "caught"];
+
+/** Throw in development if review copy ever uses accusatory language. */
+export function assertSafeLanguage(text: string): void {
+  const lower = text.toLowerCase();
+  const hit = FORBIDDEN_LANGUAGE.find((w) => lower.includes(w));
+  if (hit) {
+    throw new Error(
+      `Review copy used forbidden language "${hit}". OpenRubric surfaces signals, never verdicts.`,
+    );
+  }
+}
+
+export function isGithubConfigured(): boolean {
+  return Boolean(process.env.GITHUB_TOKEN);
+}
+
+/** Accepts "github.com/owner/repo", a full URL, or "owner/repo". */
+export function parseRepoUrl(url: string): { owner: string; repo: string } | null {
+  if (!url) return null;
+  const cleaned = url
+    .trim()
+    .replace(/^https?:\/\//, "")
+    .replace(/^github\.com\//, "")
+    .replace(/\.git$/, "")
+    .replace(/\/$/, "");
+  const parts = cleaned.split("/").filter(Boolean);
+  if (parts.length < 2) return null;
+  return { owner: parts[0], repo: parts[1] };
+}
+
+export const PRIORITY_LABEL: Record<ReviewPriority, string> = {
+  clean: "Clean timeline",
+  light: "Light review",
+  needs: "Needs review",
+  high: "High priority",
+};
+
+interface ScanMetrics {
+  totalCommits: number;
+  preEventCommits: number;
+  postDeadlineCommits: number;
+  repoCreatedBeforeEvent: boolean;
+  firstCommitInWindow: boolean;
+  hasUnlistedContributors: boolean;
+}
+
+/**
+ * Map raw metrics → a single review priority, taking the most severe signal.
+ * Thresholds are intentionally conservative; everything is a prompt to ask, not a
+ * conclusion.
+ */
+export function deriveReviewPriority(m: ScanMetrics): ReviewPriority {
+  const severities: ReviewPriority[] = ["clean"];
+
+  if (m.totalCommits === 0) severities.push("needs"); // no useful history
+  if (m.postDeadlineCommits > 0) severities.push("needs"); // post-deadline activity
+  if (m.preEventCommits > 0 && m.preEventCommits <= 20) severities.push("light");
+  if (m.preEventCommits > 20) severities.push("high"); // many pre-event commits
+  if (m.repoCreatedBeforeEvent && m.firstCommitInWindow) severities.push("light"); // placeholder repo
+  if (m.hasUnlistedContributors) severities.push("needs");
+
+  const order: ReviewPriority[] = ["clean", "light", "needs", "high"];
+  return severities.reduce((worst, s) => (order.indexOf(s) > order.indexOf(worst) ? s : worst), "clean");
+}
+
+/**
+ * Careful, non-accusatory summary for a scan. Always framed as a question for the
+ * organizer and always ends on "a signal, not a verdict".
+ */
+export function reviewNote(m: ScanMetrics, priority: ReviewPriority): string {
+  let note: string;
+  if (priority === "clean") {
+    note = `All ${m.totalCommits} commits fall inside the event window. Nothing here needs review.`;
+  } else if (m.preEventCommits > 20) {
+    note = `GitHub timeline shows ${m.preEventCommits} commits before the hackathon start. This does not prove a rule violation, but judges may want to ask which parts were built during the event.`;
+  } else if (m.postDeadlineCommits > 0) {
+    note = `GitHub timeline shows ${m.postDeadlineCommits} commits after the submission deadline. This does not prove a rule violation, but judges may want to ask what changed after submission.`;
+  } else if (m.preEventCommits > 0 || m.repoCreatedBeforeEvent) {
+    note = `Some activity predates the event window. This is often a pre-created repo — judges may simply want to confirm which parts were built during the event.`;
+  } else if (m.totalCommits === 0) {
+    note = `No useful commit history was found for this repo. Judges may want to ask the team to share where the work lives.`;
+  } else {
+    note = "A review signal was detected. Judges may want to ask the team about it.";
+  }
+  assertSafeLanguage(note);
+  return note;
+}
+
+/** GitHub commit shape (subset we use). */
+interface GhCommit {
+  commit: { author: { date: string } | null };
+  author: { login: string } | null;
+}
+
+async function gh<T>(path: string, token: string): Promise<T> {
+  const res = await fetch(`https://api.github.com${path}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/vnd.github+json",
+      "X-GitHub-Api-Version": "2022-11-28",
+    },
+    // Cache scans briefly; commit history doesn't change mid-judging.
+    next: { revalidate: 300 },
+  });
+  if (!res.ok) throw new Error(`GitHub API ${res.status} for ${path}`);
+  return (await res.json()) as T;
+}
+
+export interface ScanInput {
+  submissionId: string;
+  repoUrl: string;
+  eventStart: string; // ISO
+  submissionDeadline: string; // ISO
+  listedHandles?: string[];
+}
+
+/**
+ * Scan a repository for review signals. Falls back to demo data when GITHUB_TOKEN
+ * is absent or the repo can't be read — OpenRubric never blocks judging on a failed
+ * scan.
+ */
+export async function scanRepository(input: ScanInput): Promise<GithubScan> {
+  const token = process.env.GITHUB_TOKEN;
+  const parsed = parseRepoUrl(input.repoUrl);
+
+  if (!token || !parsed) {
+    return demoScanFor(input.submissionId);
+  }
+
+  try {
+    const start = new Date(input.eventStart).getTime();
+    const deadline = new Date(input.submissionDeadline).getTime();
+
+    const [repo, commits, contributors] = await Promise.all([
+      gh<{ created_at: string }>(`/repos/${parsed.owner}/${parsed.repo}`, token),
+      gh<GhCommit[]>(`/repos/${parsed.owner}/${parsed.repo}/commits?per_page=100`, token),
+      gh<{ login: string }[]>(`/repos/${parsed.owner}/${parsed.repo}/contributors?per_page=100`, token).catch(() => []),
+    ]);
+
+    const dates = commits
+      .map((c) => c.commit.author?.date)
+      .filter((d): d is string => Boolean(d))
+      .map((d) => new Date(d).getTime())
+      .sort((a, b) => a - b);
+
+    const preEventCommits = dates.filter((d) => d < start).length;
+    const postDeadlineCommits = dates.filter((d) => d > deadline).length;
+    const repoCreatedBeforeEvent = new Date(repo.created_at).getTime() < start;
+    const firstCommitInWindow = dates.length > 0 && dates[0] >= start;
+
+    const listed = new Set((input.listedHandles ?? []).map((h) => h.toLowerCase()));
+    const contributorRecords = contributors.map((c) => ({
+      login: c.login,
+      listed: listed.size === 0 ? true : listed.has(c.login.toLowerCase()),
+    }));
+    const hasUnlistedContributors = contributorRecords.some((c) => !c.listed);
+
+    const metrics: ScanMetrics = {
+      totalCommits: dates.length,
+      preEventCommits,
+      postDeadlineCommits,
+      repoCreatedBeforeEvent,
+      firstCommitInWindow,
+      hasUnlistedContributors,
+    };
+
+    const priority = deriveReviewPriority(metrics);
+    const fmt = (ms: number) => new Date(ms).toISOString();
+
+    const timeline: TimelineEvent[] = [
+      {
+        label: "Repo created",
+        meta: repoCreatedBeforeEvent ? "before the event window" : "within the event window",
+        tone: repoCreatedBeforeEvent ? "needs" : "clean",
+      },
+      dates.length > 0
+        ? { label: "First commit", meta: firstCommitInWindow ? "within window" : "before event start", tone: firstCommitInWindow ? "clean" : "needs" }
+        : { label: "No commits found", meta: "empty history", tone: "needs" },
+      dates.length > 0
+        ? { label: "Last commit", meta: postDeadlineCommits > 0 ? "after deadline" : "before deadline", tone: postDeadlineCommits > 0 ? "needs" : "clean" }
+        : { label: "—", meta: "", tone: "needs" },
+    ];
+
+    const flags: TimelineFlag[] = [
+      { label: preEventCommits > 0 ? `${preEventCommits} commits before event start` : "All commits inside event window", ok: preEventCommits === 0 },
+      { label: postDeadlineCommits > 0 ? `${postDeadlineCommits} commits after the deadline` : "No post-deadline activity", ok: postDeadlineCommits === 0 },
+      { label: hasUnlistedContributors ? "Unlisted contributor detected" : "All contributors listed", ok: !hasUnlistedContributors },
+    ];
+
+    return {
+      id: `scan-${input.submissionId}`,
+      submission_id: input.submissionId,
+      repo_owner: parsed.owner,
+      repo_name: parsed.repo,
+      repo_created_at: repo.created_at,
+      first_commit_at: dates.length ? fmt(dates[0]) : repo.created_at,
+      last_commit_at: dates.length ? fmt(dates[dates.length - 1]) : repo.created_at,
+      total_commits: dates.length,
+      pre_event_commits: preEventCommits,
+      post_deadline_commits: postDeadlineCommits,
+      contributors_json: contributorRecords,
+      timeline_json: timeline,
+      flags_json: flags,
+      review_priority: priority,
+      summary: reviewNote(metrics, priority),
+      created_at: new Date().toISOString(),
+    };
+  } catch {
+    // Never block judging on a failed scan.
+    return demoScanFor(input.submissionId);
+  }
+}
+
+/** Return the demo scan for a known submission, or a clean placeholder. */
+export function demoScanFor(submissionId: string): GithubScan {
+  const project = DEMO_PROJECTS.find((p) => p.id === submissionId);
+  if (project) return project.scan;
+  return {
+    id: `scan-${submissionId}`,
+    submission_id: submissionId,
+    repo_owner: "—",
+    repo_name: "—",
+    repo_created_at: new Date(0).toISOString(),
+    first_commit_at: new Date(0).toISOString(),
+    last_commit_at: new Date(0).toISOString(),
+    total_commits: 0,
+    pre_event_commits: 0,
+    post_deadline_commits: 0,
+    contributors_json: [],
+    timeline_json: [{ label: "No scan yet", meta: "connect a repo to scan", tone: "clean" }],
+    flags_json: [],
+    review_priority: "clean",
+    summary: "No repository connected yet.",
+    created_at: new Date().toISOString(),
+  };
+}
