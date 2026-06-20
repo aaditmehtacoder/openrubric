@@ -89,7 +89,7 @@ export default function PricingPage() {
                 Managed event
               </div>
               <div className="mb-1 flex items-baseline gap-2">
-                <span className="text-[34px] font-bold tracking-[-0.02em]">$20–30</span>
+                <span className="text-[34px] font-bold tracking-[-0.02em]">$50–100</span>
                 <span className="text-[14px] text-dim">per event</span>
               </div>
               <p className="mb-5 text-[13.5px] leading-[1.55] text-dim">
