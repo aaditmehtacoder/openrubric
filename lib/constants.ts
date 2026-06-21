@@ -29,6 +29,7 @@ export const ROUTES = {
   teamDashboard: "/dashboard/team",
   submit: "/submit",
   pricing: "/pricing",
+  video: "/video",
   contact: "/contact",
   feedback: "/feedback",
   terms: "/terms",

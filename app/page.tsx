@@ -5,6 +5,7 @@ import { WorkflowStrip } from "@/components/marketing/workflow-strip";
 import { DarkProductSection } from "@/components/marketing/dark-product-section";
 import { ReviewSignals } from "@/components/marketing/review-signals";
 import { FinalCta } from "@/components/marketing/final-cta";
+import { DemoVideo } from "@/components/marketing/demo-video";
 import { Reveal } from "@/components/ui/reveal";
 
 const JUDGING_ROOMS = [
@@ -52,6 +53,14 @@ export default function HomePage() {
         {/* Hero is intentionally not wrapped in Reveal — its preview panel uses a
             position:fixed maximize overlay that a lingering transform would break. */}
         <LandingHero />
+
+        <Reveal>
+          <DemoVideo
+            eyebrow="Product demo"
+            heading="See OpenRubric in action."
+            sub="A quick walkthrough of importing projects, scoring against a shared rubric, and publishing winners."
+          />
+        </Reveal>
 
         <Reveal>
           <FeatureGrid

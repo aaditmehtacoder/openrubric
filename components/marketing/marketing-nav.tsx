@@ -8,7 +8,7 @@ const NAV_LINKS = [
   { label: "Pricing", href: ROUTES.pricing },
   { label: "Docs", href: ROUTES.docs },
   { label: "GitHub", href: SITE.githubUrl, external: true },
-  { label: "Demo", href: ROUTES.judgeDashboard },
+  { label: "Demo", href: ROUTES.video },
 ];
 
 export function MarketingNav() {
