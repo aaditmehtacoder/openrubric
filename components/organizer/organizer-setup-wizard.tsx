@@ -88,13 +88,81 @@ interface ExistingHackathon {
   criteria: { name: string; max: number }[];
 }
 
-/** ISO timestamp → local `YYYY-MM-DDTHH:mm` for a datetime-local input. */
+/** ISO timestamp → browser-local `YYYY-MM-DDTHH:mm` (fallback when no timezone is set). */
 function isoToLocalInput(iso?: string | null): string {
   if (!iso) return "";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+/**
+ * The datetime-local inputs hold a NAIVE wall-clock value (no zone). The organizer
+ * means that wall time IN THE HACKATHON'S timezone — not the browser's, and definitely
+ * not the (UTC) server's. These two helpers convert between the input's wall-clock and
+ * a real UTC instant using the selected IANA zone, so a time round-trips unchanged and
+ * is stored as the correct moment (which is what the GitHub deadline check relies on).
+ */
+
+/** Offset (ms) of `timeZone` from UTC at a given instant. Positive = ahead of UTC. */
+function tzOffsetMs(instantMs: number, timeZone: string): number {
+  const dtf = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  const map: Record<string, string> = {};
+  for (const p of dtf.formatToParts(new Date(instantMs))) map[p.type] = p.value;
+  const hour = map.hour === "24" ? "00" : map.hour; // some engines emit "24" at midnight
+  const asUTC = Date.UTC(+map.year, +map.month - 1, +map.day, +hour, +map.minute, +map.second);
+  return asUTC - instantMs;
+}
+
+/** Naive `YYYY-MM-DDTHH:mm` interpreted IN `timeZone` → UTC ISO string. */
+function zonedInputToISO(local: string, timeZone?: string | null): string | null {
+  if (!local) return null;
+  const [datePart, timePart] = local.split("T");
+  if (!datePart || !timePart) return null;
+  const [y, m, d] = datePart.split("-").map(Number);
+  const [hh, mm] = timePart.split(":").map(Number);
+  if ([y, m, d, hh, mm].some((n) => Number.isNaN(n))) return null;
+  // No zone → interpret in the browser's own zone (legacy behavior).
+  if (!timeZone) {
+    const dt = new Date(y, m - 1, d, hh, mm);
+    return Number.isNaN(dt.getTime()) ? null : dt.toISOString();
+  }
+  const wallAsUTC = Date.UTC(y, m - 1, d, hh, mm);
+  // Two passes settle DST boundaries (the offset can depend on the resolved instant).
+  let utc = wallAsUTC - tzOffsetMs(wallAsUTC, timeZone);
+  utc = wallAsUTC - tzOffsetMs(utc, timeZone);
+  return new Date(utc).toISOString();
+}
+
+/** UTC ISO string → `YYYY-MM-DDTHH:mm` wall time IN `timeZone`, for a datetime-local input. */
+function isoToZonedInput(iso?: string | null, timeZone?: string | null): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  if (!timeZone) return isoToLocalInput(iso);
+  const dtf = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    hour12: false,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const map: Record<string, string> = {};
+  for (const p of dtf.formatToParts(d)) map[p.type] = p.value;
+  const hour = map.hour === "24" ? "00" : map.hour;
+  return `${map.year}-${map.month}-${map.day}T${hour}:${map.minute}`;
 }
 
 /** Custom timezone dropdown — styled to match the wizard inputs (no native <select>). */
@@ -232,17 +300,20 @@ export function OrganizerSetupWizard({
     } catch {
       /* keep UTC */
     }
+    // Saved dates are read back IN the hackathon's own timezone, so the wall-clock the
+    // organizer sees matches exactly what they entered (no browser/server shift).
+    const tz = existing?.hackathon.timezone || detected;
     setForm((f) => ({
       ...f,
       start_time:
-        f.start_time || isoToLocalInput(existing?.hackathon.start_time) || localDateTime(0, 9),
+        f.start_time || isoToZonedInput(existing?.hackathon.start_time, tz) || localDateTime(0, 9),
       submission_deadline:
         f.submission_deadline ||
-        isoToLocalInput(existing?.hackathon.submission_deadline) ||
+        isoToZonedInput(existing?.hackathon.submission_deadline, tz) ||
         localDateTime(2, 18),
       judging_deadline:
         f.judging_deadline ||
-        isoToLocalInput(existing?.hackathon.judging_deadline) ||
+        isoToZonedInput(existing?.hackathon.judging_deadline, tz) ||
         localDateTime(3, 20),
       timezone: f.timezone || detected,
     }));
@@ -378,14 +449,17 @@ export function OrganizerSetupWizard({
     if (!websiteGate()) return;
     setSaving(true);
     setError(null);
+    // Convert the wall-clock inputs to real UTC instants using the SELECTED timezone, so
+    // the moment stored is correct regardless of where the browser or server happen to be.
+    const tz = form.timezone || null;
     const payload = {
       name: form.name,
       logo_url: form.logo_url,
       website_url: urlNormalized.current || form.website_url,
       devpost_url: form.devpost_url,
-      start_time: form.start_time,
-      submission_deadline: form.submission_deadline,
-      judging_deadline: form.judging_deadline,
+      start_time: zonedInputToISO(form.start_time, tz),
+      submission_deadline: zonedInputToISO(form.submission_deadline, tz),
+      judging_deadline: zonedInputToISO(form.judging_deadline, tz),
       timezone: form.timezone,
       judges_per_project: judgesPerProject,
       tracks,
