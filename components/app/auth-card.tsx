@@ -148,15 +148,18 @@ export function AuthCard({
     }
     setPending(true);
     const inviteQs = invite ? `?invite=${encodeURIComponent(invite)}` : "";
+    // Prefer the canonical app URL (openrubric.vercel.app via NEXT_PUBLIC_APP_URL) so OAuth
+    // always returns to production — never localhost or a preview origin. Falls back to the
+    // current origin only if the env var isn't set.
+    const base =
+      process.env.NEXT_PUBLIC_APP_URL?.replace(/\/+$/, "") ||
+      (typeof window !== "undefined" ? window.location.origin : "");
     const { error } = await supabase.auth.signInWithOAuth({
       provider,
       options: {
         // Return to our callback route, which exchanges the code for a session, accepts
         // the invite, and routes the judge straight to judging — never back to sign in.
-        redirectTo:
-          typeof window !== "undefined"
-            ? `${window.location.origin}${ROUTES.authCallback}${inviteQs}`
-            : undefined,
+        redirectTo: `${base}${ROUTES.authCallback}${inviteQs}`,
       },
     });
     if (error) {

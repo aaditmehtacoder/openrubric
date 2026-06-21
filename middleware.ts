@@ -10,6 +10,16 @@ export async function middleware(request: NextRequest) {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return NextResponse.next();
 
+  // OAuth / magic-link sometimes returns to the Supabase "Site URL" root with a
+  // `?code=…` instead of our callback route. Forward any stray code to /auth/callback
+  // so the code is always exchanged for a session (preserving ?invite if present).
+  const code = request.nextUrl.searchParams.get("code");
+  if (code && request.nextUrl.pathname !== "/auth/callback") {
+    const cb = request.nextUrl.clone();
+    cb.pathname = "/auth/callback";
+    return NextResponse.redirect(cb);
+  }
+
   // Only do auth work when a Supabase session cookie is actually present. Anonymous
   // visitors skip the network refresh entirely, and the "invalid refresh token" log
   // (a harmless stale-cookie artifact) is confined to genuinely stale sessions.
