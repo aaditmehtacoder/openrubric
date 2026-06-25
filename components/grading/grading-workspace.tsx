@@ -80,7 +80,7 @@ export function GradingWorkspace({
   ];
 
   return (
-    <div className={cn("flex min-h-screen flex-col bg-canvas", theme === "dark" && "dark")}>
+    <div className={cn("flex min-h-screen flex-col bg-canvas text-ink", theme === "dark" && "dark")}>
       {/* top bar */}
       <div className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-line bg-background/85 px-6 py-3.5 backdrop-blur-[12px]">
         <div className="flex min-w-0 items-center gap-4">

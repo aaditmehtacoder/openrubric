@@ -30,7 +30,7 @@ export function TrackBuilder({
           <button
             type="button"
             onClick={() => onChange(tracks.filter((x) => x !== t))}
-            className="text-[#C9C4BA] transition-colors hover:text-signal-high"
+            className="text-faint transition-colors hover:text-signal-high"
             aria-label={`Remove ${t}`}
           >
             ×
@@ -58,7 +58,7 @@ export function TrackBuilder({
         <button
           type="button"
           onClick={() => setAdding(true)}
-          className="rounded-full border border-dashed border-[#C7D3F2] bg-accent-soft px-3.5 py-2 text-[13.5px] font-semibold text-accent"
+          className="rounded-full border border-dashed border-accent-line bg-accent-soft px-3.5 py-2 text-[13.5px] font-semibold text-accent"
         >
           + Add track
         </button>

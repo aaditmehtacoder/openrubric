@@ -72,7 +72,7 @@ export function RubricBuilder({
         disabled={generating}
         className={cn(
           "mb-4 flex w-full items-center gap-3 rounded-[12px] border border-dashed px-4 py-3.5 text-left transition-colors",
-          drop.dragging ? "border-accent bg-accent-soft" : "border-[#D6D1C6] hover:border-ink",
+          drop.dragging ? "border-accent bg-accent-soft" : "border-line hover:border-ink",
           generating && "opacity-70",
         )}
       >
@@ -161,7 +161,7 @@ export function RubricBuilder({
       <button
         type="button"
         onClick={() => onChange([...criteria, { name: "New criterion", max: 10 }])}
-        className="mt-3 w-full rounded-[11px] border border-dashed border-[#D6D1C6] px-4 py-3 text-left text-[13.5px] font-semibold transition-colors hover:border-ink"
+        className="mt-3 w-full rounded-[11px] border border-dashed border-line px-4 py-3 text-left text-[13.5px] font-semibold transition-colors hover:border-ink"
       >
         + Add a criterion
       </button>

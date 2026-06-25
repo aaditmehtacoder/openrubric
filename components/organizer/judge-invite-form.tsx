@@ -191,7 +191,7 @@ export function JudgeInviteForm({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          className="mt-3 w-full rounded-[11px] border border-dashed border-[#D6D1C6] px-4 py-3 text-left text-[13.5px] font-semibold transition-colors hover:border-ink"
+          className="mt-3 w-full rounded-[11px] border border-dashed border-line px-4 py-3 text-left text-[13.5px] font-semibold transition-colors hover:border-ink"
         >
           + Invite a judge
         </button>

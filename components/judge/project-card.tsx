@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ROUTES } from "@/lib/constants";
 import type { ProjectView, SubmissionStatus } from "@/lib/types";
@@ -36,9 +36,22 @@ function TrackSelect({
 }) {
   const [value, setValue] = useState(selectedTrackId ?? "");
   const [saving, setSaving] = useState(false);
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Close the custom menu on any outside click.
+  useEffect(() => {
+    if (!open) return;
+    function onDown(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [open]);
 
   async function onChange(next: string) {
     setValue(next);
+    setOpen(false);
     setSaving(true);
     try {
       await fetch("/api/judges/track", {
@@ -54,29 +67,70 @@ function TrackSelect({
   }
 
   if (tracks.length === 0) return null;
+  const current = tracks.find((t) => t.id === value);
+  const options = [{ id: "", name: "Unassigned" }, ...tracks];
+
   return (
     <div className="mb-4">
       <span className="mb-1 block font-mono text-[10px] uppercase tracking-[0.1em] text-faint">
         Judging track{saving ? " · saving…" : ""}
       </span>
-      <div className="relative">
-        <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
+      {/* Custom dropdown (no native <select>) so it looks identical on Mac, Windows,
+          and Linux — and themes with the rest of OpenRubric. */}
+      <div ref={ref} className="relative">
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-haspopup="listbox"
+          aria-expanded={open}
           aria-label="Judging track"
-          className="w-full appearance-none rounded-[9px] border border-line bg-raised px-2.5 py-2 pr-8 text-[12.5px] font-medium text-ink outline-none transition-colors hover:border-ink focus:border-accent"
+          className={cn(
+            "flex w-full items-center justify-between gap-2 rounded-[9px] border bg-raised px-2.5 py-2 text-left text-[12.5px] font-medium transition-colors",
+            open ? "border-accent" : "border-line hover:border-ink",
+            current ? "text-ink" : "text-dim",
+          )}
         >
-          <option value="">Unassigned</option>
-          {tracks.map((t) => (
-            <option key={t.id} value={t.id}>
-              {t.name}
-            </option>
-          ))}
-        </select>
-        <ChevronDown
-          className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-faint"
-          strokeWidth={2}
-        />
+          <span className="truncate">{current?.name ?? "Unassigned"}</span>
+          <ChevronDown
+            className={cn(
+              "h-3.5 w-3.5 flex-shrink-0 text-faint transition-transform",
+              open && "rotate-180",
+            )}
+            strokeWidth={2}
+          />
+        </button>
+        {open && (
+          <div
+            role="listbox"
+            className="absolute left-0 right-0 top-[calc(100%+5px)] z-30 max-h-56 overflow-y-auto rounded-[10px] border border-line bg-surface p-1.5 shadow-[0_12px_34px_rgba(20,18,14,0.16)]"
+          >
+            {options.map((o) => {
+              const selected = o.id === value;
+              return (
+                <button
+                  key={o.id || "unassigned"}
+                  type="button"
+                  role="option"
+                  aria-selected={selected}
+                  onClick={() => onChange(o.id)}
+                  className={cn(
+                    "flex w-full items-center gap-2 rounded-[7px] px-2.5 py-2 text-left text-[12.5px] transition-colors hover:bg-sunken",
+                    selected ? "font-semibold text-ink" : "text-dim",
+                  )}
+                >
+                  <Check
+                    className={cn(
+                      "h-3.5 w-3.5 flex-shrink-0 text-accent",
+                      selected ? "opacity-100" : "opacity-0",
+                    )}
+                    strokeWidth={3}
+                  />
+                  <span className="truncate">{o.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
