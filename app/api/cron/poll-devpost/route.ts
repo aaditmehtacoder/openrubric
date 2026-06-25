@@ -27,6 +27,14 @@ const MAX_HACKATHONS_PER_RUN = 10;
  */
 async function runPoll(req: Request) {
   const secret = process.env.CRON_SECRET;
+  // Fail closed in production: a missing CRON_SECRET would otherwise leave this
+  // resource-heavy job (scraping + AI) open to anyone. (Suspect S7.)
+  if (process.env.NODE_ENV === "production" && !secret) {
+    return NextResponse.json(
+      { ok: false, error: "CRON_SECRET is not configured." },
+      { status: 503 },
+    );
+  }
   if (secret) {
     const auth = req.headers.get("authorization");
     if (auth !== `Bearer ${secret}`) {

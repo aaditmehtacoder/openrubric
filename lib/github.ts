@@ -20,7 +20,10 @@ export const FORBIDDEN_LANGUAGE = ["cheater", "fraud", "guilty", "stolen", "plag
 /** Throw in development if review copy ever uses accusatory language. */
 export function assertSafeLanguage(text: string): void {
   const lower = text.toLowerCase();
-  const hit = FORBIDDEN_LANGUAGE.find((w) => lower.includes(w));
+  // Word-boundary match so a benign word that merely *contains* a forbidden substring
+  // (e.g. "fraught", "caughted") is not wrongly blocked. The guard still throws on any
+  // standalone forbidden word.
+  const hit = FORBIDDEN_LANGUAGE.find((w) => new RegExp(`\\b${w}\\b`).test(lower));
   if (hit) {
     throw new Error(
       `Review copy used forbidden language "${hit}". OpenRubric surfaces signals, never verdicts.`,
@@ -32,17 +35,22 @@ export function isGithubConfigured(): boolean {
   return Boolean(process.env.GITHUB_TOKEN);
 }
 
-/** Accepts "github.com/owner/repo", a full URL, or "owner/repo". */
+/** Accepts "github.com/owner/repo", a full URL (incl. www. and query strings), or "owner/repo". */
 export function parseRepoUrl(url: string): { owner: string; repo: string } | null {
   if (!url) return null;
   const cleaned = url
     .trim()
     .replace(/^https?:\/\//, "")
+    .replace(/^www\./, "") // tolerate the www. subdomain
     .replace(/^github\.com\//, "")
+    .replace(/[?#].*$/, "") // drop query string / fragment
     .replace(/\.git$/, "")
-    .replace(/\/$/, "");
+    .replace(/\/+$/, "");
   const parts = cleaned.split("/").filter(Boolean);
   if (parts.length < 2) return null;
+  // A leading host-looking segment means this was a non-GitHub URL (github.com was
+  // already stripped above) — don't yield a bogus owner like "example.com".
+  if (parts[0].includes(".")) return null;
   return { owner: parts[0], repo: parts[1] };
 }
 
@@ -169,6 +177,34 @@ async function gh<T>(path: string, token: string): Promise<T> {
   return (await res.json()) as T;
 }
 
+/**
+ * Max commit pages fetched per scan (100 commits/page). Bounds a scan on a huge repo
+ * while paginating far past the old single-page (100-commit) ceiling. (Suspect S5.)
+ */
+export const MAX_COMMIT_PAGES = 5;
+
+/**
+ * Fetch commits with pagination up to MAX_COMMIT_PAGES. The previous single-page fetch
+ * silently undercounted pre/post-event commits on repos with >100 commits, which could
+ * mis-derive review priority. `capped` is true when the repo has more commits than we
+ * read, so the summary can label the count honestly.
+ */
+async function ghCommits(
+  owner: string,
+  repo: string,
+  token: string,
+): Promise<{ commits: GhCommit[]; capped: boolean }> {
+  const commits: GhCommit[] = [];
+  let capped = false;
+  for (let page = 1; page <= MAX_COMMIT_PAGES; page++) {
+    const batch = await gh<GhCommit[]>(`/repos/${owner}/${repo}/commits?per_page=100&page=${page}`, token);
+    commits.push(...batch);
+    if (batch.length < 100) break;
+    if (page === MAX_COMMIT_PAGES && batch.length === 100) capped = true;
+  }
+  return { commits, capped };
+}
+
 /** Default lateness/earliness grace, in minutes. Override with GITHUB_GRACE_MINUTES. */
 export const DEFAULT_GRACE_MINUTES = 30;
 
@@ -216,12 +252,13 @@ export async function scanRepository(input: ScanInput): Promise<GithubScan> {
       ? new Date(input.submissionDeadline).getTime() + grace
       : Number.POSITIVE_INFINITY;
 
-    const [repo, commits, contributors, languages] = await Promise.all([
+    const [repo, commitResult, contributors, languages] = await Promise.all([
       gh<{ created_at: string }>(`/repos/${parsed.owner}/${parsed.repo}`, token),
-      gh<GhCommit[]>(`/repos/${parsed.owner}/${parsed.repo}/commits?per_page=100`, token),
+      ghCommits(parsed.owner, parsed.repo, token),
       gh<{ login: string }[]>(`/repos/${parsed.owner}/${parsed.repo}/contributors?per_page=100`, token).catch(() => []),
       gh<Record<string, number>>(`/repos/${parsed.owner}/${parsed.repo}/languages`, token).catch(() => ({})),
     ]);
+    const { commits, capped } = commitResult;
 
     // Language breakdown → [{ name, pct }] sorted by share (desc).
     const langTotal = Object.values(languages).reduce((a, b) => a + b, 0);
@@ -300,7 +337,9 @@ export async function scanRepository(input: ScanInput): Promise<GithubScan> {
       timeline_json: timeline,
       flags_json: flags,
       review_priority: priority,
-      summary: reviewNote(metrics, priority, graceMinutes(input.graceMinutes)),
+      summary: capped
+        ? `${reviewNote(metrics, priority, graceMinutes(input.graceMinutes))} (Based on the most recent ${commits.length} commits.)`
+        : reviewNote(metrics, priority, graceMinutes(input.graceMinutes)),
       languages_json,
       created_at: new Date().toISOString(),
     };

@@ -1,21 +1,107 @@
-MIT License
+OpenRubric Proprietary License
+Evaluation & Hackathon-Use License — Version 1.0
 
-Copyright (c) 2026 Aadit Mehta and OpenRubric contributors
+Copyright (c) 2026 Aadit Mehta. All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+"Software" means the OpenRubric source code, object code, documentation, designs,
+assets, and any accompanying materials in this repository. "Licensor" means Aadit
+Mehta, the sole owner of the Software. "You" means the individual or entity
+exercising rights under this License.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+THIS IS NOT FREE OR OPEN-SOURCE SOFTWARE. The Software is proprietary and is
+licensed, not sold. Your only rights are those expressly granted below. All rights
+not expressly granted are reserved by the Licensor.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+------------------------------------------------------------------------------
+1. LIMITED GRANT (WHAT YOU MAY DO)
+------------------------------------------------------------------------------
+Subject to your continuous compliance with this License, the Licensor grants You a
+personal, non-exclusive, non-transferable, non-sublicensable, royalty-free, and
+REVOCABLE license to:
+
+   (a) install and run an unmodified copy of the Software on infrastructure You
+       control, solely to evaluate it and to operate or participate in a bona fide
+       hackathon or similar judging event; and
+   (b) make a single backup copy strictly for that permitted operational use.
+
+This grant is for hands-on use and evaluation only. It conveys no ownership and no
+right to exploit the Software commercially as a product of your own.
+
+------------------------------------------------------------------------------
+2. RESTRICTIONS (WHAT YOU MAY NOT DO)
+------------------------------------------------------------------------------
+Except as expressly permitted in Section 1, You shall NOT, in whole or in part,
+directly or indirectly:
+
+   (a) copy, reproduce, republish, post, mirror, or store the Software except as
+       required to run the permitted backup copy;
+   (b) distribute, sell, rent, lease, lend, host as a service, or otherwise make
+       the Software available to any third party;
+   (c) modify, adapt, translate, or create derivative works of the Software;
+   (d) sublicense, assign, or transfer this License or any rights under it;
+   (e) reverse engineer, decompile, or disassemble the Software, except to the
+       limited extent applicable law expressly permits despite this restriction;
+   (f) remove, obscure, or alter any copyright, trademark, or proprietary notice;
+   (g) use the Software, its code, its structure, or its design to build, train, or
+       operate a competing or substantially similar product or service; or
+   (h) use the Software for any unlawful purpose.
+
+------------------------------------------------------------------------------
+3. OWNERSHIP
+------------------------------------------------------------------------------
+The Software is and remains the exclusive property of the Licensor and is protected
+by copyright and other intellectual-property laws and treaties. This License does
+not grant You any rights to the Licensor's trademarks, service marks, or trade
+names.
+
+------------------------------------------------------------------------------
+4. TERMINATION
+------------------------------------------------------------------------------
+This License is effective until terminated. It terminates automatically and
+immediately, without notice, if You breach any term. The Licensor may also revoke
+this License at any time at its sole discretion. Upon termination You must
+immediately cease all use of the Software and permanently delete every copy in your
+possession or control. Sections 2 through 7 survive termination.
+
+------------------------------------------------------------------------------
+5. ENFORCEMENT AND REMEDIES
+------------------------------------------------------------------------------
+You acknowledge that any unauthorized copying, distribution, modification, or other
+breach of this License would cause the Licensor irreparable harm for which monetary
+damages would be an inadequate remedy. Accordingly, the Licensor is entitled, in
+addition to any other remedy available at law or in equity, to seek immediate
+injunctive relief without the requirement to post a bond, together with recovery of
+actual and statutory damages, the Licensor's lost profits and/or your profits
+attributable to the infringement, and all costs and reasonable attorneys' fees
+incurred in enforcing this License. The Licensor reserves every right and remedy
+available under applicable copyright and other law and intends to pursue them to
+the fullest extent permitted.
+
+------------------------------------------------------------------------------
+6. DISCLAIMER OF WARRANTY
+------------------------------------------------------------------------------
+THE SOFTWARE IS PROVIDED "AS IS" AND "AS AVAILABLE", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NONINFRINGEMENT. YOU BEAR THE ENTIRE
+RISK ARISING OUT OF YOUR USE OF THE SOFTWARE.
+
+------------------------------------------------------------------------------
+7. LIMITATION OF LIABILITY
+------------------------------------------------------------------------------
+TO THE MAXIMUM EXTENT PERMITTED BY LAW, IN NO EVENT SHALL THE LICENSOR BE LIABLE
+FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, OR FOR
+ANY LOSS OF PROFITS, DATA, OR GOODWILL, ARISING OUT OF OR RELATED TO THE SOFTWARE
+OR THIS LICENSE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. THE LICENSOR'S
+TOTAL AGGREGATE LIABILITY SHALL NOT EXCEED USD $100.
+
+------------------------------------------------------------------------------
+8. GENERAL
+------------------------------------------------------------------------------
+This License is the entire agreement between You and the Licensor regarding the
+Software and supersedes all prior understandings. If any provision is held
+unenforceable, the remaining provisions remain in full force. The Licensor's
+failure to enforce any provision is not a waiver of it. This License is governed by
+the laws of the jurisdiction in which the Licensor resides, without regard to
+conflict-of-laws rules.
+
+For licensing inquiries beyond the scope of this grant, contact the Licensor.

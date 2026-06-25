@@ -76,13 +76,36 @@ export async function POST(req: Request) {
   if (real) {
     const service = await getSupabaseServiceClient();
     if (service) {
+      // Clamp each score to its criterion's max_points before persisting. The client
+      // slider is bounded, but the API must not trust it — an over-max score would
+      // silently inflate totalScore and the rankings. (Bug B01 / suspect S1.)
+      const { data: sub } = await service
+        .from("submissions")
+        .select("hackathon_id")
+        .eq("id", submission_id)
+        .single();
+      const maxByCriterion = new Map<string, number>();
+      if (sub?.hackathon_id) {
+        const { data: criteria } = await service
+          .from("rubric_criteria")
+          .select("id, max_points")
+          .eq("hackathon_id", sub.hackathon_id);
+        for (const c of (criteria ?? []) as { id: string; max_points: number }[]) {
+          maxByCriterion.set(c.id, Number(c.max_points));
+        }
+      }
+      const clampScore = (criterionId: string, score: number): number => {
+        const max = maxByCriterion.get(criterionId);
+        const floored = Math.max(0, score);
+        return typeof max === "number" && Number.isFinite(max) ? Math.min(floored, max) : floored;
+      };
       const rows = Object.entries(scores)
         .filter(([cid]) => UUID.test(cid))
         .map(([criterion_id, score]) => ({
           submission_id,
           judge_id,
           criterion_id,
-          score,
+          score: clampScore(criterion_id, score),
           // Auto-finalize: when the client says every criterion is scored, mark the
           // rows final; if it later goes incomplete, clear the flag.
           ...(complete !== undefined ? { is_final: complete } : {}),

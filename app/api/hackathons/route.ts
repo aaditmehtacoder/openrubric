@@ -24,6 +24,19 @@ const createSchema = z.object({
     .default([]),
 });
 
+/** Enforce chronological ordering when all three timestamps are supplied. (Suspect S6.) */
+function assertDateOrder(
+  v: { start_time?: string | null; submission_deadline?: string | null; judging_deadline?: string | null },
+): string | null {
+  const start = v.start_time ? Date.parse(v.start_time) : NaN;
+  const sub = v.submission_deadline ? Date.parse(v.submission_deadline) : NaN;
+  const judge = v.judging_deadline ? Date.parse(v.judging_deadline) : NaN;
+  if (Number.isNaN(start) || Number.isNaN(sub) || Number.isNaN(judge)) return null;
+  if (sub <= start) return "Submission deadline must be after the start time.";
+  if (judge <= sub) return "Judging deadline must be after the submission deadline.";
+  return null;
+}
+
 const slugify = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "").slice(0, 48);
 const toTs = (s?: string | null) => {
@@ -50,6 +63,10 @@ export async function POST(req: Request) {
   const parsed = createSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json({ ok: false, error: parsed.error.flatten() }, { status: 400 });
+  }
+  const orderError = assertDateOrder(parsed.data);
+  if (orderError) {
+    return NextResponse.json({ ok: false, error: orderError }, { status: 400 });
   }
   if (!isSupabaseConfigured()) {
     return NextResponse.json({ ok: false, error: "Supabase is not configured." }, { status: 503 });

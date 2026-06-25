@@ -24,14 +24,37 @@ export const signUpSchema = z.object({
 });
 
 // ── Setup wizard ──────────────────────────────────────────────────────────
-export const hackathonSchema = z.object({
-  name: z.string().min(2, "Name your hackathon"),
-  website_url: z.string().optional().or(z.literal("")),
-  devpost_url: z.string().optional().or(z.literal("")),
-  start_time: z.string().min(1, "Set a start time"),
-  submission_deadline: z.string().min(1, "Set a submission deadline"),
-  judging_deadline: z.string().min(1, "Set a judging deadline"),
-});
+export const hackathonSchema = z
+  .object({
+    name: z.string().min(2, "Name your hackathon"),
+    website_url: z.string().optional().or(z.literal("")),
+    devpost_url: z.string().optional().or(z.literal("")),
+    start_time: z.string().min(1, "Set a start time"),
+    submission_deadline: z.string().min(1, "Set a submission deadline"),
+    judging_deadline: z.string().min(1, "Set a judging deadline"),
+  })
+  // S6: enforce chronological ordering start < submission < judging. Only validated
+  // when all three parse as dates, so the field-level "required" messages still fire first.
+  .superRefine((v, ctx) => {
+    const start = Date.parse(v.start_time);
+    const sub = Date.parse(v.submission_deadline);
+    const judge = Date.parse(v.judging_deadline);
+    if (Number.isNaN(start) || Number.isNaN(sub) || Number.isNaN(judge)) return;
+    if (sub <= start) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["submission_deadline"],
+        message: "Submission deadline must be after the start time",
+      });
+    }
+    if (judge <= sub) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["judging_deadline"],
+        message: "Judging deadline must be after the submission deadline",
+      });
+    }
+  });
 
 export const rubricCriterionSchema = z.object({
   name: z.string().min(1, "Criterion needs a name"),
@@ -104,8 +127,10 @@ export const manualSubmissionSchema = z.object({
 export const scoreAutosaveSchema = z.object({
   submission_id: z.string().min(1),
   judge_id: z.string().min(1),
-  scores: z.record(z.string(), z.number().min(0)),
-  presentation: z.record(z.string(), z.number().min(0)).optional(),
+  // Coarse upper bound (no rubric criterion can exceed 100 max_points). The exact
+  // per-criterion clamp happens server-side in the autosave route. (Suspect S1.)
+  scores: z.record(z.string(), z.number().min(0).max(100)),
+  presentation: z.record(z.string(), z.number().min(0).max(100)).optional(),
   comment: z.string().optional(),
   // When the client knows whether every criterion is scored, it sends this so the
   // autosave can flip is_final + the assignment status (In Progress ↔ Completed)

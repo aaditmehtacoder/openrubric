@@ -33,6 +33,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
+# test artifacts
+/coverage
+/e2e/.cache
+
 # vercel
 .vercel
 

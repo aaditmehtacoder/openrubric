@@ -4,13 +4,14 @@
 
 # OpenRubric
 
-**Open judging infrastructure for fairer hackathons.**
+**Judging infrastructure for fairer hackathons.**
 
-A nonprofit, open-source hackathon judging system — import Devpost submissions, paste a
+A proprietary hackathon judging system — import Devpost submissions, paste a
 rubric, invite judges, score projects live, review GitHub commit timelines, and publish
-track winners transparently.
+track winners transparently. Free to run and evaluate for your own event; not free to copy
+(see [License](#license)).
 
-[Demo](#-quickstart) · [Docs](/docs) · [Self-hosting](#-self-hosting) · [Ethics](#-ethical-use)
+[Demo](#-quickstart) · [Docs](/docs) · [Running it](#-self-hosting) · [Ethics](#-ethical-use)
 
 </div>
 
@@ -21,7 +22,7 @@ track winners transparently.
 OpenRubric gives hackathon organizers a rubric-first judging workspace:
 
 - **Import** submissions from a public Devpost URL, a CSV, or by hand.
-- **Score** every project against a shared, weighted rubric — each judge keeps an
+- **Score** every project against a shared, points-based rubric — each judge keeps an
   independent record, and the organizer aggregates.
 - **Review** each repo's GitHub timeline for *signals* (pre-event commits, post-deadline
   activity, unlisted contributors) framed as questions, never accusations.
@@ -226,5 +227,6 @@ is, literally, "this is a signal, not a verdict."
 
 ## License
 
-MIT — free to use, self-host, and modify. Built as nonprofit, open-source infrastructure
-for the hackathon community.
+Proprietary — see [LICENSE](LICENSE). You may install and run OpenRubric to evaluate it and
+to operate or participate in a hackathon, but copying, redistributing, modifying, or building
+a competing product from it is **not** permitted. All rights reserved by the author.
