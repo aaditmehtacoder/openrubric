@@ -34,6 +34,7 @@ export const ROUTES = {
   video: "/video",
   contact: "/contact",
   feedback: "/feedback",
+  request: "/request",
   terms: "/terms",
   privacy: "/privacy",
   project: (id: string) => `/judge/project/${id}`,

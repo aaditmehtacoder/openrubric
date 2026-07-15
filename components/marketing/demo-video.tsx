@@ -25,12 +25,12 @@ export function DemoVideo({
             {heading}
           </h2>
           {sub && (
-            <p className="mx-auto mt-3.5 max-w-[52ch] text-[15px] leading-[1.6] text-dim">{sub}</p>
+            <p className="mx-auto mt-3.5 max-w-[52ch] text-[16px] leading-[1.6] text-ink/75">{sub}</p>
           )}
         </div>
 
         <div className="mx-auto max-w-[940px]">
-          <div className="overflow-hidden rounded-[18px] border border-line bg-black shadow-[0_24px_70px_rgba(20,18,14,0.16)]">
+          <div className="overflow-hidden rounded-[18px] border border-line bg-black shadow-[0_24px_70px_rgba(20,18,14,0.16)] transition-shadow duration-500 hover:shadow-[0_32px_90px_rgba(20,18,14,0.24)]">
             <video
               src="/openrubricdemo.mp4"
               controls
