@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { DemoProvider } from "@/components/app/demo-store";
 import { TranslateWidget } from "@/components/app/translate-widget";
 import { SessionProvider } from "@/lib/session";
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <DemoProvider>{children}</DemoProvider>
         </SessionProvider>
         <TranslateWidget />
+        <Analytics />
       </body>
     </html>
   );
