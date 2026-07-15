@@ -3,6 +3,7 @@ import { LandingHero } from "@/components/marketing/landing-hero";
 import { FeatureGrid } from "@/components/marketing/feature-grid";
 import { WorkflowStrip } from "@/components/marketing/workflow-strip";
 import { DarkProductSection } from "@/components/marketing/dark-product-section";
+import { HackathonRequestBar } from "@/components/marketing/hackathon-request-bar";
 import { ReviewSignals } from "@/components/marketing/review-signals";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { DemoVideo } from "@/components/marketing/demo-video";
@@ -51,49 +52,39 @@ export default function HomePage() {
       <MarketingNav />
       <main>
         {/* Hero is intentionally not wrapped in Reveal — its preview panel uses a
-            position:fixed maximize overlay that a lingering transform would break. */}
+            position:fixed maximize overlay that a lingering transform would break.
+            The sections below choreograph their own entrances (word-by-word
+            headlines, staggered cells, animated meters), so no outer wrappers. */}
         <LandingHero />
 
         <Reveal>
-          <DemoVideo
-            eyebrow="Product demo"
-            heading="See OpenRubric in action."
-            sub="A quick walkthrough of importing projects, scoring against a shared rubric, and publishing winners."
-          />
+          <DemoVideo eyebrow="Product demo" heading="See OpenRubric in action." />
         </Reveal>
 
-        <Reveal>
-          <FeatureGrid
-            id="product"
-            eyebrow="Built for real judging rooms"
-            heading="Everything a judging room needs, and nothing it doesn't."
-            items={JUDGING_ROOMS}
-            columns={3}
-          />
-        </Reveal>
+        <FeatureGrid
+          id="product"
+          eyebrow="Built for real judging rooms"
+          heading="Everything a judging room needs, and nothing it doesn't."
+          items={JUDGING_ROOMS}
+          columns={3}
+        />
 
-        <Reveal>
-          <WorkflowStrip />
-        </Reveal>
+        <WorkflowStrip />
 
-        <Reveal>
-          <DarkProductSection id="docs" />
-        </Reveal>
+        <HackathonRequestBar />
 
-        <Reveal>
-          <ReviewSignals />
-        </Reveal>
+        <DarkProductSection id="docs" />
 
-        <Reveal>
-          <FeatureGrid
-            id="opensource"
-            eyebrow="Open Source By Design"
-            heading="Transparent, self-hostable, and yours to keep."
-            items={OPEN_SOURCE}
-            columns={4}
-            headingClassName="max-w-[20ch]"
-          />
-        </Reveal>
+        <ReviewSignals />
+
+        <FeatureGrid
+          id="opensource"
+          eyebrow="Open Source By Design"
+          heading="Transparent, self-hostable, and yours to keep."
+          items={OPEN_SOURCE}
+          columns={4}
+          headingClassName="max-w-[20ch]"
+        />
 
         <FinalCta />
       </main>
