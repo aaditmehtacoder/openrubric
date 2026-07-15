@@ -3,6 +3,7 @@ import { LandingHero } from "@/components/marketing/landing-hero";
 import { FeatureGrid } from "@/components/marketing/feature-grid";
 import { WorkflowStrip } from "@/components/marketing/workflow-strip";
 import { DarkProductSection } from "@/components/marketing/dark-product-section";
+import { HackathonRequestBar } from "@/components/marketing/hackathon-request-bar";
 import { ReviewSignals } from "@/components/marketing/review-signals";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { DemoVideo } from "@/components/marketing/demo-video";
@@ -69,6 +70,8 @@ export default function HomePage() {
         />
 
         <WorkflowStrip />
+
+        <HackathonRequestBar />
 
         <DarkProductSection id="docs" />
 
