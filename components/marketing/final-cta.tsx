@@ -7,6 +7,7 @@ const FOOTER_LINKS = [
   { label: "Pricing", href: ROUTES.pricing },
   { label: "Docs", href: ROUTES.docs },
   { label: "Demo", href: ROUTES.video },
+  { label: "Request judging", href: ROUTES.request },
   { label: "Contact", href: ROUTES.contact },
   { label: "Terms", href: ROUTES.terms },
   { label: "Privacy", href: ROUTES.privacy },

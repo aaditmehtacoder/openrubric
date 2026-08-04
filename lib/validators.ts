@@ -183,6 +183,15 @@ export const feedbackSchema = z.object({
 });
 export type FeedbackValues = z.infer<typeof feedbackSchema>;
 
+// ── "Want us at your hackathon?" requests ────────────────────────────────
+export const hackathonRequestSchema = z.object({
+  hackathonName: z.string().min(2, "What's the event called?").max(140),
+  name: z.string().min(2, "Tell us who you are").max(120),
+  email: z.string().email("Enter a valid email so we can reply"),
+  message: z.string().min(20, "Give us a little more detail").max(5000),
+});
+export type HackathonRequestValues = z.infer<typeof hackathonRequestSchema>;
+
 export type SignInValues = z.infer<typeof signInSchema>;
 export type SignUpValues = z.infer<typeof signUpSchema>;
 export type HackathonValues = z.infer<typeof hackathonSchema>;
