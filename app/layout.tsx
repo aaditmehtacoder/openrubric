@@ -32,27 +32,40 @@ const APP_URL = (
   (process.env.NODE_ENV === "production" ? "https://openrubric.vercel.app" : "http://localhost:3000")
 ).replace(/\/+$/, "");
 
+const DESCRIPTION =
+  "OpenRubric is managed judging infrastructure for hackathons. We import submissions, keep every judge on the same weighted rubric, surface GitHub timeline questions for organizers, and produce final rankings with a CSV backup.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "OpenRubric — Open judging infrastructure for fairer hackathons",
+    default: "OpenRubric — Managed judging infrastructure for hackathons",
     template: "%s · OpenRubric",
   },
-  description:
-    "OpenRubric is a hackathon judging system. Import Devpost submissions, paste a rubric, invite judges, score projects live, review GitHub commit timelines, and publish track winners transparently.",
+  description: DESCRIPTION,
+  applicationName: "OpenRubric",
   keywords: [
     "hackathon judging",
-    "rubric",
-    "Devpost",
+    "hackathon judging software",
+    "judging rubric",
+    "Devpost import",
     "judging infrastructure",
-    "fair judging",
+    "hackathon organizers",
   ],
+  authors: [{ name: "Aadit Mehta" }],
   openGraph: {
-    title: "OpenRubric",
-    description: "Open judging infrastructure for fairer hackathons.",
+    title: "OpenRubric — Managed judging infrastructure for hackathons",
+    description:
+      "Judging shouldn't be the messiest part of your hackathon. OpenRubric imports submissions, keeps every judge on the same rubric, and gives organizers a clear path from final demos to verified winners.",
     url: APP_URL,
     siteName: "OpenRubric",
     type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "OpenRubric — Managed judging infrastructure for hackathons",
+    description:
+      "Import submissions, keep every judge on one weighted rubric, and go from final demos to verified winners.",
   },
   icons: {
     icon: [{ url: "/icon.svg", type: "image/svg+xml" }],

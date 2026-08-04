@@ -1,61 +1,70 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui/logo";
 import { MarketingAuthButtons } from "./marketing-auth-buttons";
-import { ROUTES, SITE } from "@/lib/constants";
+import { MarketingMobileNav } from "./marketing-mobile-nav";
+import { ROUTES } from "@/lib/constants";
 
-const NAV_LINKS = [
+export const NAV_LINKS = [
+  { label: "How it works", href: "/#how-it-works" },
   { label: "Product", href: "/#product" },
+  { label: "Partner events", href: "/#partners" },
   { label: "Pricing", href: ROUTES.pricing },
   { label: "Docs", href: ROUTES.docs },
-  { label: "GitHub", href: SITE.githubUrl, external: true },
   { label: "Demo", href: ROUTES.video },
 ];
 
 export function MarketingNav() {
   return (
-    <header className="sticky top-0 z-50 border-b border-line bg-background/85 backdrop-blur-[14px]">
-      {/* Alpha notice — the first thing every visitor sees. */}
-      <Link
-        href={ROUTES.feedback}
-        className="flex items-center justify-center gap-2 border-b border-line-soft bg-accent-soft px-5 py-2.5 text-center font-mono text-[12px] tracking-[0.02em] text-dim transition-colors hover:text-ink"
+    <header className="sticky top-0 z-50 border-b border-line bg-background/90 backdrop-blur-[14px]">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-control focus:bg-ink focus:px-4 focus:py-2 focus:text-[13px] focus:font-semibold focus:text-canvas"
       >
-        <span className="rounded-full border border-accent px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-accent">
-          Alpha
-        </span>
-        <span>
-          OpenRubric is in early alpha — expect bugs. Report an issue{" "}
-          <span className="text-accent">→</span>
-        </span>
-      </Link>
+        Skip to content
+      </a>
 
-      {/* Nav */}
-      <nav className="container-marketing flex items-center justify-between py-4">
-        <Link href={ROUTES.home} className="text-ink">
+      {/* Status strip. Honest about the stage of the product, without alarming organizers. */}
+      <div className="border-b border-line-soft bg-raised">
+        <p className="container-marketing flex items-center justify-center gap-2.5 py-2 text-center font-mono text-[11.5px] tracking-[0.02em] text-dim">
+          <span
+            className="h-1.5 w-1.5 flex-shrink-0 rounded-full bg-signal-clean-dot"
+            aria-hidden="true"
+          />
+          Now onboarding pilot hackathons.{" "}
+          <Link
+            href={ROUTES.contact}
+            className="rounded-sm underline underline-offset-[3px] transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+          >
+            Talk to us
+          </Link>
+        </p>
+      </div>
+
+      <nav aria-label="Main" className="container-marketing flex items-center justify-between py-4">
+        <Link
+          href={ROUTES.home}
+          className="rounded-sm text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
+        >
           <Logo />
+          <span className="sr-only">OpenRubric home</span>
         </Link>
 
-        <div className="hidden items-center gap-7 text-sm text-dim md:flex">
-          {NAV_LINKS.map((l) =>
-            l.external ? (
-              <a
-                key={l.label}
+        <ul className="hidden items-center gap-7 text-sm text-dim lg:flex">
+          {NAV_LINKS.map((l) => (
+            <li key={l.label}>
+              <Link
                 href={l.href}
-                target="_blank"
-                rel="noreferrer"
-                className="transition-colors hover:text-ink"
+                className="rounded-sm transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-4 focus-visible:ring-offset-canvas"
               >
                 {l.label}
-              </a>
-            ) : (
-              <Link key={l.label} href={l.href} className="transition-colors hover:text-ink">
-                {l.label}
               </Link>
-            ),
-          )}
-        </div>
+            </li>
+          ))}
+        </ul>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           <MarketingAuthButtons />
+          <MarketingMobileNav links={NAV_LINKS} />
         </div>
       </nav>
     </header>

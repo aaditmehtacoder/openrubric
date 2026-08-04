@@ -17,7 +17,7 @@ export default function TermsPage() {
   return (
     <>
       <MarketingNav />
-      <main className="bg-canvas">
+      <main id="main-content" tabIndex={-1} className="bg-canvas">
         <div className="container-marketing max-w-[760px] py-20">
           <Eyebrow className="mb-3">Legal</Eyebrow>
           <h1 className="mb-2 font-serif text-[clamp(30px,4vw,48px)] font-normal leading-[1.05] tracking-[-0.015em]">
@@ -26,17 +26,33 @@ export default function TermsPage() {
           <p className="mb-8 font-mono text-[12px] text-faint">Last updated: June 20, 2026</p>
 
           <p className={P}>
-            These terms govern your use of {SITE.name} (&ldquo;the Service&rdquo;), an open-source
-            hackathon judging platform. By using the hosted Service or deploying the software
-            yourself, you agree to these terms. If you don&apos;t agree, please don&apos;t use the
-            Service.
+            These terms govern your use of {SITE.name} (&ldquo;the Service&rdquo;), a hackathon
+            judging platform. By using the hosted Service or running the software yourself, you agree
+            to these terms. If you don&apos;t agree, please don&apos;t use the Service.
           </p>
 
-          <h2 className={H}>1. The software is open-source</h2>
+          <h2 className={H}>1. The software is proprietary</h2>
           <p className={P}>
-            {SITE.name} is released under the MIT License. You are free to use, copy, modify, and
-            self-host the code, subject to that license. Nothing in these terms restricts the rights
-            the MIT License grants you over the source code.
+            {SITE.name} is proprietary software, licensed and not sold. It is <strong>not</strong>{" "}
+            free or open-source software. The source is published so organizers can inspect what runs
+            their judging, but publication is not a grant of open-source rights.
+          </p>
+          <p className={P}>
+            The{" "}
+            <a
+              className="text-accent underline underline-offset-2"
+              href={`${SITE.githubUrl}/blob/main/LICENSE`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              OpenRubric Proprietary License
+            </a>{" "}
+            grants you a revocable, non-transferable right to install and run an unmodified copy on
+            infrastructure you control, solely to evaluate it or to operate or take part in a bona
+            fide judging event, plus one backup copy. Copying, redistributing, hosting it as a
+            service, modifying it, creating derivative works, and using it to build a competing
+            product are not permitted. The license file itself is the authoritative statement of your
+            rights, and it controls if anything here differs from it.
           </p>
 
           <h2 className={H}>2. Acceptable use</h2>
@@ -44,7 +60,7 @@ export default function TermsPage() {
             You agree to use the Service for legitimate hackathon and project-judging purposes. You
             will not use it to harass others, upload unlawful content, attempt to breach security or
             access data that isn&apos;t yours, or disrupt the Service for other users. Judging
-            decisions and any awards are made by organizers — {SITE.name} surfaces evidence and
+            decisions and any awards are made by organizers. {SITE.name} surfaces evidence and
             scores but does not make final decisions on your behalf.
           </p>
 
@@ -56,13 +72,13 @@ export default function TermsPage() {
             solely to operate the Service for you.
           </p>
 
-          <h2 className={H}>4. Managed events</h2>
+          <h2 className={H}>4. Managed and partner events</h2>
           <p className={P}>
-            We optionally offer a paid managed service where we run an event for you, including
-            adding AI credits and operating the model on your behalf, for a flat per-event fee. That
-            service is a convenience and is separate from the free, open-source software. Specific
-            scope and fees are agreed in writing before any event. See{" "}
-            <Link className="text-accent hover:underline" href={ROUTES.pricing}>
+            Our primary offering is a managed service: we configure your event, import submissions,
+            onboard judges, add the AI credits, and support judging while it runs. Partner events are
+            provided in kind in exchange for sponsor recognition; other managed events are a flat
+            per-event fee. Scope, recognition, and fees are agreed in writing before any event. See{" "}
+            <Link className="text-accent underline underline-offset-2" href={ROUTES.pricing}>
               Pricing
             </Link>
             .
@@ -77,9 +93,9 @@ export default function TermsPage() {
           <h2 className={H}>6. Disclaimer &amp; limitation of liability</h2>
           <p className={P}>
             The Service is provided &ldquo;as is&rdquo;, without warranties of any kind. To the
-            maximum extent permitted by law, {SITE.name} and its contributors are not liable for any
+            maximum extent permitted by law, {SITE.name} and its licensor are not liable for any
             indirect, incidental, or consequential damages, or for any judging outcome, arising from
-            your use of the Service.
+            your use of the Service. The liability limits in the license file apply in full.
           </p>
 
           <h2 className={H}>7. Changes</h2>
@@ -92,7 +108,7 @@ export default function TermsPage() {
           <h2 className={H}>8. Contact</h2>
           <p className={P}>
             Questions about these terms? Email{" "}
-            <a className="text-accent hover:underline" href={`mailto:${SITE.supportEmail}`}>
+            <a className="text-accent underline underline-offset-2" href={`mailto:${SITE.supportEmail}`}>
               {SITE.supportEmail}
             </a>
             .

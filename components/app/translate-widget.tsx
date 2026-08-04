@@ -43,6 +43,9 @@ export function TranslateWidget() {
       id="google_translate_element"
       suppressHydrationWarning
       className="fixed bottom-4 left-4 z-40 rounded-[9px] border border-line bg-surface/95 px-2 py-1 shadow-card backdrop-blur"
+      // role="group" so the accessible name below is permitted (aria-label is
+      // prohibited on a plain generic container).
+      role="group"
       aria-label="Translate this site"
     />
   );

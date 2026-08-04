@@ -73,7 +73,7 @@ const PROJECTS: Project[] = [
     score: 83,
     clean: true,
     summary:
-      "An OCR pipeline that turns handwritten prescriptions into structured, pharmacist-checkable orders — with a confidence score and a human-in-the-loop review queue.",
+      "An OCR pipeline that turns handwritten prescriptions into structured, pharmacist-checkable orders with a confidence score and a human-in-the-loop review queue.",
     tags: ["FastAPI", "Tesseract", "Postgres"],
     rubric: [
       { name: "Innovation", value: 21, max: 25 },
@@ -239,7 +239,7 @@ export function ProductPreviewPanel() {
             className="flex flex-1 cursor-default justify-center"
             aria-label={windowState !== "open" ? "Reopen preview" : "openrubric.vercel.app"}
           >
-            <div className="rounded-md border border-[#1A1A1A] bg-[#080808] px-4 py-[5px] font-mono text-[12px] text-[#6B6B6B]">
+            <div className="rounded-md border border-[#1A1A1A] bg-[#080808] px-4 py-[5px] font-mono text-[12px] text-[#8F8F8F]">
               openrubric.vercel.app
             </div>
           </button>
@@ -267,7 +267,7 @@ export function ProductPreviewPanel() {
               />
 
               {/* search */}
-              <div className="relative mb-[18px] flex items-center gap-2.5 rounded-[11px] border border-line-dark bg-panel px-4 py-3 focus-within:border-accent/60">
+              <div className="relative mb-[18px] flex items-center gap-2.5 rounded-[11px] border border-line-dark bg-panel px-4 py-3 focus-within:border-panel-accent/60">
                 <Search className="h-[15px] w-[15px] text-dim" strokeWidth={1.6} />
                 <input
                   ref={inputRef}
@@ -302,7 +302,7 @@ export function ProductPreviewPanel() {
                         <div className="text-[18px] font-semibold tracking-[-0.01em] text-white">
                           {selected.name}
                         </div>
-                        <div className="mt-1 font-mono text-[11.5px] text-[#7A7A7A]">
+                        <div className="mt-1 font-mono text-[11.5px] text-[#9A9A9A]">
                           {selected.team} · {selected.track}
                         </div>
                       </div>
@@ -322,7 +322,7 @@ export function ProductPreviewPanel() {
 
                   {/* AI summary */}
                   <div className="rounded-[13px] border border-line-dark bg-panel-800 p-4">
-                    <div className="mb-2.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-accent">
+                    <div className="mb-2.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-panel-accent">
                       AI Summary
                     </div>
                     <p className="text-[13.5px] leading-relaxed text-[#C4C4C4]">{selected.summary}</p>
@@ -343,10 +343,10 @@ export function ProductPreviewPanel() {
                   <div className="rounded-[13px] border border-line-dark bg-panel-800 p-4">
                     <div className="mb-3 flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#7A7A7A]">
+                        <span className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#9A9A9A]">
                           Rubric Score
                         </span>
-                        <span className="rounded border border-line-dark px-1.5 py-px font-mono text-[8.5px] uppercase tracking-[0.08em] text-[#6A6A6A]">
+                        <span className="rounded border border-line-dark px-1.5 py-px font-mono text-[8.5px] uppercase tracking-[0.08em] text-[#8F8F8F]">
                           drag to try
                         </span>
                       </div>
@@ -367,7 +367,7 @@ export function ProductPreviewPanel() {
                             <div className="relative h-[5px] flex-1">
                               <div className="absolute inset-0 rounded-[3px] bg-[#181818]" />
                               <div
-                                className="absolute inset-y-0 left-0 rounded-[3px] bg-accent"
+                                className="absolute inset-y-0 left-0 rounded-[3px] bg-panel-accent"
                                 style={{ width: `${pct}%` }}
                               />
                               <span
@@ -398,12 +398,12 @@ export function ProductPreviewPanel() {
                 <div className="flex flex-col gap-3.5">
                   {/* track rank */}
                   <div className="rounded-[13px] border border-line-dark bg-panel-800 p-4">
-                    <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#7A7A7A]">
+                    <div className="mb-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#9A9A9A]">
                       Track · {selected.track}
                     </div>
                     <div className="flex flex-col gap-0.5">
                       {filtered.length === 0 ? (
-                        <div className="px-[9px] py-3 font-mono text-[12px] text-[#7A7A7A]">
+                        <div className="px-[9px] py-3 font-mono text-[12px] text-[#9A9A9A]">
                           No projects match “{query}”.
                         </div>
                       ) : (
@@ -415,11 +415,11 @@ export function ProductPreviewPanel() {
                               type="button"
                               onClick={() => setSelectedId(t.id)}
                               className="flex items-center gap-[11px] rounded-lg px-[9px] py-2 text-left transition-colors hover:bg-white/[0.04]"
-                              style={{ background: active ? "rgba(37,99,235,0.10)" : "transparent" }}
+                              style={{ background: active ? "rgba(59,120,246,0.14)" : "transparent" }}
                             >
                               <span
                                 className="w-[18px] font-mono text-[12px]"
-                                style={{ color: active ? "#2563EB" : "#6A6A6A" }}
+                                style={{ color: active ? "#6D98FF" : "#8F8F8F" }}
                               >
                                 {t.rank}
                               </span>
@@ -444,7 +444,7 @@ export function ProductPreviewPanel() {
 
                   {/* timeline mini */}
                   <div className="flex-1 rounded-[13px] border border-line-dark bg-panel-800 p-4">
-                    <div className="mb-3.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#7A7A7A]">
+                    <div className="mb-3.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-[#9A9A9A]">
                       GitHub Timeline
                     </div>
                     <div className="flex flex-col">
@@ -463,7 +463,7 @@ export function ProductPreviewPanel() {
                           </div>
                           <div className="pb-3.5">
                             <div className="text-[12.5px] text-[#C4C4C4]">{ev.label}</div>
-                            <div className="mt-0.5 font-mono text-[10.5px] text-[#6A6A6A]">{ev.meta}</div>
+                            <div className="mt-0.5 font-mono text-[10.5px] text-[#8F8F8F]">{ev.meta}</div>
                           </div>
                         </div>
                       ))}
@@ -513,13 +513,13 @@ function WindowDot({ color, label, onClick }: { color: string; label: string; on
 function ClosedState({ onReopen }: { onReopen: () => void }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 px-6 py-16 text-center">
-      <div className="font-mono text-[12px] uppercase tracking-[0.14em] text-[#6A6A6A]">
+      <div className="font-mono text-[12px] uppercase tracking-[0.14em] text-[#8F8F8F]">
         Preview closed
       </div>
       <button
         type="button"
         onClick={onReopen}
-        className="rounded-[9px] border border-line-dark bg-panel-800 px-4 py-2 text-[13px] text-[#C4C4C4] transition-colors hover:border-accent/60 hover:text-white"
+        className="rounded-[9px] border border-line-dark bg-panel-800 px-4 py-2 text-[13px] text-[#C4C4C4] transition-colors hover:border-panel-accent/60 hover:text-white"
       >
         Reopen window
       </button>

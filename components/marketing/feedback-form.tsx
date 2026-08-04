@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { SITE, mailto } from "@/lib/constants";
 
 type Kind = "feature" | "bug" | "other";
 type Status = "idle" | "sending" | "sent" | "error";
@@ -44,27 +45,34 @@ export function FeedbackForm() {
         setMessage("");
       } else {
         setStatus("error");
-        setError("Couldn't send that — please try again, or email us directly.");
+        setError("We couldn't deliver that message. Send it by email instead and it will reach us.");
       }
     } catch {
       setStatus("error");
-      setError("Network error — please try again, or email us directly.");
+      setError("Network error. Send the message by email instead and it will reach us.");
     }
   }
 
+  // Fallback link, prefilled with whatever the visitor already typed, so a failed
+  // POST never loses their message.
+  const fallbackHref = mailto(
+    `${KINDS.find((k) => k.value === kind)?.label ?? "Message"} for ${SITE.name}`,
+    `${message}\n\n${name ? `From: ${name}` : ""}`.trim(),
+  );
+
   if (status === "sent") {
     return (
-      <div className="rounded-[14px] border border-accent bg-accent-soft p-6">
-        <div className="mb-1.5 text-[16px] font-semibold tracking-[-0.01em]">Thank you — got it. 🙌</div>
+      <div role="status" className="rounded-[14px] border border-accent bg-accent-soft p-6">
+        <div className="mb-1.5 text-[16px] font-semibold tracking-[-0.01em]">Message delivered.</div>
         <p className="text-[14px] leading-[1.6] text-dim">
-          Your note is on its way to the team. If you left an email, we&apos;ll follow up there.
+          It reached our inbox. If you left an email address, we will reply there.
         </p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-4 font-mono text-[12px] text-accent transition-opacity hover:opacity-80"
+          className="mt-4 rounded-sm font-mono text-[12px] text-accent transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
         >
-          Send another →
+          Send another
         </button>
       </div>
     );
@@ -133,10 +141,22 @@ export function FeedbackForm() {
         </div>
       </div>
 
-      {error && <p className="mb-3 text-[13px] text-signal-high">{error}</p>}
+      <div aria-live="polite">
+        {error && (
+          <p className="mb-3 text-[13px] leading-[1.6] text-signal-high">
+            {error}{" "}
+            <a
+              href={fallbackHref}
+              className="rounded-sm font-medium underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+            >
+              Email {SITE.supportEmail}
+            </a>
+          </p>
+        )}
+      </div>
 
       <Button type="submit" disabled={message.trim().length < 5 || status === "sending"}>
-        {status === "sending" ? "Sending…" : "Send feedback"}
+        {status === "sending" ? "Sending…" : "Send message"}
       </Button>
     </form>
   );

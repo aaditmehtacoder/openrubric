@@ -4,113 +4,113 @@ import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
-import { ROUTES, SITE } from "@/lib/constants";
+import { ROUTES, SITE, MAILTO } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "OpenRubric is free and open-source to self-host. Or have us run your event end-to-end for a flat fee.",
+    "OpenRubric runs your hackathon judging for you. The first partner event is free as an in-kind sponsorship; managed events after that are a flat fee.",
 };
 
-const FREE = [
-  "Unlimited hackathons, judges, and submissions",
-  "Devpost import + GitHub timeline review",
-  "Shared rubric scoring with live autosave",
-  "Per-track winners, overall rankings, CSV export",
-  "Bring your own AI key (GitHub Models is free)",
-  "Self-host on your own Supabase — your data, your control",
+const PARTNER = [
+  "Event setup and rubric configuration",
+  "Devpost or CSV import",
+  "Judge onboarding",
+  "Live support during judging",
+  "Rankings and CSV export",
+  "Recognition as your judging technology partner",
 ];
 
 const MANAGED = [
-  "We add the AI credits and run the model for you",
-  "We import your submissions and wire up your rubric",
-  "We invite your judges and configure tracks",
-  "Live GitHub review + AI summaries fully enabled",
-  "You watch results roll in — no setup, no infra",
-  "Email support throughout your event",
+  "Everything in the partner event package",
+  "AI credits for project summaries, added by us",
+  "Rubric, tracks, and judge assignments configured for you",
+  "GitHub timeline review enabled across submissions",
+  "Email support before and during your event",
+  "CSV backup of submissions, scores, and rankings",
 ];
+
+function Checklist({ items }: { items: string[] }) {
+  return (
+    <ul className="mb-7 flex flex-col gap-2.5">
+      {items.map((f) => (
+        <li key={f} className="flex items-start gap-2.5 text-[13.5px] leading-[1.5] text-ink">
+          <span className="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full bg-accent" aria-hidden="true" />
+          {f}
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export default function PricingPage() {
   return (
     <>
       <MarketingNav />
-      <main className="bg-canvas">
-        <div className="container-marketing max-w-[980px] py-20">
-          <div className="mb-12 text-center">
+      <main id="main-content" tabIndex={-1} className="bg-canvas">
+        <div className="container-marketing max-w-[980px] py-16 sm:py-20">
+          <div className="mb-12 max-w-[60ch]">
             <Eyebrow className="mb-3">Pricing</Eyebrow>
-            <h1 className="mx-auto mb-4 max-w-[20ch] font-serif text-[clamp(32px,5vw,56px)] font-normal leading-[1.04] tracking-[-0.015em]">
-              Free to run yourself. Or let us run it.
+            <h1 className="mb-4 max-w-[20ch] font-serif text-[clamp(32px,4.4vw,52px)] font-normal leading-[1.05] tracking-[-0.015em]">
+              We run the judging. You run the event.
             </h1>
-            <p className="mx-auto max-w-[56ch] text-[15px] leading-[1.65] text-dim">
-              OpenRubric is MIT-licensed and free forever to self-host. If you&apos;d rather not touch
-              the setup, we&apos;ll run your event with our own AI model — you just watch the results.
+            <p className="text-[15.5px] leading-[1.65] text-dim">
+              OpenRubric is a managed service. There is no license to buy and no infrastructure for
+              you to stand up. We set the event up, support it live, and hand you the exported
+              results.
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            {/* Free / self-host */}
-            <div className="flex flex-col rounded-[16px] border border-line bg-surface p-7">
-              <div className="mb-1 font-mono text-[10.5px] uppercase tracking-[0.12em] text-faint">
-                Open source
+            {/* Partner event */}
+            <div className="relative flex flex-col rounded-[14px] border border-accent bg-accent-soft p-7">
+              <div className="mb-1.5 font-mono text-[10.5px] uppercase tracking-[0.12em] text-accent">
+                Partner event
               </div>
               <div className="mb-1 flex items-baseline gap-2">
-                <span className="text-[34px] font-bold tracking-[-0.02em]">$0</span>
-                <span className="text-[14px] text-dim">forever</span>
+                <span className="text-[34px] font-bold tracking-[-0.02em]">Free</span>
+                <span className="text-[14px] text-dim">first event, in kind</span>
               </div>
               <p className="mb-5 text-[13.5px] leading-[1.55] text-dim">
-                Clone it, deploy it, own it. Everything the platform does, on your own infrastructure.
+                We run your judging at no cost. In return you list OpenRubric as your official
+                judging technology partner, place our logo on your sponsor page, and let us write an
+                anonymized case study.
               </p>
-              <ul className="mb-6 flex flex-col gap-2.5">
-                {FREE.map((f) => (
-                  <li key={f} className="flex items-start gap-2.5 text-[13.5px] leading-[1.5] text-ink">
-                    <span className="mt-[3px] text-accent">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto flex gap-3">
-                <Button asChild className="flex-1">
-                  <Link href={ROUTES.signUp}>Get started</Link>
-                </Button>
-                <Button asChild variant="outline">
-                  <a href={SITE.githubUrl} target="_blank" rel="noreferrer">
-                    GitHub ↗
-                  </a>
+              <Checklist items={PARTNER} />
+              <div className="mt-auto">
+                <Button asChild className="w-full">
+                  <a href={MAILTO.partnership}>Discuss a partnership</a>
                 </Button>
               </div>
             </div>
 
-            {/* Managed */}
-            <div className="relative flex flex-col rounded-[16px] border border-accent bg-accent-soft p-7">
-              <div className="absolute right-5 top-5 rounded-full border border-accent px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-accent">
-                We run it
-              </div>
-              <div className="mb-1 font-mono text-[10.5px] uppercase tracking-[0.12em] text-accent">
+            {/* Managed event */}
+            <div className="flex flex-col rounded-[14px] border border-line bg-surface p-7">
+              <div className="mb-1.5 font-mono text-[10.5px] uppercase tracking-[0.12em] text-faint">
                 Managed event
               </div>
               <div className="mb-1 flex items-baseline gap-2">
-                <span className="text-[34px] font-bold tracking-[-0.02em]">$50–100</span>
+                <span className="text-[34px] font-bold tracking-[-0.02em]">
+                  {"$"}50 to {"$"}100
+                </span>
                 <span className="text-[14px] text-dim">per event</span>
               </div>
               <p className="mb-5 text-[13.5px] leading-[1.55] text-dim">
-                A flat fee per hackathon. We manually add the API credits and run the AI model for
-                you — all you do is sit back and watch the results happen.
+                A flat fee per hackathon once you are past the partner event, or if you would rather
+                not offer sponsor recognition. It covers the AI credits and our support time. Larger
+                events are quoted before anything is agreed.
               </p>
-              <ul className="mb-6 flex flex-col gap-2.5">
-                {MANAGED.map((f) => (
-                  <li key={f} className="flex items-start gap-2.5 text-[13.5px] leading-[1.5] text-ink">
-                    <span className="mt-[3px] text-accent">✓</span>
-                    {f}
-                  </li>
-                ))}
-              </ul>
+              <Checklist items={MANAGED} />
               <div className="mt-auto">
-                <Button asChild className="w-full">
-                  <Link href={ROUTES.contact}>Request a managed run →</Link>
+                <Button asChild variant="outline" className="w-full">
+                  <a href={MAILTO.pilot}>Run a pilot</a>
                 </Button>
                 <p className="mt-3 text-center text-[12px] text-dim">
                   Or email{" "}
-                  <a className="text-accent hover:underline" href={`mailto:${SITE.supportEmail}`}>
+                  <a
+                    className="rounded-sm text-accent underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+                    href={`mailto:${SITE.supportEmail}`}
+                  >
                     {SITE.supportEmail}
                   </a>
                 </p>
@@ -118,10 +118,32 @@ export default function PricingPage() {
             </div>
           </div>
 
-          <p className="mx-auto mt-10 max-w-[60ch] text-center text-[12.5px] leading-[1.6] text-faint">
-            The managed option is a convenience service — the software itself is, and always will be,
-            free and open-source under the MIT license.
-          </p>
+          <div className="mt-10 rounded-[14px] border border-line bg-raised p-6">
+            <h2 className="mb-2 text-[15px] font-semibold tracking-[-0.01em]">
+              About the software itself
+            </h2>
+            <p className="max-w-[70ch] text-[13.5px] leading-[1.65] text-dim">
+              OpenRubric is proprietary software owned by its author. The source is published so
+              organizers can inspect what runs their judging, and the{" "}
+              <a
+                href={`${SITE.githubUrl}/blob/main/LICENSE`}
+                target="_blank"
+                rel="noreferrer"
+                className="rounded-sm text-accent underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+              >
+                license
+              </a>{" "}
+              permits running an unmodified copy to evaluate it or to operate your own event. It does
+              not permit redistributing or modifying it. Full terms are in the{" "}
+              <Link
+                href={ROUTES.terms}
+                className="rounded-sm text-accent underline underline-offset-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
+              >
+                terms of service
+              </Link>
+              .
+            </p>
+          </div>
         </div>
         <FinalCta />
       </main>

@@ -14,16 +14,16 @@ export default function FeedbackPage() {
   return (
     <>
       <MarketingNav />
-      <main className="bg-canvas">
+      <main id="main-content" tabIndex={-1} className="bg-canvas">
         <div className="container-marketing max-w-[680px] py-20">
           <Eyebrow className="mb-3">Feedback</Eyebrow>
           <h1 className="mb-4 font-serif text-[clamp(30px,4vw,48px)] font-normal leading-[1.05] tracking-[-0.015em]">
             Help shape OpenRubric.
           </h1>
           <p className="mb-10 max-w-[58ch] text-[15px] leading-[1.65] text-dim">
-            Got an idea for a feature, or hit something that doesn&apos;t work? Send it over — it goes
+            Got an idea for a feature, or hit something that doesn&apos;t work? Send it over. It goes
             straight to the team. Prefer email? Reach us at{" "}
-            <a className="text-accent hover:underline" href={`mailto:${SITE.supportEmail}`}>
+            <a className="text-accent underline underline-offset-2" href={`mailto:${SITE.supportEmail}`}>
               {SITE.supportEmail}
             </a>
             .

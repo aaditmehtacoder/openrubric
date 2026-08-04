@@ -45,8 +45,8 @@ const config: Config = {
         accent: {
           DEFAULT: v("--accent"),
           fg: "#FFFFFF",
-          soft: "rgba(37,99,235,0.07)",
-          line: "rgba(37,99,235,0.22)",
+          soft: "rgba(29,78,216,0.07)",
+          line: "rgba(29,78,216,0.22)",
         },
 
         // ---- fixed: dark product "screenshot" panels ----
@@ -57,12 +57,15 @@ const config: Config = {
           700: "#0E0E0E",
         },
         ondark: "#A8A8A8",
+        // Lifted blue for the fixed-dark preview panel (the page accent is tuned for
+        // the light canvas and is too dark to read on near-black).
+        "panel-accent": "#6D98FF",
 
         // ---- fixed: review signal scale (muted, never aggressive) ----
         signal: {
-          clean: "#2E8A5E",
+          clean: "#226B49",
           "clean-dot": "#4FB286",
-          review: "#A8791F",
+          review: "#7F5B12",
           "review-dot": "#C99A3A",
           high: "#B4453C",
           "high-dot": "#C0584E",

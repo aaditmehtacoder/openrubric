@@ -7,7 +7,8 @@ import { ROUTES, SITE } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Docs",
-  description: "How OpenRubric works, core concepts, self-hosting, and ethical-use guidance.",
+  description:
+    "How OpenRubric judging works: the flow from import to rankings, the core concepts, configuration, and how to read GitHub timeline signals responsibly.",
 };
 
 const TOC = [
@@ -15,8 +16,8 @@ const TOC = [
   { id: "workflow", label: "How it works" },
   { id: "concepts", label: "Core concepts" },
   { id: "github-review", label: "GitHub review" },
-  { id: "self-hosting", label: "Self-hosting" },
-  { id: "ethics", label: "Ethical use" },
+  { id: "configuration", label: "Configuration" },
+  { id: "ethics", label: "Human decisions" },
 ];
 
 const ENV = [
@@ -47,7 +48,7 @@ export default function DocsPage() {
   return (
     <>
       <MarketingNav />
-      <main className="bg-canvas">
+      <main id="main-content" tabIndex={-1} className="bg-canvas">
         <div className="container-marketing grid gap-12 py-20 lg:grid-cols-[200px_1fr]">
           {/* TOC */}
           <aside className="hidden lg:block">
@@ -75,12 +76,12 @@ export default function DocsPage() {
               Documentation
             </Eyebrow>
             <h1 className="mb-5 max-w-[20ch] font-serif text-[clamp(34px,4.5vw,54px)] font-normal leading-[1.04] tracking-[-0.015em]">
-              Run fair, transparent hackathon judging.
+              How OpenRubric judging works.
             </h1>
             <p className="mb-16 max-w-[60ch] text-[17px] leading-[1.6] text-dim">
-              OpenRubric is a nonprofit, open-source judging system. This guide covers the judging
-              flow, the core concepts, how to self-host, and — most importantly — how to use the
-              GitHub review signals responsibly.
+              This guide covers the judging flow from import to rankings, the core concepts, the
+              configuration behind a managed event, and how to read GitHub timeline signals
+              responsibly.
             </p>
 
             <section className="mb-16">
@@ -106,7 +107,7 @@ export default function DocsPage() {
               <p className={P}>The end-to-end flow is six steps:</p>
               <ol className="mb-4 max-w-[62ch] list-inside list-decimal space-y-1.5 text-[15px] leading-[1.6] text-ink marker:font-mono marker:text-accent">
                 <li>Paste a Devpost hackathon URL (or upload a CSV / add projects manually).</li>
-                <li>Import projects — only public metadata is read.</li>
+                <li>Import projects. Only public metadata is read.</li>
                 <li>Paste your rubric; OpenRubric turns it into scorable, weighted criteria.</li>
                 <li>Invite judges and assign tracks or specific submissions.</li>
                 <li>Judges score live; each judge keeps an independent record.</li>
@@ -128,12 +129,12 @@ export default function DocsPage() {
                 winners are computed per track and overall.
               </p>
               <p className={P}>
-                <strong>Judges.</strong> Each judge has their own score record — judges never
+                <strong>Judges.</strong> Each judge has their own score record. Judges never
                 overwrite each other. The organizer aggregates judge scores into averages.
               </p>
               <p className={P}>
                 <strong>Review signals.</strong> GitHub-timeline observations framed as questions,
-                mapped to a priority: clean → light → needs review → high priority.
+                mapped to a priority: clean, light, needs review, or high priority.
               </p>
             </section>
 
@@ -145,7 +146,7 @@ export default function DocsPage() {
                 When a <code className="rounded bg-raised px-1.5 py-0.5 font-mono text-[13px]">GITHUB_TOKEN</code>{" "}
                 is configured, OpenRubric scans each repo&apos;s creation date, first and last commit,
                 pre-event and post-deadline commits, and contributors. Each observation is phrased as
-                something an organizer might ask about — for example:
+                something an organizer might ask about. For example:
               </p>
               <blockquote className="mb-4 max-w-[62ch] border-l-2 border-accent bg-raised px-5 py-4 text-[14.5px] leading-[1.55] text-ink">
                 “GitHub timeline shows 9 commits before the hackathon start. This does not prove a
@@ -159,15 +160,19 @@ export default function DocsPage() {
             </section>
 
             <section className="mb-16">
-              <H id="self-hosting" eyebrow="Self-hosting">
-                Your data, your Supabase.
+              <H id="configuration" eyebrow="Configuration">
+                What powers a managed event.
               </H>
               <p className={P}>
-                Clone the repo, run <code className="rounded bg-raised px-1.5 py-0.5 font-mono text-[13px]">npm install</code>{" "}
-                and <code className="rounded bg-raised px-1.5 py-0.5 font-mono text-[13px]">npm run dev</code>. With
-                no environment variables, the app runs in fully working demo mode. To go live, create
-                a Supabase project, run <code className="rounded bg-raised px-1.5 py-0.5 font-mono text-[13px]">supabase/schema.sql</code>,
-                and set:
+                For a managed or partner event, we handle all of this for you. It is documented here
+                so organizers know exactly what the system touches and where their data lives. The
+                license permits running an unmodified copy yourself to evaluate OpenRubric or to
+                operate your own event; it does not permit redistributing or modifying it.
+              </p>
+              <p className={P}>
+                Data lives in a Supabase project (Postgres, auth, realtime). Judge scores are
+                isolated per judge by row-level security, and every event can be exported to CSV at
+                any time. These are the settings behind a live deployment:
               </p>
               <div className="mb-4 overflow-hidden rounded-[12px] border border-line bg-surface">
                 {ENV.map(([key, desc]) => (
@@ -183,7 +188,7 @@ export default function DocsPage() {
             </section>
 
             <section className="mb-4">
-              <H id="ethics" eyebrow="Ethical Use">
+              <H id="ethics" eyebrow="Human decisions">
                 Human final decisions.
               </H>
               <div className="max-w-[62ch] rounded-[14px] border border-accent bg-accent-soft p-6">
@@ -193,15 +198,22 @@ export default function DocsPage() {
                 </p>
               </div>
               <p className={`${P} mt-5`}>
-                Read the full mission and contribute on{" "}
-                <a href={SITE.githubUrl} target="_blank" rel="noreferrer" className="font-medium text-accent underline">
-                  GitHub
-                </a>
-                , or jump into the{" "}
-                <Link href={ROUTES.judgeDashboard} className="font-medium text-accent underline">
+                Want to see it working? Try the{" "}
+                <Link href={ROUTES.judgeDashboard} className="font-medium text-accent underline underline-offset-2">
                   judge demo
                 </Link>
-                .
+                , watch the{" "}
+                <Link href={ROUTES.video} className="font-medium text-accent underline underline-offset-2">
+                  2-minute demo
+                </Link>
+                , or email{" "}
+                <a
+                  href={`mailto:${SITE.supportEmail}`}
+                  className="font-medium text-accent underline underline-offset-2"
+                >
+                  {SITE.supportEmail}
+                </a>{" "}
+                about a pilot.
               </p>
             </section>
           </div>

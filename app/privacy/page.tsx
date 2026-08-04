@@ -17,7 +17,7 @@ export default function PrivacyPage() {
   return (
     <>
       <MarketingNav />
-      <main className="bg-canvas">
+      <main id="main-content" tabIndex={-1} className="bg-canvas">
         <div className="container-marketing max-w-[760px] py-20">
           <Eyebrow className="mb-3">Legal</Eyebrow>
           <h1 className="mb-2 font-serif text-[clamp(30px,4vw,48px)] font-normal leading-[1.05] tracking-[-0.015em]">
@@ -26,10 +26,10 @@ export default function PrivacyPage() {
           <p className="mb-8 font-mono text-[12px] text-faint">Last updated: June 20, 2026</p>
 
           <p className={P}>
-            This policy explains what {SITE.name} collects and why. {SITE.name} is open-source and
-            self-hostable: if you run your own instance, <em>you</em> are the data controller and your
-            data lives in <em>your</em> Supabase project. This policy describes the hosted Service we
-            operate.
+            This policy explains what {SITE.name} collects and why, and it describes the hosted
+            Service we operate for managed and partner events. If you run your own instance under the
+            license, <em>you</em> are the data controller and the data lives in <em>your</em>{" "}
+            Supabase project.
           </p>
 
           <h2 className={H}>What we collect</h2>
@@ -37,21 +37,21 @@ export default function PrivacyPage() {
             <li className={LI}>
               <span className="mt-[3px] text-accent">•</span>
               <span>
-                <strong className="text-ink">Account data</strong> — your name, email, and role
+                <strong className="text-ink">Account data</strong>: your name, email, and role
                 (organizer or judge), used to sign you in and keep roles separate.
               </span>
             </li>
             <li className={LI}>
               <span className="mt-[3px] text-accent">•</span>
               <span>
-                <strong className="text-ink">Event data</strong> — hackathons, submissions, rubrics,
+                <strong className="text-ink">Event data</strong>: hackathons, submissions, rubrics,
                 scores, and comments you create or import, used to operate judging.
               </span>
             </li>
             <li className={LI}>
               <span className="mt-[3px] text-accent">•</span>
               <span>
-                <strong className="text-ink">Imported public data</strong> — when you import from
+                <strong className="text-ink">Imported public data</strong>: when you import from
                 Devpost or scan a public GitHub repo, we process that public information to build
                 submissions and review timelines.
               </span>
@@ -59,7 +59,7 @@ export default function PrivacyPage() {
             <li className={LI}>
               <span className="mt-[3px] text-accent">•</span>
               <span>
-                <strong className="text-ink">Feedback you send</strong> — messages submitted through
+                <strong className="text-ink">Feedback you send</strong>: messages submitted through
                 our feedback or contact forms, including any name/email you choose to provide.
               </span>
             </li>
@@ -67,7 +67,7 @@ export default function PrivacyPage() {
 
           <h2 className={H}>How we use it</h2>
           <p className={P}>
-            We use your data only to operate the Service — authenticating you, running judging,
+            We use your data only to operate the Service: authenticating you, running judging,
             generating AI summaries and GitHub reviews, and responding to your feedback. We do not
             sell your data, and we do not use it for advertising.
           </p>
@@ -87,17 +87,17 @@ export default function PrivacyPage() {
             organizer publishes results.
           </p>
 
-          <h2 className={H}>Self-hosting</h2>
+          <h2 className={H}>Running your own instance</h2>
           <p className={P}>
-            If you self-host {SITE.name}, this policy does not apply to your instance — you control
-            your own keys, database, and integrations, and are responsible for your own privacy
-            practices toward your users.
+            If you run your own instance of {SITE.name} under the license, this policy does not apply
+            to it. You control your own keys, database, and integrations, and you are responsible for
+            your own privacy practices toward your users.
           </p>
 
           <h2 className={H}>Contact</h2>
           <p className={P}>
             Privacy questions or deletion requests? Email{" "}
-            <a className="text-accent hover:underline" href={`mailto:${SITE.supportEmail}`}>
+            <a className="text-accent underline underline-offset-2" href={`mailto:${SITE.supportEmail}`}>
               {SITE.supportEmail}
             </a>
             .

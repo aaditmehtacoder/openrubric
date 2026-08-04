@@ -1,100 +1,56 @@
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { LandingHero } from "@/components/marketing/landing-hero";
-import { FeatureGrid } from "@/components/marketing/feature-grid";
-import { WorkflowStrip } from "@/components/marketing/workflow-strip";
-import { DarkProductSection } from "@/components/marketing/dark-product-section";
-import { ReviewSignals } from "@/components/marketing/review-signals";
+import { JudgingRoom } from "@/components/marketing/judging-room";
+import { Differentiators } from "@/components/marketing/differentiators";
+import { Partnership } from "@/components/marketing/partnership";
+import { Faq } from "@/components/marketing/faq";
 import { FinalCta } from "@/components/marketing/final-cta";
-import { DemoVideo } from "@/components/marketing/demo-video";
-import { Reveal } from "@/components/ui/reveal";
+import { SITE } from "@/lib/constants";
 
-const JUDGING_ROOMS = [
-  {
-    num: "01",
-    title: "Import submissions",
-    body: "Pull projects from a Devpost URL, paste project links, or upload a CSV. Manual entry always works as a fallback.",
-  },
-  {
-    num: "02",
-    title: "Score with a shared rubric",
-    body: "Paste your rubric once. Every judge scores against the same weighted criteria, with comments tied to each line.",
-  },
-  {
-    num: "03",
-    title: "Publish winners by track",
-    body: "Aggregate judge scores into per-track leaderboards and an overall winner — with review cases resolved first.",
-  },
-];
+const APP_URL = (
+  process.env.NEXT_PUBLIC_APP_URL ||
+  (process.env.NODE_ENV === "production" ? "https://openrubric.vercel.app" : "http://localhost:3000")
+).replace(/\/+$/, "");
 
-const OPEN_SOURCE = [
-  {
-    title: "Transparent scoring",
-    body: "Every number traces back to a criterion and a judge. Nothing is a black box.",
+/**
+ * Structured data. Deliberately claims nothing that isn't true: no ratings, no user
+ * counts, and the license is stated as proprietary to match the LICENSE file.
+ */
+const JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: SITE.name,
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  url: APP_URL,
+  description:
+    "Managed judging infrastructure for hackathons. Imports submissions, keeps judges on one weighted rubric, surfaces GitHub timeline questions for organizers, and produces final rankings with a CSV backup.",
+  license: `${SITE.githubUrl}/blob/main/LICENSE`,
+  author: { "@type": "Person", name: "Aadit Mehta" },
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+    description: "First managed partner event provided in kind. Managed events afterwards are a flat per-event fee.",
+    url: `${APP_URL}/pricing`,
   },
-  {
-    title: "Self-hostable",
-    body: "Run it on your own Supabase project. Your data never leaves your control.",
-  },
-  {
-    title: "Exportable data",
-    body: "Export submissions, scores, and rankings as CSV or JSON at any time.",
-  },
-  {
-    title: "Human final decisions",
-    body: "OpenRubric surfaces evidence. Organizers make every award decision.",
-  },
-];
+};
 
 export default function HomePage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        // Static, author-controlled object; no user input reaches this string.
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(JSON_LD) }}
+      />
       <MarketingNav />
-      <main>
-        {/* Hero is intentionally not wrapped in Reveal — its preview panel uses a
-            position:fixed maximize overlay that a lingering transform would break. */}
+      <main id="main-content" tabIndex={-1}>
         <LandingHero />
-
-        <Reveal>
-          <DemoVideo
-            eyebrow="Product demo"
-            heading="See OpenRubric in action."
-            sub="A quick walkthrough of importing projects, scoring against a shared rubric, and publishing winners."
-          />
-        </Reveal>
-
-        <Reveal>
-          <FeatureGrid
-            id="product"
-            eyebrow="Built for real judging rooms"
-            heading="Everything a judging room needs, and nothing it doesn't."
-            items={JUDGING_ROOMS}
-            columns={3}
-          />
-        </Reveal>
-
-        <Reveal>
-          <WorkflowStrip />
-        </Reveal>
-
-        <Reveal>
-          <DarkProductSection id="docs" />
-        </Reveal>
-
-        <Reveal>
-          <ReviewSignals />
-        </Reveal>
-
-        <Reveal>
-          <FeatureGrid
-            id="opensource"
-            eyebrow="Open Source By Design"
-            heading="Transparent, self-hostable, and yours to keep."
-            items={OPEN_SOURCE}
-            columns={4}
-            headingClassName="max-w-[20ch]"
-          />
-        </Reveal>
-
+        <JudgingRoom />
+        <Differentiators />
+        <Partnership />
+        <Faq />
         <FinalCta />
       </main>
     </>

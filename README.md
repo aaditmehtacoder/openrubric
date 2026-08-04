@@ -4,14 +4,16 @@
 
 # OpenRubric
 
-**Judging infrastructure for fairer hackathons.**
+**Managed judging infrastructure for hackathons.**
 
-A proprietary hackathon judging system — import Devpost submissions, paste a
-rubric, invite judges, score projects live, review GitHub commit timelines, and publish
-track winners transparently. Free to run and evaluate for your own event; not free to copy
-(see [License](#license)).
+Import Devpost submissions, configure one weighted rubric, invite judges, score projects
+live, review GitHub commit timelines, and publish track winners with an exportable backup.
 
-[Demo](#-quickstart) · [Docs](/docs) · [Running it](#-self-hosting) · [Ethics](#-ethical-use)
+**This is proprietary software, not open source.** You may run an unmodified copy to
+evaluate it or to operate your own judging event. You may not redistribute or modify it.
+See [License](#license).
+
+[Quickstart](#-quickstart) · [Docs](/docs) · [Running it](#-running-your-own-instance) · [Human decisions](#%EF%B8%8F-human-decisions)
 
 </div>
 
@@ -78,9 +80,11 @@ Try these routes:
 | `/judge/project/lighthouse` | The judge grading workspace |
 | `/submit`, `/dashboard/team` | Participant flow |
 
-## 🔧 Self-hosting
+## 🔧 Running your own instance
 
-Copy the env template and fill in only what you need:
+The license permits running an unmodified copy on infrastructure you control, solely to
+evaluate OpenRubric or to operate/participate in a bona fide judging event. Copy the env
+template and fill in only what you need:
 
 ```bash
 cp .env.example .env.local
@@ -215,18 +219,26 @@ npm run lint       # eslint
 npm run typecheck  # tsc --noEmit
 ```
 
-## ⚖️ Ethical use
+## ⚖️ Human decisions
 
-OpenRubric is built to make judging **more transparent and fairer**, not to automate
-accusations. Review signals are evidence, not verdicts — the closing line on every signal
+Review signals are questions for organizers, not verdicts. The closing line on every signal
 is, literally, "this is a signal, not a verdict."
 
 > **OpenRubric does not determine cheating or automatically penalize teams. It surfaces
-> evidence for human organizers to review.** Self-hostable. Transparent. Exportable.
-> Human final decisions.
+> evidence for human organizers to review.** Every score is entered by a judge and every
+> award is made by a person.
 
 ## License
 
-Proprietary — see [LICENSE](LICENSE). You may install and run OpenRubric to evaluate it and
-to operate or participate in a hackathon, but copying, redistributing, modifying, or building
-a competing product from it is **not** permitted. All rights reserved by the author.
+Proprietary. See [LICENSE](LICENSE), which is the authoritative statement of your rights.
+
+OpenRubric is **not** free or open-source software. The OpenRubric Proprietary License grants
+a revocable, non-transferable right to install and run an unmodified copy on infrastructure
+you control, solely to evaluate it or to operate or participate in a bona fide hackathon or
+similar judging event, plus a single backup copy. Copying, redistributing, hosting it as a
+service, modifying it, creating derivative works, and using it to build a competing product
+are **not** permitted. Copyright (c) 2026 Aadit Mehta. All rights reserved.
+
+Commercial availability: OpenRubric is offered as a managed service for hackathons. The first
+managed partner event is provided in kind in exchange for sponsor recognition; managed events
+after that are a flat per-event fee.

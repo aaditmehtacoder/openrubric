@@ -22,12 +22,12 @@
     --surface-raised: 251 250 246; /* raised panels, inputs */
     --sunken: 240 237 229; /* progress tracks, active nav, segmented control */
     --foreground: 13 13 13; /* primary text + primary buttons */
-    --muted: 108 106 100; /* secondary text */
-    --faint: 162 156 147; /* tertiary / mono metadata */
+    --muted: 88 86 81; /* secondary text — 6.3:1 on canvas (WCAG AA) */
+    --faint: 106 102 96; /* tertiary / mono metadata — 4.8:1 on canvas (WCAG AA) */
     --border: 230 226 217;
     --border-soft: 240 237 229;
     --border-softer: 244 241 234;
-    --accent: 37 99 235; /* restrained deep blue */
+    --accent: 29 78 216; /* restrained deep blue — 6.8:1 with white, AA on tinted cards */
   }
 
   /* ---- dark: deep, warm-neutral. Scoped to the dashboard via a `.dark` wrapper
@@ -55,6 +55,23 @@
   html {
     scroll-behavior: smooth;
     color-scheme: light;
+  }
+
+  /* Respect the OS "reduce motion" setting everywhere: no smooth scrolling, and
+     transitions/animations collapse to an instant state change. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 
   body {
