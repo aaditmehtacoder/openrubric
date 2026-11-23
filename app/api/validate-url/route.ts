@@ -35,7 +35,9 @@ export async function POST(req: Request) {
       method: "GET",
       redirect: "follow",
       signal: ctrl.signal,
-      headers: { "User-Agent": "Mozilla/5.0 (OpenRubric link check)", Accept: "text/html,*/*" },
+      // `*/*`, not text/html: Cloudflare-fronted sites (Devpost included) 403 a
+      // non-browser request that asks for text/html, which would flag a good link as dead.
+      headers: { "User-Agent": "Mozilla/5.0 (OpenRubric link check)", Accept: "*/*" },
     });
     clearTimeout(timer);
     let title: string | undefined;

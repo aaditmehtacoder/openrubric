@@ -50,8 +50,12 @@ export function devpostBase(input: string): string {
 }
 
 async function getHtml(url: string, signal?: AbortSignal): Promise<string> {
+  // Accept MUST stay `*/*`. Devpost's Cloudflare serves a 403 "Just a moment..." JS
+  // challenge to any non-browser request whose Accept mentions text/html (a browser-ish
+  // Accept without the rest of a real browser's fingerprint), while `*/*` gets the
+  // normal server-rendered page. Verified 2026-11-23: same URL, 403 vs 200.
   const res = await fetch(url, {
-    headers: { "User-Agent": UA, Accept: "text/html,application/xhtml+xml" },
+    headers: { "User-Agent": UA, Accept: "*/*" },
     signal,
   });
   if (res.status === 403) {

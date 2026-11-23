@@ -89,6 +89,22 @@ describe("scrapeDevpost (fixture HTML, no network)", () => {
     );
   });
 
+  it("never asks for text/html (Devpost's Cloudflare 403s that, but serves */*)", async () => {
+    const fetchMock = vi.fn(async (url: string | URL) => {
+      const u = String(url);
+      if (u.includes("project-gallery?page=1")) return htmlResponse(GALLERY);
+      if (u.includes("project-gallery")) return htmlResponse("<html></html>");
+      return htmlResponse(PROJECT);
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    await scrapeDevpost("myhack");
+    expect(fetchMock).toHaveBeenCalled();
+    for (const [, init] of fetchMock.mock.calls as unknown as [string, RequestInit][]) {
+      const accept = (init?.headers as Record<string, string> | undefined)?.Accept ?? "";
+      expect(accept).not.toMatch(/text\/html/i);
+    }
+  });
+
   it("throws DevpostBlockedError on a 403 (route turns this into the graceful message)", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => htmlResponse("blocked", 403)));
     await expect(scrapeDevpost("myhack")).rejects.toBeInstanceOf(DevpostBlockedError);
