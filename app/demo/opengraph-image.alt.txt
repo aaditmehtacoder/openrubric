@@ -1,0 +1,1 @@
+A judge scoring a hackathon project in OpenRubric: eight rubric sliders, 80 of 100, all changes saved

@@ -25,6 +25,17 @@ const nextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  async redirects() {
+    return [
+      // The demo page moved from /video, and the film replaced the older recording.
+      { source: "/video", destination: "/demo", permanent: true },
+      {
+        source: "/openrubricdemo.mp4",
+        destination: "/demo/openrubric-demo.mp4",
+        permanent: true,
+      },
+    ];
+  },
   webpack: (config, { dev }) => {
     // Silence webpack's filesystem-cache "Serializing big strings" perf notices
     // in dev. These come from large vendor bundles (recharts, framer-motion),

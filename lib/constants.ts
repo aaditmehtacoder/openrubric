@@ -33,6 +33,26 @@ export const MAILTO = {
   ),
 } as const;
 
+/**
+ * The product film, shown on the home page and on /demo. One place for its files and
+ * its length, so buttons and metadata cannot drift from the film that is published.
+ */
+export const DEMO_FILM = {
+  src: "/demo/openrubric-demo.mp4",
+  poster: "/demo/openrubric-demo-poster.jpg",
+  seconds: 78,
+  /** Running time as shown on the player. */
+  length: "1:18",
+  /** How links and buttons name it. */
+  label: "78-second demo",
+  /** The day this cut was published (schema.org uploadDate). */
+  published: "2026-11-23",
+} as const;
+
+/** Shown under the film wherever it plays: what in it is real and what is not. */
+export const DEMO_FILM_NOTE =
+  "Filmed in OpenRubric with the public project gallery of the Acalanes Data Fest. Scores for ten of the eleven projects, and two of the three judges, are sample data.";
+
 export const ROUTES = {
   home: "/",
   docs: "/docs",
@@ -52,7 +72,7 @@ export const ROUTES = {
   teamScores: "/dashboard/team/scores",
   submit: "/submit",
   pricing: "/pricing",
-  video: "/video",
+  demo: "/demo",
   contact: "/contact",
   feedback: "/feedback",
   request: "/request",

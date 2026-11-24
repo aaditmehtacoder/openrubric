@@ -1,8 +1,7 @@
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { LandingHero } from "@/components/marketing/landing-hero";
 import { JudgingRoom } from "@/components/marketing/judging-room";
-import { Differentiators } from "@/components/marketing/differentiators";
-import { Partnership } from "@/components/marketing/partnership";
+import { Pilot } from "@/components/marketing/pilot";
 import { Faq } from "@/components/marketing/faq";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { SITE } from "@/lib/constants";
@@ -48,8 +47,7 @@ export default function HomePage() {
       <main id="main-content" tabIndex={-1}>
         <LandingHero />
         <JudgingRoom />
-        <Differentiators />
-        <Partnership />
+        <Pilot />
         <Faq />
         <FinalCta />
       </main>

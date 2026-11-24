@@ -18,7 +18,7 @@ entire project.
 |---|---|
 | **GitHub repository** | https://github.com/aaditmehtacoder/openrubric |
 | **Live website** | https://openrubric.vercel.app |
-| **Demo video** | https://openrubric.vercel.app/video (file: [`public/openrubricdemo.mp4`](public/openrubricdemo.mp4)) |
+| **Demo video** | https://openrubric.vercel.app/demo (file: [`public/demo/openrubric-demo.mp4`](public/demo/openrubric-demo.mp4), 78 seconds) |
 | **Documentation page** | https://openrubric.vercel.app/docs |
 | **Pricing** | https://openrubric.vercel.app/pricing |
 | **Support email** | openrubric@gmail.com |
@@ -94,7 +94,7 @@ Submits and tracks a project. They:
 ### 🌐 Public / Visitor
 - Landing page at [`/`](https://openrubric.vercel.app).
 - Docs, pricing, contact, feedback, terms, and privacy pages.
-- The **demo video** at [`/video`](https://openrubric.vercel.app/video).
+- The **demo video** on the landing page and at [`/demo`](https://openrubric.vercel.app/demo).
 
 ---
 
@@ -210,7 +210,7 @@ metadata, scores). Light + dark themes driven by ~14 CSS variables in
 ```
 app/                 # App Router routes (marketing, auth, organizer, judge, api)
 components/
-  marketing/         # Landing-page sections + demo video player
+  marketing/         # Landing-page sections + the demo film player
   app/               # Shell, sidebar, auth, grading store
   organizer/         # Dashboard, setup wizard, import
   judge/             # Search dashboard + project cards
@@ -220,7 +220,7 @@ components/
 lib/                 # scoring, github, ai, supabase, import-pipeline, validators, types …
 supabase/schema.sql  # Postgres schema + Row Level Security
 design-reference/    # Original HTML prototypes + full design handoff
-public/              # Logos, icon, and the demo video (openrubricdemo.mp4)
+public/              # Logos, icon, and the demo film (demo/openrubric-demo.mp4)
 ```
 
 ### Key library files
@@ -465,5 +465,5 @@ building a competing product are **not** permitted. All rights reserved by the a
 
 - **Repository:** https://github.com/aaditmehtacoder/openrubric
 - **Live site:** https://openrubric.vercel.app
-- **Demo video:** https://openrubric.vercel.app/video
+- **Demo video:** https://openrubric.vercel.app/demo
 - **Contact:** openrubric@gmail.com

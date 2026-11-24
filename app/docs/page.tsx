@@ -3,7 +3,7 @@ import Link from "next/link";
 import { MarketingNav } from "@/components/marketing/marketing-nav";
 import { FinalCta } from "@/components/marketing/final-cta";
 import { Eyebrow } from "@/components/ui/eyebrow";
-import { ROUTES, SITE } from "@/lib/constants";
+import { DEMO_FILM, ROUTES, SITE } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Docs",
@@ -203,8 +203,8 @@ export default function DocsPage() {
                   judge demo
                 </Link>
                 , watch the{" "}
-                <Link href={ROUTES.video} className="font-medium text-accent underline underline-offset-2">
-                  2-minute demo
+                <Link href={ROUTES.demo} className="font-medium text-accent underline underline-offset-2">
+                  {DEMO_FILM.label}
                 </Link>
                 , or email{" "}
                 <a

@@ -1,19 +1,23 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
-import { ROUTES, SITE, MAILTO } from "@/lib/constants";
+import { DEMO_FILM, ROUTES, SITE, MAILTO } from "@/lib/constants";
 
 const FOOTER_LINKS = [
   { label: "Pricing", href: ROUTES.pricing },
   { label: "Docs", href: ROUTES.docs },
-  { label: "Demo", href: ROUTES.video },
+  { label: "Demo", href: ROUTES.demo },
   { label: "Request judging", href: ROUTES.request },
   { label: "Contact", href: ROUTES.contact },
   { label: "Terms", href: ROUTES.terms },
   { label: "Privacy", href: ROUTES.privacy },
 ];
 
-export function FinalCta() {
+/**
+ * Closing call to action and the site footer. `secondary` picks the quieter button:
+ * the film everywhere, pricing on the page that already is the film.
+ */
+export function FinalCta({ secondary = "demo" }: { secondary?: "demo" | "pricing" }) {
   return (
     <>
       <section className="border-t border-line bg-canvas text-ink">
@@ -30,7 +34,11 @@ export function FinalCta() {
               <a href={MAILTO.pilot}>Run a pilot</a>
             </Button>
             <Button asChild size="lg" variant="outline" className="w-full sm:w-auto">
-              <Link href={ROUTES.video}>Watch the 2-minute demo</Link>
+              {secondary === "pricing" ? (
+                <Link href={ROUTES.pricing}>See what it costs</Link>
+              ) : (
+                <Link href={ROUTES.demo}>Watch the {DEMO_FILM.label}</Link>
+              )}
             </Button>
           </div>
         </div>

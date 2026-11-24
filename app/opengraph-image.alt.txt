@@ -1,0 +1,1 @@
+OpenRubric: judging infrastructure for hackathons
