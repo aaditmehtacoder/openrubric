@@ -141,7 +141,7 @@ export function JudgeInviteForm({
                 onClick={() => onChange(judges.filter((x) => x.email !== j.email))}
                 title="Remove judge"
                 aria-label={`Remove ${j.name}`}
-                className="flex-shrink-0 rounded-md p-1.5 text-faint opacity-0 transition-all hover:bg-[rgba(199,58,58,0.1)] hover:text-[#c73a3a] group-hover:opacity-100"
+                className="flex-shrink-0 rounded-md p-1.5 text-faint opacity-0 transition-all hover:bg-[rgba(199,58,58,0.1)] hover:text-signal-high group-hover:opacity-100"
               >
                 <Trash2 className="h-3.5 w-3.5" strokeWidth={2} />
               </button>

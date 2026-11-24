@@ -3,6 +3,7 @@ import { Newsreader, Geist } from "next/font/google";
 import { DemoProvider } from "@/components/app/demo-store";
 import { TranslateWidget } from "@/components/app/translate-widget";
 import { SessionProvider } from "@/lib/session";
+import { THEME_BOOT_SCRIPT } from "@/lib/theme-boot";
 import "./globals.css";
 
 // Editorial serif — landing headlines only.
@@ -72,6 +73,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
       className={`${sans.variable} ${serif.variable}`}
     >
+      <head>
+        {/* Applies the saved dark theme on app routes before first paint (no white flash). */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+      </head>
       {/* suppressHydrationWarning: browser extensions (Grammarly, password managers)
           inject attributes onto <body> before hydration — harmless, but noisy. */}
       <body suppressHydrationWarning>

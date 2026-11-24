@@ -29,6 +29,11 @@
     --border-soft: 240 237 229;
     --border-softer: 244 241 234;
     --accent: 29 78 216; /* restrained deep blue — 6.8:1 with white, AA on tinted cards */
+    /* Review-signal TEXT colors (green = clean, amber = worth a look, red = high). */
+    --signal-clean: 34 107 73;
+    --signal-review: 127 91 18;
+    --signal-high: 180 69 60;
+    --range-track: 230 226 217; /* rubric slider track */
   }
 
   /* ---- dark: deep, warm-neutral. Scoped to the dashboard via a `.dark` wrapper
@@ -46,6 +51,11 @@
     --border-soft: 34 36 40;
     --border-softer: 29 30 34;
     --accent: 109 152 255; /* lifted blue — more legible on dark */
+    /* Lifted signal text so status labels stay readable (AA) on the dark cards. */
+    --signal-clean: 99 201 150;
+    --signal-review: 226 178 84;
+    --signal-high: 240 133 122;
+    --range-track: 70 73 81; /* visible against the dark card */
     color-scheme: dark; /* native scrollbars / date pickers / autofill go dark */
   }
 
@@ -112,7 +122,7 @@
     appearance: none;
     height: 5px;
     border-radius: 3px;
-    background: rgb(var(--border));
+    background: rgb(var(--range-track));
     cursor: pointer;
   }
 
@@ -139,6 +149,21 @@
 }
 
 @layer components {
+  /* Google Translate widget (fixed, bottom-left): follow the app theme in dark mode. */
+  .dark .goog-te-gadget {
+    color: rgb(var(--muted)) !important;
+  }
+  .dark .goog-te-gadget .goog-te-combo {
+    background: rgb(var(--surface-raised));
+    color: rgb(var(--foreground));
+    border: 1px solid rgb(var(--border));
+    border-radius: 6px;
+  }
+  .dark .goog-te-gadget a,
+  .dark .goog-te-gadget span {
+    color: rgb(var(--muted)) !important;
+  }
+
   /* "Eyebrow" — the small uppercase metadata label used across every screen */
   .eyebrow {
     @apply font-mono text-[11px] uppercase tracking-[0.14em] text-dim;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTheme } from "@/lib/use-theme";
+import { useDocumentTheme, useTheme } from "@/lib/use-theme";
 import { cn } from "@/lib/utils";
 
 /**
@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
  */
 export function DashboardFrame({ children }: { children: React.ReactNode }) {
   const { theme } = useTheme();
+  useDocumentTheme();
   // `text-ink` on the SAME element as `.dark` re-resolves the inherited text color to the
   // dark-mode foreground at this boundary, otherwise descendants without an explicit text
   // class keep inheriting the (dark) color computed up at <body>, and stay invisible.

@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProfileMenu } from "@/components/app/profile-menu";
 import { ThemeToggle } from "@/components/app/theme-toggle";
 import { useDemo } from "@/components/app/demo-store";
-import { useTheme } from "@/lib/use-theme";
+import { useDocumentTheme, useTheme } from "@/lib/use-theme";
 import { isComplete, rubricMax, totalScore } from "@/lib/scoring";
 import { cn } from "@/lib/utils";
 import { TechIcon } from "@/components/ui/tech-icon";
@@ -87,6 +87,7 @@ export function GradingWorkspace({
 }) {
   const { scoresFor, registerCriteria } = useDemo();
   const { theme } = useTheme();
+  useDocumentTheme();
   const reviewOnly = viewerRole === "organizer";
   const [tab, setTab] = useState("summary");
 

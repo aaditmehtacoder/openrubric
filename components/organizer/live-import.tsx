@@ -200,7 +200,7 @@ export function LiveImport({
                   <span className="truncate font-medium">{r.name}</span>
                   <span className="flex flex-shrink-0 items-center gap-1.5 font-mono text-[11.5px] text-dim">
                     {r.stage === "done" ? (
-                      <Check className="h-3.5 w-3.5 text-[#2e8a5e]" strokeWidth={3} />
+                      <Check className="h-3.5 w-3.5 text-signal-clean" strokeWidth={3} />
                     ) : r.stage === "error" ? (
                       <AlertCircle className="h-3.5 w-3.5 text-signal-high" />
                     ) : (

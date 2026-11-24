@@ -6,8 +6,9 @@ import tailwindcssAnimate from "tailwindcss-animate";
  *
  * Themeable tokens read CSS variables defined in app/globals.css (light = :root,
  * dark = .dark), so light/dark switching recolors the whole app from one place.
- * Fixed tokens (panel.*, line.dark, ondark, signal.*) belong to the dark "product
- * screenshot" panels and stay constant in both themes.
+ * Fixed tokens (panel.*, line.dark, ondark, signal.*-dot) belong to the dark "product
+ * screenshot" panels and stay constant in both themes. signal.clean/review/high are
+ * text colors and ARE themeable, so status labels stay readable on dark cards.
  */
 const v = (name: string) => `rgb(var(${name}) / <alpha-value>)`;
 
@@ -63,11 +64,11 @@ const config: Config = {
 
         // ---- fixed: review signal scale (muted, never aggressive) ----
         signal: {
-          clean: "#226B49",
+          clean: v("--signal-clean"), // theme-aware text (lifted in .dark)
           "clean-dot": "#4FB286",
-          review: "#7F5B12",
+          review: v("--signal-review"),
           "review-dot": "#C99A3A",
-          high: "#B4453C",
+          high: v("--signal-high"),
           "high-dot": "#C0584E",
         },
       },
