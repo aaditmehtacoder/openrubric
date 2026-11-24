@@ -5,9 +5,9 @@ import { ReadmeCard } from "./readme-card";
 import type { ProjectView } from "@/lib/types";
 
 /**
- * Real screenshots scraped from the public Devpost gallery + an embedded view of the
- * GitHub repo. When no screenshots were captured (CSV/manual import, or Devpost blocked
- * the scrape), it shows a clear "no screenshots" state rather than fake tiles.
+ * The judge page's Screenshots and GitHub tabs: real screenshots scraped from the public
+ * Devpost gallery, and the GitHub repo at a glance. Missing data shows a plain one-line
+ * empty state rather than fake tiles.
  */
 
 function ext(url: string | null): string {
@@ -50,29 +50,24 @@ function fmtDateTime(iso: string, timeZone: string | null): string {
   }
 }
 
-export function ScreenshotsGithubCard({
-  project,
-  timezone = null,
-  readme = null,
-}: {
-  project: ProjectView;
-  timezone?: string | null;
-  /** The repo's README markdown (scan-cached or fetched on demand by the page). */
-  readme?: string | null;
-}) {
-  const shots = project.screenshots ?? [];
-  const scan = project.scan;
-  const contributors = scan.contributors_json ?? [];
-  const readmeText = readme ?? scan.readme_md ?? null;
+/** Card header: a plain sentence-case title, with optional right-aligned meta. */
+function CardTitle({ children, meta }: { children: React.ReactNode; meta?: string }) {
+  return (
+    <div className="mb-3.5 flex items-baseline justify-between gap-3">
+      <h3 className="text-[15px] font-semibold text-ink">{children}</h3>
+      {meta && <span className="text-[12px] text-faint">{meta}</span>}
+    </div>
+  );
+}
 
+/** Demo video (when there is one) + the real screenshots scraped from Devpost. */
+export function ProjectMedia({ project }: { project: ProjectView }) {
+  const shots = project.screenshots ?? [];
   return (
     <div className="flex flex-col gap-4">
-      {/* Demo video (Vimeo / YouTube), when the project has one */}
       {project.demo_video_url && (
-        <div className="rounded-[14px] border border-line bg-surface p-5">
-          <div className="mb-3.5 font-mono text-[10.5px] uppercase tracking-[0.14em] text-faint">
-            Demo video
-          </div>
+        <section className="rounded-[16px] border border-line bg-surface p-6">
+          <CardTitle>Demo video</CardTitle>
           <div className="aspect-video w-full overflow-hidden rounded-[10px] border border-line bg-black">
             <iframe
               src={project.demo_video_url}
@@ -82,94 +77,79 @@ export function ScreenshotsGithubCard({
               allowFullScreen
             />
           </div>
-        </div>
+        </section>
       )}
 
-      {/* Screenshots */}
-      <div className="rounded-[14px] border border-line bg-surface p-5">
-        <div className="mb-3.5 flex items-center justify-between">
-          <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-faint">
-            Screenshots
-          </div>
-          <div className="font-mono text-[10.5px] text-faint">
-            {shots.length ? `${shots.length} from Devpost` : "N/A"}
-          </div>
-        </div>
-
+      <section className="rounded-[16px] border border-line bg-surface p-6">
+        <CardTitle meta={shots.length ? `${shots.length} from Devpost` : undefined}>Screenshots</CardTitle>
         {shots.length === 0 ? (
-          <p className="text-[13px] text-dim">
-            No screenshots were captured for this project. They&apos;re pulled from the public Devpost
-            gallery on import, some projects don&apos;t upload any, or Devpost blocked the scrape.
-          </p>
+          <p className="text-[13.5px] text-dim">No screenshots for this project.</p>
         ) : (
           <ScreenshotGallery shots={shots} name={project.project_name} />
         )}
-      </div>
+      </section>
+    </div>
+  );
+}
 
-      {/* GitHub embed */}
-      <div className="rounded-[14px] border border-line bg-surface p-5">
-        <div className="mb-3.5 flex items-center gap-2">
-          <TechIcon name="GitHub" className="h-4 w-4 text-ink" />
-          <span className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-faint">
-            GitHub repository
-          </span>
+/** The GitHub repo at a glance (languages, commits, contributors) + its README. */
+export function ProjectCode({
+  project,
+  timezone = null,
+  readme = null,
+}: {
+  project: ProjectView;
+  timezone?: string | null;
+  /** The repo's README markdown (scan-cached or fetched on demand by the page). */
+  readme?: string | null;
+}) {
+  const scan = project.scan;
+  const contributors = scan.contributors_json ?? [];
+  const readmeText = readme ?? scan.readme_md ?? null;
+
+  if (!project.repo_url) {
+    return (
+      <section className="rounded-[16px] border border-line bg-surface p-6">
+        <CardTitle>GitHub repository</CardTitle>
+        <p className="text-[13.5px] text-dim">No repository linked for this project.</p>
+      </section>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-4">
+      <section className="rounded-[16px] border border-line bg-surface p-6">
+        <div className="mb-1 flex items-center gap-2 text-[12.5px] font-medium text-dim">
+          <TechIcon name="GitHub" className="h-3.5 w-3.5 text-ink" />
+          GitHub repository
+        </div>
+        <a
+          href={ext(project.repo_url)}
+          target="_blank"
+          rel="noreferrer"
+          className="text-[17px] font-semibold text-ink underline-offset-2 hover:underline"
+        >
+          {scan.repo_owner && scan.repo_name ? `${scan.repo_owner}/${scan.repo_name}` : prettyUrl(project.repo_url)}
+        </a>
+
+        <div className="mt-4 grid grid-cols-3 gap-3 border-t border-line-soft pt-4">
+          <Stat label="Commits" value={String(scan.total_commits)} />
+          <Stat label="Contributors" value={String(contributors.length)} />
+          <Stat label="Last commit" value={fmtDateTime(scan.last_commit_at, timezone)} wrap />
         </div>
 
-        {project.repo_url ? (
-          <>
-            <a
-              href={ext(project.repo_url)}
-              target="_blank"
-              rel="noreferrer"
-              className="text-[15px] font-semibold text-ink underline-offset-2 hover:underline"
-            >
-              {scan.repo_owner}/{scan.repo_name}
-            </a>
-            <p className="mt-1.5 text-[13px] leading-[1.55] text-dim">{project.ai.what}</p>
+        <LanguagesBar languages={scan.languages_json ?? []} />
 
-            {(project.ai.tech ?? []).length > 0 && (
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {(project.ai.tech ?? []).slice(0, 8).map((t) => (
-                  <span
-                    key={t}
-                    className="inline-flex items-center gap-1.5 rounded-md border border-line px-2 py-0.5 font-mono text-[11px] text-dim"
-                  >
-                    <TechIcon name={t} className="h-3 w-3" />
-                    {t}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            <LanguagesBar languages={scan.languages_json ?? []} />
-
-            <div className="mt-4 grid grid-cols-3 gap-3 border-t border-line-soft pt-4">
-              <Stat label="Commits" value={String(scan.total_commits)} />
-              <Stat label="Contributors" value={String(contributors.length)} />
-              <div className="min-w-0">
-                <div className="font-mono text-[10px] uppercase tracking-[0.1em] text-faint">
-                  Last commit
-                </div>
-                <div className="mt-0.5 text-[12.5px] font-medium leading-snug text-ink">
-                  {fmtDateTime(scan.last_commit_at, timezone)}
-                </div>
-              </div>
-            </div>
-
-            <a
-              href={ext(project.repo_url)}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-control border border-line bg-raised px-4 py-2.5 text-[13px] font-medium text-ink transition-colors hover:border-ink"
-            >
-              <TechIcon name="GitHub" className="h-4 w-4" />
-              Open {prettyUrl(project.repo_url)} ↗
-            </a>
-          </>
-        ) : (
-          <p className="text-[13px] text-dim">No repository linked, N/A.</p>
-        )}
-      </div>
+        <a
+          href={ext(project.repo_url)}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-control border border-line bg-raised px-4 py-2.5 text-[13.5px] font-medium text-ink transition-colors hover:border-ink"
+        >
+          <TechIcon name="GitHub" className="h-4 w-4" />
+          Open on GitHub ↗
+        </a>
+      </section>
 
       {/* The repo's real README, rendered inline */}
       {readmeText && <ReadmeCard readme={readmeText} repoUrl={project.repo_url} />}
@@ -185,7 +165,7 @@ function LanguagesBar({ languages }: { languages: { name: string; pct: number }[
   const top = languages.slice(0, 6);
   return (
     <div className="mt-4 border-t border-line-soft pt-4">
-      <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.1em] text-faint">Languages</div>
+      <div className="mb-2 text-[12.5px] font-medium text-dim">Languages</div>
       <div className="flex h-2 w-full overflow-hidden rounded-full bg-sunken">
         {top.map((l, i) => (
           <span
@@ -203,7 +183,7 @@ function LanguagesBar({ languages }: { languages: { name: string; pct: number }[
               style={{ background: LANG_COLORS[i % LANG_COLORS.length] }}
             />
             <span className="font-medium text-ink">{l.name}</span>
-            <span className="font-mono text-faint">{l.pct}%</span>
+            <span className="tabular-nums text-faint">{l.pct}%</span>
           </span>
         ))}
       </div>
@@ -211,11 +191,13 @@ function LanguagesBar({ languages }: { languages: { name: string; pct: number }[
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({ label, value, wrap = false }: { label: string; value: string; wrap?: boolean }) {
   return (
-    <div>
-      <div className="font-mono text-[10px] uppercase tracking-[0.1em] text-faint">{label}</div>
-      <div className="mt-0.5 truncate text-[13px] font-medium text-ink">{value}</div>
+    <div className="min-w-0">
+      <div className="text-[12px] text-dim">{label}</div>
+      <div className={`mt-0.5 text-[14px] font-semibold tabular-nums leading-snug text-ink ${wrap ? "" : "truncate"}`}>
+        {value}
+      </div>
     </div>
   );
 }

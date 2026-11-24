@@ -36,7 +36,7 @@ function renderInline(text: string, keyBase: string): React.ReactNode[] {
       );
     } else if (m[3]) {
       nodes.push(
-        <code key={`${keyBase}-${i++}`} className="rounded bg-sunken px-1 py-0.5 font-mono text-[11.5px] text-ink">
+        <code key={`${keyBase}-${i++}`} className="rounded bg-sunken px-1 py-0.5 font-code text-[11.5px] text-ink">
           {m[4]}
         </code>,
       );
@@ -75,7 +75,7 @@ function renderMarkdown(md: string): React.ReactNode[] {
       out.push(
         <pre
           key={`c-${key++}`}
-          className="my-2 overflow-x-auto rounded-[8px] border border-line bg-sunken p-3 font-mono text-[11px] leading-[1.5] text-ink"
+          className="my-2 overflow-x-auto rounded-[8px] border border-line bg-sunken p-3 font-code text-[11px] leading-[1.5] text-ink"
         >
           {codeBuf.join("\n")}
         </pre>,

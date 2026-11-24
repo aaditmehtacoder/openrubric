@@ -74,7 +74,11 @@ const config: Config = {
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "-apple-system", "sans-serif"],
         serif: ["var(--font-serif)", "Georgia", "Cambria", "serif"],
-        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
+        // `font-mono` is the label/metadata style used across the app. It now renders in
+        // the UI sans (Geist) with tabular figures; no monospace webfont is loaded.
+        mono: ["var(--font-sans)", "system-ui", "-apple-system", "sans-serif"],
+        // Real code (README blocks, inline `code`) keeps a system monospace.
+        code: ["ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       fontSize: {
         label: ["11px", { lineHeight: "1", letterSpacing: "0.14em" }],

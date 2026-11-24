@@ -73,7 +73,7 @@ function renderInline(text: string, keyBase: string): React.ReactNode[] {
     else if (m[3]) nodes.push(<strong key={`${keyBase}-${i++}`} className="font-semibold text-ink">{m[4]}</strong>);
     else if (m[5]) nodes.push(<em key={`${keyBase}-${i++}`}>{m[6]}</em>);
     else if (m[7]) nodes.push(<em key={`${keyBase}-${i++}`}>{m[7]}</em>);
-    else if (m[8]) nodes.push(<code key={`${keyBase}-${i++}`} className="rounded bg-sunken px-1 py-0.5 font-mono text-[12px] text-ink">{m[9]}</code>);
+    else if (m[8]) nodes.push(<code key={`${keyBase}-${i++}`} className="rounded bg-sunken px-1 py-0.5 font-code text-[12px] text-ink">{m[9]}</code>);
     else if (m[10]) nodes.push(<a key={`${keyBase}-${i++}`} href={m[12]} target="_blank" rel="noreferrer nofollow" className="text-accent underline-offset-2 hover:underline">{m[11]}</a>);
     rest = rest.slice(m.index + m[0].length);
   }
@@ -93,7 +93,7 @@ export function DevpostWriteup({ text }: { text: string }) {
     nodes.push(
       <ul key={`ul-${key++}`} className="my-2 flex flex-col gap-1.5">
         {items.map((b, i) => (
-          <li key={i} className="flex gap-2.5 text-[13.5px] leading-[1.55] text-dim">
+          <li key={i} className="flex gap-2.5 text-[14px] leading-[1.6] text-dim">
             <span className="mt-[7px] h-1 w-1 flex-shrink-0 rounded-full bg-faint" />
             <span>{renderInline(b, `li${key}-${i}`)}</span>
           </li>
@@ -107,7 +107,7 @@ export function DevpostWriteup({ text }: { text: string }) {
     nodes.push(
       <h3
         key={`h-${key++}`}
-        className="mb-1.5 mt-5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.12em] text-accent first:mt-0"
+        className="mb-1.5 mt-6 text-[14px] font-semibold text-ink first:mt-0"
       >
         {renderInline(t, `h${key}`)}
       </h3>,
@@ -115,7 +115,7 @@ export function DevpostWriteup({ text }: { text: string }) {
   };
   const pushPara = (t: string) => {
     nodes.push(
-      <p key={`p-${key++}`} className="mb-2.5 text-[13.5px] leading-[1.62] text-dim">
+      <p key={`p-${key++}`} className="mb-2.5 text-[14px] leading-[1.65] text-dim">
         {renderInline(t, `p${key}`)}
       </p>,
     );

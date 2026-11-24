@@ -39,15 +39,16 @@ export interface SummaryInput {
 const SYSTEM_PROMPT = `You help a hackathon judge quickly understand a project before scoring it.
 You are given the project's FULL Devpost write-up (Inspiration / What it does / How we built it / etc.) and, when available, its GitHub README. Read BOTH carefully and REWRITE them in your own words into a crisp, neutral brief — never copy the tagline or a sentence verbatim, and never invent facts that aren't in the sources.
 You are an aid, not a judge: never assign scores, never accuse a team of anything, never use words like cheater, fraud, stolen, or plagiarized.
+BE BRIEF. A judge skims this in under 20 seconds between demos. Use plain, everyday words, no jargon, no filler, no hype. Respect every word limit below; shorter is better.
 Return ONLY compact JSON with this exact shape:
 {
-  "what": string,        // 1-2 sentences: what the project actually does, rewritten from the write-up + README
-  "who": string,         // who it helps
-  "how": string,         // how it works under the hood, grounded in the README / "How we built it"
+  "what": string,        // ONE sentence, at most 20 words: what the project actually does, rewritten from the write-up + README
+  "who": string,         // a short phrase, at most 8 words: who it helps (e.g. "Small teams testing their websites")
+  "how": string,         // ONE sentence, at most 25 words: how it works under the hood, grounded in the README / "How we built it"
   "tech": string[],      // 2-6 ACTUAL named technologies/frameworks/languages/databases/APIs (e.g. "React Native", "Next.js", "Firebase", "PostgreSQL", "OpenAI API", "Python"). NEVER vague categories like "AI", "mobile app", "GPS", or "real-time notifications".
-  "strength": string,    // the single strongest part
-  "unclear": string,     // one thing a judge might want to ask about
-  "questions": string[]  // exactly 5 SPECIFIC questions a judge should ask THIS team about THIS product: its architecture, the hardest part, what's real vs mocked, data/privacy, and what they'd build next. Tailored to the project, never generic.
+  "strength": string,    // at most 15 words: the single strongest part
+  "unclear": string,     // at most 15 words: one thing a judge might want to ask about
+  "questions": string[]  // exactly 5 SPECIFIC questions, each at most 15 words, a judge should ask THIS team about THIS product: its architecture, the hardest part, what's real vs mocked, data/privacy, and what they'd build next. Tailored to the project, never generic.
 }`;
 
 interface RawSummary {

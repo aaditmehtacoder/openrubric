@@ -143,7 +143,7 @@ export default function DocsPage() {
                 Signals, not verdicts.
               </H>
               <p className={P}>
-                When a <code className="rounded bg-raised px-1.5 py-0.5 font-mono text-[13px]">GITHUB_TOKEN</code>{" "}
+                When a <code className="rounded bg-raised px-1.5 py-0.5 font-code text-[13px]">GITHUB_TOKEN</code>{" "}
                 is configured, OpenRubric scans each repo&apos;s creation date, first and last commit,
                 pre-event and post-deadline commits, and contributors. Each observation is phrased as
                 something an organizer might ask about. For example:
@@ -180,7 +180,7 @@ export default function DocsPage() {
                     key={key}
                     className="grid grid-cols-1 gap-1 border-b border-line-softer px-4 py-3 last:border-b-0 sm:grid-cols-[280px_1fr]"
                   >
-                    <code className="font-mono text-[12.5px] text-accent">{key}</code>
+                    <code className="font-code text-[12.5px] text-accent">{key}</code>
                     <span className="text-[13px] text-dim">{desc}</span>
                   </div>
                 ))}

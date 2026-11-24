@@ -11,7 +11,8 @@
  * intentionally fixed (they read as a dark app preview / mockup, not the site theme).
  *
  * Fonts are injected as CSS variables by next/font in app/layout.tsx:
- *   --font-sans  → Hanken Grotesk   --font-serif → Newsreader   --font-mono → JetBrains Mono
+ *   --font-sans → Geist   --font-serif → Newsreader
+ * There is no monospace webfont: `font-mono` labels render in Geist with tabular figures.
  */
 
 @layer base {
@@ -81,7 +82,7 @@
     font-feature-settings: "liga" 1, "calt" 1;
   }
 
-  /* Mono (Geist Mono) carries the data — keep figures aligned. */
+  /* Labels/metadata (`font-mono`, now Geist) carry data — keep figures aligned. */
   .font-mono {
     font-variant-numeric: tabular-nums;
   }
@@ -138,7 +139,7 @@
 }
 
 @layer components {
-  /* Mono "eyebrow" — the uppercase metadata label used across every screen */
+  /* "Eyebrow" — the small uppercase metadata label used across every screen */
   .eyebrow {
     @apply font-mono text-[11px] uppercase tracking-[0.14em] text-dim;
   }
